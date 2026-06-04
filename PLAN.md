@@ -372,6 +372,16 @@ CJK 字型 + H1 hook PoC,headless Docker 驗證通過:
 
 ---
 
+### 10k. 打包 / 散布(2026-06-04)
+
+- `dist/make-release.sh`:從 image 萃取 binary + mods + 3 字型 + lookup + `libfaun.so.0`(自建,bundle)+ `run.sh` → Linux tarball。
+- `dist/play.sh`:Docker + X11 桌面遊玩(`U4CHT_FONT` 可選字形)。
+- 依賴:`liballegro5.2` 等系統 apt 提供;libfaun bundle。
+- Windows:xu4 內建 `Dockerfile.mingw` + `cbuild` 可跨編(需 mingw SDK),尚未產出。
+- GPL:binary 散布附 source(本 repo patches + xu4 upstream);U4 資料為 Origin freeware。
+
+---
+
 ## 11. 風險與待決 (RAID)
 
 | # | 風險/待決 | 等級 | 處置 |
