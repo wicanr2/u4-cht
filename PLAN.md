@@ -232,8 +232,8 @@ U6-cht 的核心經驗可直接套用:
 
 ### 10b. P2 headless 截圖 loop(2026-06-04 實測)
 
-- `u4-cht/docker/Dockerfile.test`(FROM `u4cht/xu4-allegro` + xvfb + Mesa 軟體 GL + ImageMagick)+ `docker/shot.sh`:`Xvfb :99` + `LIBGL_ALWAYS_SOFTWARE=1`(llvmpipe)跑 `xu4 -q -s <scale>`,等 N 秒後 `import -window root` 截圖。
-- **用法**:`docker run --rm -v /out:/out u4cht/xu4-test <等待秒數> <scale>`。
+- `u4-cht/docker/Dockerfile.test`(FROM `u4cht/xu4-allegro` + xvfb + Mesa 軟體 GL + ImageMagick)+ `docker/shot.sh`:`Xvfb :99` + `LIBGL_ALWAYS_SOFTWARE=1`(llvmpipe)跑 `xu4 -q -s <scale> --filter xBRZ`,等 N 秒後 `import -window root` 截圖。
+- **用法**:`docker run --rm -v /out:/out u4cht/xu4-test <等待秒數> <scale> [額外 xu4 args]`。`shot.sh` **預設帶 `--filter xBRZ`**(灰階 CJK AA 最平滑);第 3 參數自帶 `--filter` 可覆蓋,或附加 `--skip-intro` 等(已防重複 `--filter`)。實際指令記於 `/out/xu4.log` 首行 `+ ...`。
 - ✅ **驗證通過**:截到完整「**Ultima IV — Quest of the Avatar**」標題畫面 + 動態世界地圖(960×600,scale 3)→ 證明 Allegro 5 + GL 渲染管線在 Docker headless 全程可跑。**此即 P3+ 的決定性 pass/fail loop。**
 - ⚠️ intro 為動畫,截圖時點影響畫面;後續做穩定基準時改用固定狀態(如進遊戲後固定座標)再 diff。
 
@@ -288,7 +288,7 @@ CJK 字型 + H1 hook PoC,headless Docker 驗證通過:
   - **字型可讀性**(2026-06-04):
     - 字型:Noto Sans CJK TC **Medium** 優於 AR PL UMing(Ming serif 細筆易斷)與 Noto Bold(密筆糊);對比 `docs/screenshots/03_font_compare.png`。
     - **灰階 AA**:`build_cjk_font.py --mode gray`(預設)存抗鋸齒 alpha,`cjkBlit` 用該值混黑底(二值 atlas 仍相容)→ 斜筆/曲線鋸齒減少;對比 `docs/screenshots/04_aa_compare.png`。
-    - **放大 filter**:xu4 預設 `--filter point`(nearest-neighbor)會把 AA gray 邊緣放大成方塊、部分削弱 AA。`--filter` 無字面 linear,但平滑放大器(`xBRZ` / `HQX`)會把 AA 邊緣補成連續筆畫 → **`--filter xBRZ` + 灰階 AA 最平滑可讀**;對比 `docs/screenshots/05_filter_compare.png`。
+    - **放大 filter**:xu4 預設 `--filter point`(nearest-neighbor)會把 AA gray 邊緣放大成方塊、部分削弱 AA。`--filter` 無字面 linear,但平滑放大器(`xBRZ` / `HQX`)會把 AA 邊緣補成連續筆畫 → **`--filter xBRZ` + 灰階 AA 最平滑可讀**;對比 `docs/screenshots/05_filter_compare.png`。**`docker/shot.sh` 已將 `--filter xBRZ` 設為 headless 截圖預設**(可被第 3 參數覆蓋)。
 - **引擎側**(`patches/engine/`,套用 `tools/apply_cht.sh`):
   - 新模組 `cht.cpp/h`:載入資產 + `chtLookup`(二分)+ `chtGlyph`。
   - `screen.cpp`:`cjkBlit`(16×16 全形,**灰階 alpha 混色** blit 到 `xu4.screenImage`)+ `screenMessageCJK`(UTF-8、CJK-aware 換行)+ **H1 `screenMessageN` 進入查表命中改走 CJK**;`chtSelfTest`(env 守護)。

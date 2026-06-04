@@ -29,10 +29,12 @@ docker build -f docker/Dockerfile.zh -t u4cht/xu4-allegro xu4
 # 建置測試 image(xvfb + Mesa 軟體 GL + ImageMagick)
 docker build -f docker/Dockerfile.test -t u4cht/xu4-test docker
 
-# 跑遊戲並截圖:<等待秒數> <scale>
+# 跑遊戲並截圖:<等待秒數> <scale> [額外 xu4 args]
 mkdir -p /tmp/u4shot
 docker run --rm -v /tmp/u4shot:/out u4cht/xu4-test 22 3
 # → /tmp/u4shot/screen.png
+# shot.sh 預設帶 --filter xBRZ(灰階 CJK AA 最平滑);
+# 第 3 參數自帶 --filter 可覆蓋,或附加其他 args(如 "--skip-intro")
 ```
 
 ## 4. 抽取 NPC 對話 → 雙語表(P4 資料面)

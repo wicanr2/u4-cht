@@ -86,6 +86,8 @@ docker build -f docker/Dockerfile.zh -t u4cht/xu4-allegro xu4
 docker build -f docker/Dockerfile.test -t u4cht/xu4-test docker
 mkdir -p /tmp/u4shot
 docker run --rm -v /tmp/u4shot:/out u4cht/xu4-test 22 3   # → /tmp/u4shot/screen.png
+# shot.sh 預設帶 --filter xBRZ(灰階 CJK AA 最平滑);第 3 參數可自帶 --filter 覆蓋,
+# 或附加其他 xu4 args,如:... u4cht/xu4-test 22 3 "--skip-intro"
 ```
 
 > 原版 U4 資料(`ultima4.zip`)為 Origin © 1985 的 **freeware**,由 `make download` 自動取得,不需手動準備、不入庫。
