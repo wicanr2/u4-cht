@@ -22,42 +22,76 @@ index 6736af1..ac16f35 100644
          creature.cpp \
          death.cpp \
          debug.cpp \
+diff --git a/src/gpu_opengl.cpp b/src/gpu_opengl.cpp
+index 882a30c..29a699e 100644
+--- a/src/gpu_opengl.cpp
++++ b/src/gpu_opengl.cpp
+@@ -574,7 +574,7 @@ const char* gpu_init(void* res, int w, int h, int scale, int filter)
+ 
+     // Create screen, white, noise & shadow textures.
+     glGenTextures(TEXTURE_COUNT, &gr->screenTex);
+-    gpu_defineTex(gr->screenTex, 320, 200, NULL,
++    gpu_defineTex(gr->screenTex, 640, 400, NULL,
+ #if defined(ANDROID) || defined(USE_GLES)
+                   GL_RGBA,  // Must match glTexSubImage2D format.
+ #else
+@@ -660,7 +660,7 @@ const char* gpu_init(void* res, int w, int h, int scale, int filter)
+ 
+         glUseProgram(sh);
+         glUniform2f(mmap, (float) w, (float) h);
+-        glUniform2f(gr->slocScDim, 320.0f, 200.0f);
++        glUniform2f(gr->slocScDim, 640.0f, 400.0f);
+         glUniform1i(cmap, GTU_CMAP);
+     }
+     }
+diff --git a/src/imagemgr.cpp b/src/imagemgr.cpp
+index a7cd166..88c3ff4 100644
+--- a/src/imagemgr.cpp
++++ b/src/imagemgr.cpp
+@@ -609,6 +609,28 @@ ImageInfo* ImageMgr::load(ImageInfo* info) {
+     unscaled->save(out2.append("-fixup.ppm").c_str());
+ #endif
+ 
++    /* U4 繁中化 B:全美術 2x(640×400 regime;RGBA 保留來源像素)*/
++    {
++        int sw = unscaled->width(), sh = unscaled->height();
++        Image* big = Image::create(sw * 2, sh * 2);
++        for (int yy = 0; yy < sh; ++yy)
++            for (int xx = 0; xx < sw; ++xx) {
++                RGBA c; unscaled->getPixel(xx, yy, c);
++                big->putPixel(xx*2,   yy*2,   c.r, c.g, c.b, c.a);
++                big->putPixel(xx*2+1, yy*2,   c.r, c.g, c.b, c.a);
++                big->putPixel(xx*2,   yy*2+1, c.r, c.g, c.b, c.a);
++                big->putPixel(xx*2+1, yy*2+1, c.r, c.g, c.b, c.a);
++            }
++        delete unscaled;
++        unscaled = big;
++        info->width  *= 2;
++        info->height *= 2;
++        SubImage* si = (SubImage*) info->subImages;
++        for (int i = 0; i < info->subImageCount; ++i) {
++            si[i].x *= 2; si[i].y *= 2; si[i].width *= 2; si[i].height *= 2;
++        }
++    }
++
+     info->image = unscaled;
+     //info->tex = gpu_makeTexture(info->image);
+ 
 diff --git a/src/intro.cpp b/src/intro.cpp
-index acdf1f7..fb6d36d 100644
+index acdf1f7..f7efa53 100644
 --- a/src/intro.cpp
 +++ b/src/intro.cpp
-@@ -783,13 +783,13 @@ void IntroController::updateScreen() {
-             backgroundArea.draw(BKGD_OPTIONS_BTM, 0, 120);
-         }
+@@ -661,7 +661,7 @@ void IntroController::drawBeastie(int beast, int vertoffset, int frame) {
+     ASSERT(beast == 0 || beast == 1, "invalid beast: %d", beast);
  
--        menuArea.textAt(1,  1, "In another world, in a time to come.");
--        menuArea.textAt(14, 3, "Options:");
--        menuArea.textAtKey(10, 5, "Return to the view", 0);
--        menuArea.textAtKey(10, 6, "Journey Onward", 0);
--        menuArea.textAtKey(10, 7, "Initiate New Game", 0);
-+        /* U4 繁中化:CJK 16px 需 2 列距,主選單改 2-row 間隔(避免重疊) */
-+        menuArea.textAt(1,  0, "In another world, in a time to come.");
-+        menuArea.textAtKey(10, 2, "Return to the view", 0);
-+        menuArea.textAtKey(10, 4, "Journey Onward", 0);
-+        menuArea.textAtKey(10, 6, "Initiate New Game", 0);
-         menuArea.textAtKey(10, 8, "Configure", 0);
--        menuArea.textAtKey(10, 9, "About", 0);
-+        menuArea.textAtKey(10, 10, "About", 0);
-         drawBeasties();
+     backgroundArea.draw(beastiesImg, beastieSub[beast] + frame,
+-                        beast ? (320 - 48) : 0,
++                        beast ? (U4_SCREEN_W - 96) : 0,   // U4 繁中化 B:2x(48→96)
+                         vertoffset);
+ }
  
-         // draw the cursor last
-@@ -811,7 +811,8 @@ void IntroController::initiateNewGame() {
-     backgroundArea.draw(BKGD_OPTIONS_BTM, 0, 120);
- 
-     // display name prompt and read name from keyboard
--    menuArea.textAt(3, 3, "By what name shalt thou be known");
-+    // U4 繁中化:CJK 16px 需 2 列距,兩行提示改 row 2/4
-+    menuArea.textAt(3, 2, "By what name shalt thou be known");
-     menuArea.textAt(3, 4, "in this world and time?");
- 
-     // enable the text cursor after setting it's initial position
 diff --git a/src/screen.cpp b/src/screen.cpp
-index 46d51bd..18b67b2 100644
+index 46d51bd..70c9e3b 100644
 --- a/src/screen.cpp
 +++ b/src/screen.cpp
 @@ -25,6 +25,7 @@
@@ -77,6 +111,15 @@ index 46d51bd..18b67b2 100644
  #ifdef GPU_RENDER
      {
      ImageInfo* tinfo;
+@@ -265,7 +268,7 @@ void screenInit(int layerCount) {
+     xu4.screen = screen;
+ 
+     // Create a special purpose image that represents the whole screen.
+-    xu4.screenImage = Image::create(320, 200);
++    xu4.screenImage = Image::create(U4_SCREEN_W, U4_SCREEN_H);
+     xu4.screenImage->fill(Image::black);
+ 
+     screenInit_sys(xu4.settings, &screen->state, SYS_CLEAN);
 @@ -350,6 +353,8 @@ bool screenLayerUsed(int layer) {
      return XU4_SCREEN->layers[layer].func ? true : false;
  }
@@ -162,7 +205,7 @@ index 46d51bd..18b67b2 100644
 +        }
 +        p += n;
 +        if (cp < 0x80) { screenShowChar((int) cp, cellX + col, cellY); col += 1; }
-+        else { cjkBlitPx(cp, (cellX + col) * CHAR_WIDTH, cellY * CHAR_HEIGHT); col += 2; }
++        else { cjkBlitPx(cp, (cellX + col) * CHAR_WIDTH, cellY * CHAR_HEIGHT); col += 1; }
 +    }
 +}
 +
@@ -174,7 +217,7 @@ index 46d51bd..18b67b2 100644
 +    while (*p) {
 +        unsigned char b = *p;
 +        if (b == '\n') {
-+            c->col = 0; c->line += 2;
++            c->col = 0; c->line += 1;
 +            while (c->line >= TEXT_AREA_H) { c->line--; screenScrollMessageArea(); }
 +            ++p; continue;
 +        }
@@ -190,15 +233,15 @@ index 46d51bd..18b67b2 100644
 +        }
 +        p += n;
 +        if (cp < 0x80) {                          // 夾雜 ASCII
-+            if (c->col >= colCount) { c->col = 0; c->line += 2;
++            if (c->col >= colCount) { c->col = 0; c->line += 1;
 +                while (c->line >= TEXT_AREA_H) { c->line--; screenScrollMessageArea(); } }
 +            screenShowChar((int) cp, TEXT_AREA_X + c->col, TEXT_AREA_Y + c->line);
 +            c->col++;
 +        } else {                                  // CJK 全形,佔 2 欄
-+            if (c->col + 2 > colCount) { c->col = 0; c->line += 2;
++            if (c->col + 1 > colCount) { c->col = 0; c->line += 1;
 +                while (c->line >= TEXT_AREA_H) { c->line--; screenScrollMessageArea(); } }
 +            cjkBlit(cp, c->col, c->line);
-+            c->col += 2;
++            c->col += 1;
 +        }
 +    }
 +    screenSetCursorPos(TEXT_AREA_X + c->col, TEXT_AREA_Y + c->line);
@@ -230,12 +273,12 @@ index 46d51bd..18b67b2 100644
 +    for (int ki = 0; ki < 2; ++ki) {
 +        const char* en = keys[ki];
 +        const char* zh = chtLookup(en, (int) strlen(en));
-+        if (! zh) { line += 2; continue; }
++        if (! zh) { line += 1; continue; }
 +        int col = 0;
 +        const unsigned char* p = (const unsigned char*) zh;
 +        while (*p) {
 +            unsigned char b = *p;
-+            if (b == '\n') { col = 0; line += 2; ++p; continue; }
++            if (b == '\n') { col = 0; line += 1; ++p; continue; }
 +            uint32_t cp; int n;
 +            if (b < 0x80)             { cp = b;        n = 1; }
 +            else if ((b >> 5) == 0x6) { cp = b & 0x1F; n = 2; }
@@ -246,10 +289,10 @@ index 46d51bd..18b67b2 100644
 +                cp = (cp << 6) | (p[k] & 0x3F); }
 +            p += n;
 +            if (cp < 0x80) { screenShowChar((int) cp, TEXT_AREA_X + col, TEXT_AREA_Y + line); col++; }
-+            else { if (col + 2 > TEXT_AREA_W) { col = 0; line += 2; }
-+                cjkBlit(cp, col, line); col += 2; }
++            else { if (col + 1 > TEXT_AREA_W) { col = 0; line += 1; }
++                cjkBlit(cp, col, line); col += 1; }
 +        }
-+        line += 2;
++        line += 1;
 +    }
 +    XU4_SCREEN->uploadScreen = 1;
 +}
@@ -260,7 +303,7 @@ index 46d51bd..18b67b2 100644
      void* gpu = xu4.gpu;
      ScreenState* ss = &sp->state;
 diff --git a/src/textview.cpp b/src/textview.cpp
-index eb6fcc0..7533538 100644
+index eb6fcc0..13eef9f 100644
 --- a/src/textview.cpp
 +++ b/src/textview.cpp
 @@ -3,6 +3,7 @@
@@ -315,7 +358,7 @@ index eb6fcc0..7533538 100644
 +                    int a = g[yy * dim + xx];
 +                    xu4.screenImage->putPixel(px + xx, py + yy, a, a, a, 255);
 +                } else xu4.screenImage->fillRect(px, py, dim, dim, 60, 60, 60);
-+                col += 2;
++                col += 1;
 +            }
 +        }
 +        return;
@@ -334,3 +377,54 @@ index eb6fcc0..7533538 100644
      string ctext = highlightKey(text, keyIndex);
      textAt(x, y, ctext.c_str());
  }
+diff --git a/src/textview.h b/src/textview.h
+index 8bfa3de..ba90b57 100644
+--- a/src/textview.h
++++ b/src/textview.h
+@@ -11,8 +11,8 @@
+ #define PRINTF_LIKE(x,y)
+ #endif
+ 
+-#define CHAR_WIDTH 8
+-#define CHAR_HEIGHT 8
++#define CHAR_WIDTH 16
++#define CHAR_HEIGHT 16
+ 
+ #include <string>
+ #include "view.h"
+diff --git a/src/u4.h b/src/u4.h
+index 767f30a..57f22e4 100644
+--- a/src/u4.h
++++ b/src/u4.h
+@@ -24,8 +24,8 @@
+ #define TILE_HEIGHT (2 * CHAR_HEIGHT)
+ 
+ /* info for loading image data from charset.ega */
+-#define CHAR_WIDTH 8
+-#define CHAR_HEIGHT 8
++#define CHAR_WIDTH 16
++#define CHAR_HEIGHT 16
+ 
+ /* some character defines */
+ #define CHARSET_ANKH '\0'
+@@ -47,16 +47,16 @@
+ #define CHARSET_FLOOR '\022'
+ 
+ /* screen size (in pixels) */
+-#define U4_SCREEN_W 320
+-#define U4_SCREEN_H 200
++#define U4_SCREEN_W 640
++#define U4_SCREEN_H 400
+ 
+ /* map viewport size (in tiles) */
+ #define VIEWPORT_W 11
+ #define VIEWPORT_H 11
+ 
+ /* screen border size (in pixels) */
+-#define BORDER_WIDTH 8
+-#define BORDER_HEIGHT 8
++#define BORDER_WIDTH 16
++#define BORDER_HEIGHT 16
+ 
+ /* text area (in character units) */
+ #define TEXT_AREA_X 24

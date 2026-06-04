@@ -324,6 +324,27 @@ CJK 字型 + H1 hook PoC,headless Docker 驗證通過:
 - **剩餘 productionize 工作**(中-大):`CHAR_WIDTH/HEIGHT` 8→16(`TILE` 自動 32)+ **全美術 2x**(charset/tiles/UI/intro 圖,需載入時 upscale 或 2x blit)。完成後 CJK 16px = 1 cell,**徹底免 2 列距、可放更多文字**。
 - **決策**:A(14px + 2 列距)已可用且 ship-able;B(640)為「更佳但中-大工」的後續選項,待決定是否投入。
 
+### 10i. B-full:640×400 全美術 2x regime(2026-06-04,**取代 A**)
+
+**達成**:內部解析度 640×400 + 全美術 2x + **CJK 1-cell(16px)**,徹底解決 320 regime 的 CJK 重疊。
+
+| 改動 | 內容 |
+|---|---|
+| 常數 | `u4.h`/`textview.h`:`CHAR_WIDTH/HEIGHT` 8→16(`TILE` 自動 32)、`U4_SCREEN` 640×400、`BORDER` 16 |
+| GPU | `gpu_opengl.cpp` 螢幕紋理 + shader scDim 320×200→640×400 |
+| 美術 2x | `imagemgr.cpp` 載入後 RGBA nearest 2x + **subimage 座標 2x**(集中式,涵蓋 charset/tiles/UI/border) |
+| CJK | `screen.cpp`/`textview.cpp` CJK 進位 2→**1 cell**、line stride 2→1;`intro.cpp` 列距**還原**(16px 列已容 14px CJK) |
+| 修 | `intro.cpp` beastie 硬編 `320-48`→`U4_SCREEN_W-96` |
+
+**驗證**(xdotool 真流程,`docs/screenshots/`):
+- `10_bfull_menu.png`:主選單 **CJK 1-cell 全乾淨**(返回畫面/啟程冒險/開始新遊戲/設定/關於,beasties + 標頭正確)。
+- `12_bfull_charcreate.png`:命名提示「汝之名…為何 / 於此世此刻?」連續兩行**不再重疊**。
+- `11_bfull_map.png`:Britannia 地圖 2x 正確填滿。
+
+**🟠 唯一剩餘(intro 眼花,follow-up)**:「Ultima IV」動畫標題字母錯位 —— `AnimElement`/`AnimPlot` 用 **uint8_t 座標(上限 255,放不下 640)**+ TITLE srcImage 1x 抽取 2x 影像。需 `AnimPlot` uint8→uint16 + addTitle 座標 2x + SIGNATURE plot 2×2 block。**屬 intro 動畫子系統,不影響選單/gameplay**。
+
+**A regime**(320/14px/2 列距)保留於 git 歷史 `ddca555`,可復原。
+
 ---
 
 ## 11. 風險與待決 (RAID)
