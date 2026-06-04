@@ -64,6 +64,8 @@ def render_glyph(font, ch, W, H):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--font", required=True)
+    ap.add_argument("--index", type=int, default=0,
+                    help=".ttc face index(Noto Sans CJK TC = 3)")
     ap.add_argument("--size", type=int, default=16)
     ap.add_argument("--out", required=True)
     ap.add_argument("--preview", default="")
@@ -71,7 +73,7 @@ def main():
 
     chars = collect_codepoints()
     # 字型 size 略小於 cell 留邊
-    font = ImageFont.truetype(args.font, args.size - 1)
+    font = ImageFont.truetype(args.font, args.size - 1, index=args.index)
     W = H = args.size
 
     os.makedirs(os.path.dirname(args.out), exist_ok=True)

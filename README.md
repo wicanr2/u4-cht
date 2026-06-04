@@ -107,7 +107,10 @@ docker run --rm -v /tmp/u4shot:/out u4cht/xu4-test 22 3   # → /tmp/u4shot/scre
 | P7+ | 完整 in-game 整合 / format-aware / 跨平台打包 | ⬜ |
 
 ![cjk](docs/screenshots/02_cjk_ingame.png)
-*Phase B 驗證:xu4 文字區經真實 `chtLookup`(en→zh)+ CJK 16×16 點陣字渲染中文 —— 「一位迷人的吟遊詩人。」(Iolo)、「馬精西亞城為其驕傲所毀。」*
+*Phase B 驗證:xu4 文字區經真實 `chtLookup`(en→zh)+ **Noto Sans CJK TC** 16×16 點陣字渲染中文 —— 「一位迷人的吟遊詩人。」(Iolo)、「馬精西亞城為其驕傲所毀。」*
+
+![font-compare](docs/screenshots/03_font_compare.png)
+*字型可讀性:AR PL UMing(左,Ming serif 細筆)→ Noto Sans CJK TC Medium(右,粗筆均勻)。*
 
 ---
 

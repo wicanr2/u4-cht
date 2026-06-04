@@ -19,7 +19,7 @@ git -C "$XU4" apply --check "$ROOT/patches/engine/cht-engine.patch" 2>/dev/null 
 echo "[3/3] 產生並安裝資產"
 if [ ! -f "$ROOT/assets/cjk_font.bin" ]; then
   python3 "$ROOT/tools/build_cjk_font.py" \
-    --font /usr/share/fonts/truetype/arphic/uming.ttc --size 16 \
+    --font /usr/share/fonts/opentype/noto/NotoSansCJK-Medium.ttc --index 3 --size 16 \
     --out "$ROOT/assets/cjk_font.bin" --preview "$ROOT/assets/cjk_preview.png"
 fi
 [ -f "$ROOT/assets/u4_cht.tab" ] || python3 "$ROOT/tools/build_lookup.py" --out "$ROOT/assets/u4_cht.tab"

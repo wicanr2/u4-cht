@@ -284,7 +284,8 @@ U6-cht 的核心經驗可直接套用:
 
 CJK 字型 + H1 hook PoC,headless Docker 驗證通過:
 
-- **資料側**:`tools/build_cjk_font.py`(掃四源 zh → 1978 唯一漢字 → AR PL UMing 烘 16×16 atlas `assets/cjk_font.bin`)+ `tools/build_lookup.py`(四源合併 en→zh 二進位 `assets/u4_cht.tab`,2614 條,依 en 排序)。
+- **資料側**:`tools/build_cjk_font.py`(掃四源 zh → 1978 唯一漢字 → **Noto Sans CJK TC Medium**(`--index 3`)烘 16×16 atlas `assets/cjk_font.bin`)+ `tools/build_lookup.py`(四源合併 en→zh 二進位 `assets/u4_cht.tab`,2614 條,依 en 排序)。
+  - **字型可讀性**(2026-06-04):16px 二值化下,Noto Sans CJK TC **Medium** 優於 AR PL UMing(Ming serif 細筆易斷)與 Noto Bold(密筆糊成一團);對比見 `docs/screenshots/03_font_compare.png`。
 - **引擎側**(`patches/engine/`,套用 `tools/apply_cht.sh`):
   - 新模組 `cht.cpp/h`:載入資產 + `chtLookup`(二分)+ `chtGlyph`。
   - `screen.cpp`:`cjkBlit`(16×16 全形 blit 到 `xu4.screenImage`)+ `screenMessageCJK`(UTF-8、CJK-aware 換行)+ **H1 `screenMessageN` 進入查表命中改走 CJK**;`chtSelfTest`(env 守護)。
