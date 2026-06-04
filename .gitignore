@@ -2,6 +2,9 @@
 /xu4/
 /u4remastered/
 
+# 原始遊戲資料(Origin © 1985,不重新散布;由 make download 重建)
+/data/
+
 # 建置/執行產物
 *.mod
 *.pak

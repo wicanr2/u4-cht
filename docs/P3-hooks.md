@@ -55,9 +55,9 @@ B. GUI / 選單 / 遊戲瀏覽器(.txf SDF 紋理字,uint16 碼位)──── 
 ## 4. P4 執行 backlog(依賴序)
 
 1. **抽字串**:
-   - (a) 寫工具抽 U4 `.TLK`(NPC 對話)+ `u4read_stringtable`(intro/故事)→ en 字串集。
-   - (b) grep 抽 417 `screenMessage` 字面 + 選單/discourse 字面 → 硬編 string table。
-   - (c) 與 `u4remastered/talk/talk.json` 對齊,建雙語對照(en→zh)。
+   - (a) ✅ **已完成**:`tools/extract_tlk.py` 抽 16 個 DOS `.TLK`(256 NPC 對話)→ 對齊 `talk.json` → 雙語表 `dumps/talk_bilingual.json` + 對齊報告 `dumps/talk_alignment_report.md`(見 §6)。
+   - (b) 待做:`u4read_stringtable`(intro/故事/vendor)→ en 字串集。
+   - (c) 待做:grep 抽 417 `screenMessage` 字面 + 選單/discourse 字面 → 硬編 string table。
 2. **lookup 格式**:binary length-prefixed(byte-safe,避 U6 的 0x5C trail 坑);en 一律從 source 抽取,禁手打(U6 坑 #9)。
 3. **CJK 字庫**(二選一或併用):
    - CHARSET 路徑:用 Noto/UMing 烘 CJK 點陣字庫,改 `screenShowChar`(H2)支援全形/多格 + `screenMessageN`(H1)tokenizer 把每個 CJK 字當獨立 token(U6 坑 #3)、調行高(U6 坑 #4)。
@@ -76,3 +76,23 @@ B. GUI / 選單 / 遊戲瀏覽器(.txf SDF 紋理字,uint16 碼位)──── 
 | binary v3 lookup(0x5C trail 坑) | P4 step 2 | 直接沿用格式 |
 | tokenizer 把 Big5 lead pair 當 token(坑 #3) | H1 tokenizer 改 CJK-aware | U4 文字框更窄,行寬更需注意 |
 | 8 個 engine hook | H1–H8(本表) | 數量相近 |
+
+---
+
+## 6. P4(a) .TLK 抽取結果(2026-06-04)
+
+`tools/extract_tlk.py`(不改引擎,純資料抽取,依 `discourse_tlk.cpp` U4Talk_load 格式):
+
+| 項目 | 數字 |
+|---|---|
+| DOS `.TLK` 檔(`ultima4.zip`) | 16(BRITAIN/COVE/DEN/EMPATH/JHELOM/LCB/LYCAEUM/MAGINCIA/MINOC/MOONGLOW/PAWS/SERPENT/SKARA/TRINSIC/VESPER/YEW) |
+| 抽出 NPC 對話 | **256**(16 檔 × 16 record × 288 byte) |
+| 以 name 對齊 `talk.json` | 250 / 256 |
+| name 無對應(DOS name 欄位異常) | 6 — 疑似 remaster 修過的 broken dialogue(Serpent's Hold 門衛、Yew 乞丐等),報告列出供人工核對 |
+| 英文內容有差異 | 188 — 多為 remaster 修對白 + DOS keyword **4 字截斷**(`DANC`/`COMP`)+ 換行格式 |
+
+**產出**:
+- `dumps/talk_bilingual.json`:雙語表雛形,每 NPC × 12 欄 `{en, zh}`(en = DOS `.TLK` 原文 = H1 hook 的 lookup key;description 已套 `U4Talk_load` 執行時修飾使 en 等於引擎輸出;zh 待填;keyword/topic 預設不譯)。
+- `dumps/talk_alignment_report.md`:對齊摘要 + 無對應清單 + 英文差異明細。
+
+**翻譯原則**:以 **DOS `.TLK` 的 en 為翻譯 key**(引擎實際輸出);`talk.json` 作乾淨參考(校對、補 remaster 修正)。**raw `.TLK` / zip 不入庫**(`/data/`,Origin © 1985),由 `make download` 重建。

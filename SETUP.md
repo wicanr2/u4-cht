@@ -35,6 +35,30 @@ docker run --rm -v /tmp/u4shot:/out u4cht/xu4-test 22 3
 # → /tmp/u4shot/screen.png
 ```
 
+## 4. 抽取 NPC 對話 → 雙語表(P4 資料面)
+
+原始 `.TLK` 來自 `ultima4.zip`(Origin © 1985,**不入庫**),先從 image 取出:
+
+```bash
+mkdir -p data/zip data/tlk
+docker run --rm -v "$PWD/data/zip:/out" u4cht/xu4-allegro \
+  bash -c 'cp /build/xu4/ultima4.zip /out/'
+python3 - <<'PY'
+import zipfile
+zf=zipfile.ZipFile('data/zip/ultima4.zip')
+for n in zf.namelist():
+    if n.lower().endswith('.tlk'):
+        open(f'data/tlk/{n.upper()}','wb').write(zf.read(n))
+PY
+
+# 抽取 + 對齊 talk.json → 雙語表 + 報告
+python3 tools/extract_tlk.py \
+  --tlk-dir data/tlk \
+  --talk-json u4remastered/src/talk/talk.json \
+  --out-bilingual dumps/talk_bilingual.json \
+  --out-report dumps/talk_alignment_report.md
+```
+
 ## 檔案
 
 | 路徑 | 說明 |
@@ -43,4 +67,8 @@ docker run --rm -v /tmp/u4shot:/out u4cht/xu4-test 22 3
 | `docker/Dockerfile.zh` | xu4 Allegro 5 Linux build |
 | `docker/Dockerfile.test` | 在上者之上加 headless 截圖工具 |
 | `docker/shot.sh` | Xvfb + llvmpipe 跑 xu4 並截圖 |
+| `tools/extract_tlk.py` | 抽 DOS `.TLK` NPC 對話 + 對齊 talk.json → 雙語表 |
+| `dumps/talk_bilingual.json` | 256 NPC × 12 欄雙語表雛形(en 已填,zh 待填) |
+| `dumps/talk_alignment_report.md` | `.TLK` ↔ talk.json 對齊/差異報告 |
 | `docs/` | P3 hook 盤點等工程文件 |
+| `data/`(gitignore) | 原始遊戲資料(zip / `.TLK`),由 `make download` 重建 |

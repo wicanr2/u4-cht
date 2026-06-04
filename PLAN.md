@@ -210,7 +210,7 @@ U6-cht 的核心經驗可直接套用:
 | **P1 引擎建置** | Docker(Allegro 5)build xu4 → 二進位 + 模組 + 資料就位 | ✅ **已完成**:`Dockerfile.zh` build 成功(見 §6a) |
 | **P2 字型 PoC** | headless 截圖 loop + 文字架構盤點 + 字型可行性驗證 | ✅ **loop+驗證完成**(§10a/§9);畫出中文字移至 P4(需先建字型資產) |
 | **P3 文字 hook 盤點** | grep xu4 所有輸出 codepath,產 hook backlog | ✅ **已完成**:`docs/P3-hooks.md`(H1–H8 + 字串來源 + P4 backlog) |
-| **P4 字串抽取 + 對齊** | 抽英文字串,對齊 `talk.json` 底本,建雙語表 | 雙語對照表 |
+| **P4 字串抽取 + 對齊** | 抽英文字串,對齊 `talk.json` 底本,建雙語表 | 🔵 **資料面已完成**:`tools/extract_tlk.py` → 256 NPC 雙語表 `dumps/talk_bilingual.json`(§10c);intro/硬編字串待抽 |
 | **P5 翻譯** | 對話 + 系統字串中文化(glossary + 文白並用) | 翻譯資料 JSON |
 | **P6 整合驗證** | lookup 接上、CJK 換行、game tester 背景跑最小遊玩迴圈 | tester 無 regression |
 | **P7 收尾** | 跨平台(Win)打包、README/CREDITS、授權聲明 | 可散布(自用)版本 |
@@ -237,6 +237,21 @@ U6-cht 的核心經驗可直接套用:
 - ✅ **驗證通過**:截到完整「**Ultima IV — Quest of the Avatar**」標題畫面 + 動態世界地圖(960×600,scale 3)→ 證明 Allegro 5 + GL 渲染管線在 Docker headless 全程可跑。**此即 P3+ 的決定性 pass/fail loop。**
 - ⚠️ intro 為動畫,截圖時點影響畫面;後續做穩定基準時改用固定狀態(如進遊戲後固定座標)再 diff。
 
+### 10c. P4 資料面:.TLK 抽取 + 對齊(2026-06-04 實測)
+
+`tools/extract_tlk.py`(**不改引擎**,依 `src/discourse_tlk.cpp` U4Talk_load 格式抽 16 個 DOS `.TLK`):
+
+| 項目 | 數字 |
+|---|---|
+| 抽出 NPC 對話 | **256**(16 城 × 16 record × 288 byte) |
+| 以 name 對齊 `talk.json` | 250 / 256 |
+| name 無對應(DOS name 欄位異常,疑似 remaster 修過的 broken NPC) | 6 |
+| 英文內容差異(remaster 修對白 + DOS keyword 4 字截斷 + 換行) | 188 |
+
+- 產出 `dumps/talk_bilingual.json`(每 NPC × 12 欄 `{en, zh}`,en = `.TLK` 原文 = H1 lookup key,description 已套引擎執行時修飾;zh 待填)+ `dumps/talk_alignment_report.md`。
+- 翻譯 key 以 DOS `.TLK` en 為準;`talk.json` 作校對參考。raw `.TLK`/zip 不入庫(`/data/`)。
+- 詳見 `docs/P3-hooks.md` §6。
+
 ---
 
 ## 11. 風險與待決 (RAID)
@@ -258,9 +273,10 @@ U6-cht 的核心經驗可直接套用:
 1. **★ 決策確認(P0)— ✅ 已拍板(2026-06-04)**:使用者確認**放棄 u4remastered 作引擎基礎,改用 xu4**;後端採 Allegro 5(D3-a)。
 2. **P1 引擎建置 — ✅ 已完成(2026-06-04)**:`Dockerfile.zh` build 成功,xu4 vDR-1.0 + 完整資料模組就位(見 §10a)。
 3. **P2 引擎/字型驗證 — ✅ 已完成(2026-06-04)**:headless 截圖 loop 成立(截到標題畫面,見 §10b);文字架構盤點 + 字型可行性定讞(§9)。
-4. **P3 文字 hook 盤點 — ✅ 已完成(2026-06-04)**:`docs/P3-hooks.md`。核心:**H1 `screenMessageN` 是遊戲內所有捲動文字(含 NPC 對話)的單一中央漏斗(417 個 `screenMessage` call site 匯入)**,對應 U6 `MsgScroll` hook。下一步 P4(抽字串 + CJK 字庫 + 接 hook)。
-5. 保留 `u4remastered/talk/talk.json` 作為翻譯底本與 oracle。
-6. **git repo — ✅ 本地已 init(2026-06-04)**:納管 PLAN/SETUP/docker/docs;上游 `xu4/`、`u4remastered/` 由 `.gitignore` 排除。**push 遠端待使用者確認**。
+4. **P3 文字 hook 盤點 — ✅ 已完成(2026-06-04)**:`docs/P3-hooks.md`。核心:**H1 `screenMessageN` 是遊戲內所有捲動文字(含 NPC 對話)的單一中央漏斗(417 個 `screenMessage` call site 匯入)**,對應 U6 `MsgScroll` hook。
+5. **P4 資料面 — 🔵 已起手(2026-06-04)**:`tools/extract_tlk.py` 抽 16 個 DOS `.TLK`(256 NPC)→ 對齊 `talk.json` → 雙語表 `dumps/talk_bilingual.json` + 報告 `dumps/talk_alignment_report.md`(§10c)。**不改引擎**。下一步:intro/vendor stringtable + 417 硬編字串抽取,再進字型/翻譯/接 hook。
+6. 保留 `u4remastered/src/talk/talk.json` 作為翻譯底本與 oracle。
+7. **git repo — ✅ 本地已 init(2026-06-04)**:納管 PLAN/SETUP/docker/docs/tools/dumps;上游 `xu4/`、`u4remastered/`、原始資料 `data/` 由 `.gitignore` 排除。**push 遠端待使用者確認**。
 
 ---
 
