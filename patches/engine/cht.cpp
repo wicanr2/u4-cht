@@ -55,9 +55,23 @@ void loadLookup() {
     fprintf(stderr, "cht: loaded %zu translations\n", gTable.size());
 }
 
+/* 字形切換:env U4CHT_FONT 選 atlas(noto 預設 / firefly / kai) */
+static const char* fontFile() {
+    const char* sel = getenv("U4CHT_FONT");
+    if (sel) {
+        if (!strcmp(sel, "firefly") || !strcmp(sel, "sung"))
+            return "cjk_font_firefly.bin";
+        if (!strcmp(sel, "kai"))
+            return "cjk_font_kai.bin";
+    }
+    return "cjk_font.bin";
+}
+
 void loadFont() {
-    FILE* f = openAsset("cjk_font.bin");
-    if (!f) { fprintf(stderr, "cht: cjk_font.bin not found\n"); return; }
+    const char* fname = fontFile();
+    FILE* f = openAsset(fname);
+    if (!f) { fprintf(stderr, "cht: %s not found\n", fname); return; }
+    fprintf(stderr, "cht: font = %s\n", fname);
     char magic[8];
     uint16_t W = 0, H = 0;
     uint32_t count = 0;

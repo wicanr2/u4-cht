@@ -139,3 +139,26 @@ docker run --rm -e U4CHT_SELFTEST=1 -v /tmp/u4shot:/out u4cht/xu4-test 6 3
 ```
 
 引擎改動見 `patches/engine/`(cht.cpp/h + cht-engine.patch)。
+
+## 7. 字形切換(Firefly / Noto)
+
+三套 CJK atlas 已隨 `assets/` 提供;執行時以 env `U4CHT_FONT` 選用:
+
+| `U4CHT_FONT` | 字形 | 來源 |
+|---|---|---|
+| (未設) | Noto Sans CJK TC Medium(黑體,預設) | system noto |
+| `firefly` / `sung` | 文鼎PL細上海宋(明體) | fonts-arphic-bsmi00lp |
+| `kai` | 文鼎PL中楷(楷體) | fonts-arphic-bkai00mp |
+
+```bash
+# 取 Firefly 字型(study-area firefly-font = AR PL Big5)→ 建 atlas
+apt-get download fonts-arphic-bsmi00lp fonts-arphic-bkai00mp
+dpkg -x fonts-arphic-bsmi00lp_*.deb /tmp/bsmi; dpkg -x fonts-arphic-bkai00mp_*.deb /tmp/bkai
+python3 tools/build_cjk_font.py --font /tmp/bsmi/usr/share/fonts/truetype/arphic-bsmi00lp/bsmi00lp.ttf \
+  --size 14 --cell 16 --mode gray --out assets/cjk_font_firefly.bin
+python3 tools/build_cjk_font.py --font /tmp/bkai/usr/share/fonts/truetype/arphic-bkai00mp/bkai00mp.ttf \
+  --size 14 --cell 16 --mode gray --out assets/cjk_font_kai.bin
+
+# 用 Firefly 宋體跑
+docker run --rm -e U4CHT_FONT=firefly -v /tmp/u4shot:/out u4cht/xu4-test 22 1
+```

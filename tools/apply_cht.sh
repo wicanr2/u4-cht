@@ -23,7 +23,8 @@ if [ ! -f "$ROOT/assets/cjk_font.bin" ]; then
     --out "$ROOT/assets/cjk_font.bin" --preview "$ROOT/assets/cjk_preview.png"
 fi
 [ -f "$ROOT/assets/u4_cht.tab" ] || python3 "$ROOT/tools/build_lookup.py" --out "$ROOT/assets/u4_cht.tab"
-cp "$ROOT/assets/cjk_font.bin" "$ROOT/assets/u4_cht.tab" "$XU4/"
+# 字形切換:ship Noto(預設)+ Firefly 宋體/楷體(若已建);runtime env U4CHT_FONT 選用
+cp "$ROOT"/assets/cjk_font*.bin "$ROOT/assets/u4_cht.tab" "$XU4/"
 
 echo "[4/4] vendor module 中文化(vendors.b 模板 → 中文)"
 python3 "$ROOT/tools/patch_vendor_boron.py" \

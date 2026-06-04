@@ -362,6 +362,16 @@ CJK 字型 + H1 hook PoC,headless Docker 驗證通過:
 
 ---
 
+### 10j. 字形切換功能(2026-06-04)
+
+- 三套 CJK atlas:Noto Sans CJK TC(預設)/ Firefly 文鼎PL細上海宋(明體)/ Firefly 文鼎PL中楷(楷體)。
+- `cht.cpp` 依 env `U4CHT_FONT`(firefly/sung/kai)選 `cjk_font_<name>.bin`,預設 Noto。
+- Firefly = study-area firefly-font(AR PL Big5);`apt-get download` + `dpkg -x` 取 ttf,`build_cjk_font.py` 烘 atlas。
+- 對比 `docs/screenshots/18_font_switch.png`(黑體/明體/楷體三style)。三套 ship 於 `assets/`,`apply_cht.sh` 全 cp。
+- 後續可加 in-game 設定選單切換(目前 env)。
+
+---
+
 ## 11. 風險與待決 (RAID)
 
 | # | 風險/待決 | 等級 | 處置 |
