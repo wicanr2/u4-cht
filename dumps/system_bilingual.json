@@ -179,6 +179,18 @@
     {
       "en": "Retreat\n",
       "zh": "後退\n"
+    },
+    {
+      "en": "Loading Game...",
+      "zh": "載入遊戲中……"
+    },
+    {
+      "en": "<-Shops",
+      "zh": "<-商店"
+    },
+    {
+      "en": "SPELL # Reagents MP",
+      "zh": "法術 # 試劑 MP"
     }
   ]
 }
