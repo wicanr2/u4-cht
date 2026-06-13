@@ -32,6 +32,20 @@
 
 ---
 
+<a name="lordbritish"></a>
+## 🗣️ 謁見不列顛王
+
+走進城堡、登上二樓,向 **Lord British** 詢問世間種種 —— 八德的真義、聖壇所在、冥河大深淵與典籍密室、三位大邪君的下場。整段對白(載自原版 `avatar.exe`)逐句中文化,連初見時喚你之名的問候都不放過。
+
+| 初見:王起身相迎 | 詢問「冥河大深淵」 | 詢問「蒙丹」 |
+|---|---|---|
+| ![lbgreet](docs/screenshots/23_lb_greet.png) | ![lbabyss](docs/screenshots/24_lb_abyss.png) | ![lbmondain](docs/screenshots/25_lb_mondain.png) |
+| *「不列顛王起身說道:汝終於來了!Avatar,吾等已等候許久,許久……」名字即時帶入。* | *「乃典籍密室之所在!……方能入此密室,譬如聖者!!!」深淵與典籍兩段,忠實分頁。* | *「他說道:蒙丹已亡!」三大邪君,各有交代。* |
+
+> 實機驗證:`goto` 不列顛城堡 → 二樓 Klimb → 謁見 Lord British,逐 keyword 截圖。LB 座標由原版 `LCB_2.ULT` 解出。
+
+---
+
 <a name="art"></a>
 ## 🎨 兩個時代的美術,一鍵之間 —— `F2`
 
@@ -57,17 +71,18 @@ Ultima IV 當年有 EGA(16 色)與後來社群重製的 VGA(256 色)兩套美術
 ## 目錄
 
 1. [走進不列顛尼亞(畫廊)](#gallery)
-2. [兩個時代的美術 F2](#art)
-3. [這是什麼](#這是什麼)
-4. [為何選 xu4(而非 u4remastered)](#為何選-xu4)
-5. [八德 — Avatar 之道的起點](#八德)
-6. [遊戲中熱鍵](#hotkeys)
-7. [快速開始](#快速開始)
-8. [目前進度](#目前進度)
-9. [技術架構](#技術架構)
-10. [資料抽取成果](#資料抽取成果)
-11. [Roadmap](#roadmap)
-12. [License & Credits](#credits)
+2. [謁見不列顛王](#lordbritish)
+3. [兩個時代的美術 F2](#art)
+4. [這是什麼](#這是什麼)
+5. [為何選 xu4(而非 u4remastered)](#為何選-xu4)
+6. [八德 — Avatar 之道的起點](#八德)
+7. [遊戲中熱鍵](#hotkeys)
+8. [快速開始](#快速開始)
+9. [目前進度](#目前進度)
+10. [技術架構](#技術架構)
+11. [資料抽取成果](#資料抽取成果)
+12. [Roadmap](#roadmap)
+13. [License & Credits](#credits)
 
 ---
 
