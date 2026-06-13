@@ -87,6 +87,22 @@
     {
       "en": "\n%s %cPoisoned%c!\n",
       "zh": "\n%s %c中毒%c!\n"
+    },
+    {
+      "en": "\n%s with %s\n\u0010",
+      "zh": "\n%s 持 %s\n\u0010"
+    },
+    {
+      "en": "\n%s %cSlept%c!\n",
+      "zh": "\n%s %c沉睡%c!\n"
+    },
+    {
+      "en": "\n%s %cMagical Hit%c!\n",
+      "zh": "\n%s %c魔法命中%c!\n"
+    },
+    {
+      "en": "\n%s %cElectrified%c!\n",
+      "zh": "\n%s %c觸電%c!\n"
     }
   ]
 }
