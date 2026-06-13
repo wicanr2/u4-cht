@@ -138,15 +138,24 @@ index cdd6837..56c0966 100644
                  break;
          }
 diff --git a/src/discourse_tlk.cpp b/src/discourse_tlk.cpp
-index 01f961c..d82279e 100644
+index 01f961c..251ef42 100644
 --- a/src/discourse_tlk.cpp
 +++ b/src/discourse_tlk.cpp
-@@ -377,8 +377,17 @@ static const char* U4Talk_dialogue(TalkState* ts, int value, const char* input)
+@@ -1,5 +1,6 @@
+ // Discourse for U4 Tlk
+ 
++#include "cht.h"     // U4 繁中化:NPC look 描述查表
+ #include "game.h"
+ #include "party.h"
+ #include "screen.h"
+@@ -377,10 +378,23 @@ static const char* U4Talk_dialogue(TalkState* ts, int value, const char* input)
          switch(value) {
              case DS_NAME:
                  return USTR(name);
 -            case DS_PRONOUN:
 -                return USTR(pronoun);
+-            case DS_LOOK:
+-                return USTR(look);
 +            case DS_PRONOUN: {
 +                /* U4 繁中化:NPC 代名詞 He/She/It → 他/她/它(其餘稱謂原樣)。 */
 +                const char* pn = USTR(pronoun);
@@ -158,9 +167,15 @@ index 01f961c..d82279e 100644
 +                }
 +                return pn;
 +            }
-             case DS_LOOK:
-                 return USTR(look);
++            case DS_LOOK: {
++                /* U4 繁中化:NPC look 描述(『汝遇見/汝見到 X』)查表。 */
++                const char* lk = USTR(look);
++                const char* zh = lk ? chtLookup(lk, (int) strlen(lk)) : 0;
++                return zh ? zh : lk;
++            }
              case DS_QUESTION:
+                 return USTR(question);
+             case DS_ANSWER_Y:
 diff --git a/src/event.cpp b/src/event.cpp
 index 0bef0c9..7accd7f 100644
 --- a/src/event.cpp
