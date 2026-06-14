@@ -237,9 +237,11 @@ B. GUI / 選單(.txf SDF 紋理字,uint16 碼位)
 <a name="roadmap"></a>
 ## 🗺️ Roadmap
 
-**已完成**:四源全譯(talk 256 / stringtable 114 / 硬編 318 / vendor 278)→ CJK 灰階字庫(Noto / Firefly / Kai)→ H1–H8 文字 hook → 640×400 全美術 2x → 標題動畫 → `F2` EGA/VGA 即時切換 → `F3` 解析度 → AppImage + Windows 打包 → **Lord British 城堡對白**(LCB 二樓,載自 `avatar.exe`)→ **vendor 買賣面板**(武器/防具名 + 標題,`getName` 查表)→ **一般 NPC 對話系統全面中文化**(遇見/look 描述/代名詞 他她它/吾名為/汝欲問/告別/給金幣/加入回應 — DS_LOOK・DS_PRONOUN hook)→ **職業/怪物/物品/方向/系統/戰鬥/聖壇/Codex 訊息**補譯 → 精訊官方手冊 OCR 參考 + **混合譯名政策**(見 [譯名政策](#naming))。**全域多行掃描:screenMessage 路徑 0 殘留英文。**
+**已完成**:四源全譯(talk 256 / stringtable 114 / 硬編 318 / vendor 278)→ CJK 灰階字庫(Noto / Firefly / Kai)→ H1–H8 文字 hook → 640×400 全美術 2x → 標題動畫 → `F2` EGA/VGA 即時切換 → `F3` 解析度 → AppImage + Windows 打包 → **Lord British 城堡對白**(LCB 二樓,載自 `avatar.exe`)→ **vendor 買賣面板** → **一般 NPC 對話系統**(遇見/look/代名詞 他她它/吾名為/汝欲問/給金幣/加入 — DS_LOOK・DS_PRONOUN hook)→ **HUD 風向/方向**(screenTextAt format 查表)→ **角色面板數值縮寫**(力/敏/智/生/法…)→ **法術名**(甦醒術/神光術…本地表免碰撞)+ 施法錯誤 → **吉普賽角色創建**(框架 + 28 題道德兩難)→ **怪物名拍板**(半獸人/巨鼠/樹妖/巨口妖)→ 職業/物品/方向/系統/戰鬥/聖壇/Codex 訊息 → 精訊官方手冊 OCR 參考 + **混合譯名政策**(見 [譯名政策](#naming))。
 
-**未來方向**:角色面板數值縮寫(STR/DEX/INT…)與吉普賽問卷框架(版面需重排)、3 個待定怪物名(Hydra/Reaper/Zorn)、`.txf` GUI 字(存檔瀏覽器)SDF 子集烘焙、譯文潤飾。
+> **全路徑多行掃描:玩家可見文字 0 殘留英文**(僅吉普賽卡牌名行 positional fragment、卡圖烘進的德目美術字、GPL 授權聲明刻意保留)。
+
+**未來方向**:`.txf` GUI 字(存檔瀏覽器)SDF 子集烘焙、吉普賽卡牌名行版面重排、譯文潤飾(文白比例與專名一致性)。
 
 ---
 
