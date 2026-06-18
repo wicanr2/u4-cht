@@ -1,8 +1,9 @@
-# CJK 點陣字 atlas builder:Noto(預設)+ AR PL 宋/楷(firefly/kai 替代字形)
+# CJK 字型 builder:點陣字 atlas(Noto + AR PL 宋/楷)+ GUI SDF 字型(build_cjk_txf.py)
+# numpy/scipy 供 SDF 距離轉換(GUI 文字層中文化用)。
 FROM python:3.11-slim
 RUN apt-get update && apt-get install -y --no-install-recommends \
       fonts-noto-cjk fonts-arphic-bsmi00lp fonts-arphic-bkai00mp \
- && pip install --no-cache-dir pillow \
+ && pip install --no-cache-dir pillow numpy scipy \
  && rm -rf /var/lib/apt/lists/*
 WORKDIR /work
 ENTRYPOINT ["bash"]

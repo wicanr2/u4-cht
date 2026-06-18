@@ -34,6 +34,15 @@ if [ ! -f "$ROOT/assets/cjk_font_kai.bin" ] && [ -f "$BKAI" ]; then
   python3 "$ROOT/tools/build_cjk_font.py" --font "$BKAI" --size 14 --cell 16 \
     --out "$ROOT/assets/cjk_font_kai.bin"
 fi
+# GUI SDF 字型(模組瀏覽器中文化):對乾淨 cfont.png 注入 CJK glyph + 產 cfont-cjk.txf。
+# 走 MSDF shader 的 median(r,g,b),單通道 SDF 寫進 R=G=B 即可,毋須 msdfgen。
+# 需 numpy/scipy(見 docker/Dockerfile.font)。idempotent:已產則略過。
+if [ ! -f "$XU4/module/render/font/cfont-cjk.txf" ] && [ -f "$NOTO" ]; then
+  python3 "$ROOT/tools/build_cjk_txf.py" --font "$NOTO" --index 3 \
+    --atlas "$XU4/module/render/font/cfont.png" \
+    --out-txf "$XU4/module/render/font/cfont-cjk.txf"
+fi
+
 [ -f "$ROOT/assets/u4_cht.tab" ] || python3 "$ROOT/tools/build_lookup.py" --out "$ROOT/assets/u4_cht.tab"
 # 字形切換:ship Noto(預設)+ Firefly 宋體/楷體(若已建);runtime env U4CHT_FONT 選用
 cp "$ROOT"/assets/cjk_font*.bin "$ROOT/assets/u4_cht.tab" "$XU4/"

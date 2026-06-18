@@ -297,6 +297,25 @@ index 69ca236..9c1a8d2 100644
  
  /* spell functions */
  void castSpell(int player = -1);
+diff --git a/src/gamebrowser.cpp b/src/gamebrowser.cpp
+index 73bf48a..90a9ac6 100644
+--- a/src/gamebrowser.cpp
++++ b/src/gamebrowser.cpp
+@@ -454,10 +454,10 @@ void GameBrowser::layout()
+ 
+     *data++ = gbox;
+     *data++ = "xu4 | ";
+-    *data++ = "Game Modules";
+-    *data++ = "Play";
+-    *data++ = "Quit";
+-    *data   = "Cancel";
++    *data++ = "遊戲模組";
++    *data++ = "開始";
++    *data++ = "離開";
++    *data   = "取消";
+ 
+     TxfDrawState ds;
+     ds.fontTable = ss->fontTable;
 diff --git a/src/gpu_opengl.cpp b/src/gpu_opengl.cpp
 index 882a30c..29a699e 100644
 --- a/src/gpu_opengl.cpp
@@ -777,7 +796,7 @@ index 8807b88..9ea809d 100644
  }
 -
 diff --git a/src/screen.cpp b/src/screen.cpp
-index 46d51bd..63c2156 100644
+index 46d51bd..5ebacb4 100644
 --- a/src/screen.cpp
 +++ b/src/screen.cpp
 @@ -25,6 +25,7 @@
@@ -788,7 +807,49 @@ index 46d51bd..63c2156 100644
  
  using std::vector;
  
-@@ -189,6 +190,8 @@ static void screenInit_data(Screen* scr, Settings& settings) {
+@@ -40,8 +41,11 @@ static const float colorBlack[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+ static const char* fontFiles[] = {
+     "cfont-comfortaa.txf",
+     "cfont-avatar.txf",
+-    "cfont-symbols.txf"
++    "cfont-symbols.txf",
++    "cfont-cjk.txf"         // CJK 後備字型(GUI 文字層中文化)
+ };
++#define TXF_COUNT  4
++#define TXF_CJK    3
+ 
+ /*
+  * Load textured font metrics.
+@@ -76,7 +80,7 @@ struct Screen {
+     ImageInfo* gemTilesInfo;
+     char* msgBuffer;
+     ScreenState state;
+-    TxfHeader* txf[3];
++    TxfHeader* txf[TXF_COUNT];
+     short needPrompt;
+     short colorFG;
+     uint16_t clearCount;
+@@ -125,7 +129,11 @@ struct Screen {
+         renderMapView = NULL;
+ #endif
+         txf[0] = NULL;
++        txf[TXF_CJK] = NULL;
++        // 基礎 3 套字型為必要;CJK 後備字型單獨非致命載入,缺檔不影響 GUI 文字。
+         loadFonts(fontFiles, 3, txf);
++        txf[TXF_CJK] = (TxfHeader*) xu4.config->loadFile(fontFiles[TXF_CJK]);
++        txf_setCJKFont(txf[TXF_CJK]);
+     }
+ 
+     ~Screen() {
+@@ -133,6 +141,7 @@ struct Screen {
+             free(txf[0]);
+             free(txf[1]);
+             free(txf[2]);
++            free(txf[TXF_CJK]);
+         }
+         delete dungeonView;
+         delete[] msgBuffer;
+@@ -189,6 +198,8 @@ static void screenInit_data(Screen* scr, Settings& settings) {
      if (! scr->charsetInfo)
          errorLoadImage(BKGD_CHARSET);
  
@@ -797,7 +858,7 @@ index 46d51bd..63c2156 100644
  #ifdef GPU_RENDER
      {
      ImageInfo* tinfo;
-@@ -265,7 +268,7 @@ void screenInit(int layerCount) {
+@@ -265,7 +276,7 @@ void screenInit(int layerCount) {
      xu4.screen = screen;
  
      // Create a special purpose image that represents the whole screen.
@@ -806,7 +867,7 @@ index 46d51bd..63c2156 100644
      xu4.screenImage->fill(Image::black);
  
      screenInit_sys(xu4.settings, &screen->state, SYS_CLEAN);
-@@ -302,6 +305,24 @@ void screenReInit() {
+@@ -302,6 +313,24 @@ void screenReInit() {
      //gs_emitMessage(SENDER_DISPLAY, &screen->state);
  }
  
@@ -831,7 +892,7 @@ index 46d51bd..63c2156 100644
  // Private to screenInit_sys().
  int screenInitState(ScreenState* state, const Settings* settings, int dw, int dh)
  {
-@@ -350,15 +371,30 @@ bool screenLayerUsed(int layer) {
+@@ -350,15 +379,30 @@ bool screenLayerUsed(int layer) {
      return XU4_SCREEN->layers[layer].func ? true : false;
  }
  
@@ -862,7 +923,7 @@ index 46d51bd..63c2156 100644
      for (i = 0; i < buflen; i++)
          screenShowChar(buffer[i], x + i, y);
  }
-@@ -403,6 +439,13 @@ void screenMessage(const char *fmt, ...) {
+@@ -403,6 +447,13 @@ void screenMessage(const char *fmt, ...) {
      if (! c)
          return; // Some cases (like the intro) don't have the context initiated.
  
@@ -876,7 +937,7 @@ index 46d51bd..63c2156 100644
      va_list args;
      va_start(args, fmt);
      buflen = vsnprintf(buffer, MsgBufferSize, fmt, args);
-@@ -446,7 +489,102 @@ void screenMessageCenter(const char* text, int newlines) {
+@@ -446,7 +497,102 @@ void screenMessageCenter(const char* text, int newlines) {
      screenMessageN(start, cp - start);
  }
  
@@ -979,7 +1040,7 @@ index 46d51bd..63c2156 100644
      bool colorize = xu4.settings->enhancements &&
                      xu4.settings->enhancementsOptions.textColorization;
      const int colCount = TEXT_AREA_W;
-@@ -850,7 +988,44 @@ static void screenUploadCursor(Screen* sp, uint32_t stex) {
+@@ -850,7 +996,44 @@ static void screenUploadCursor(Screen* sp, uint32_t stex) {
                      &cimg);
  }
  
@@ -1088,6 +1149,141 @@ index d2c466b..9235af3 100644
      title.textAtFmt(titleStart, 0, "%c%s%c", 16, s, 17);
  }
  
+diff --git a/src/support/txf_draw.c b/src/support/txf_draw.c
+index b449d10..078df24 100644
+--- a/src/support/txf_draw.c
++++ b/src/support/txf_draw.c
+@@ -3,6 +3,49 @@
+ #include <math.h>
+ #include "txf_draw.h"
+ 
++/* CJK 後備字型(稀疏碼位)。見 txf_setCJKFont。 */
++static const TxfHeader* g_cjkFont = NULL;
++
++void txf_setCJKFont(const TxfHeader* tf)
++{
++    g_cjkFont = tf;
++}
++
++/* 解一個 UTF-8 字:回傳消耗的 byte 數,*cp 為碼位。
++   非法序列退化為單 byte。 */
++static int txf_utf8(const uint8_t* it, const uint8_t* end, int* cp)
++{
++    uint8_t c = *it;
++    int n, v, i;
++    if (c < 0x80)             { *cp = c; return 1; }
++    if ((c & 0xE0) == 0xC0)   { n = 2; v = c & 0x1F; }
++    else if ((c & 0xF0) == 0xE0) { n = 3; v = c & 0x0F; }
++    else if ((c & 0xF8) == 0xF0) { n = 4; v = c & 0x07; }
++    else                      { *cp = c; return 1; }
++    if (it + n > end)         { *cp = c; return 1; }
++    for (i = 1; i < n; ++i) {
++        if ((it[i] & 0xC0) != 0x80) { *cp = c; return 1; }
++        v = (v << 6) | (it[i] & 0x3F);
++    }
++    *cp = v;
++    return n;
++}
++
++/* CJK 字型 glyph 依碼位升序排列 → 二分查找(既有字型走密集索引 txf_glyph)。 */
++static const TxfGlyph* txf_glyphCp(const TxfHeader* tf, int cp)
++{
++    const TxfGlyph* g = (const TxfGlyph*) (tf + 1);
++    int lo = 0, hi = (int) tf->glyphCount - 1;
++    while (lo <= hi) {
++        int mid = (lo + hi) >> 1;
++        int c = g[mid].code;
++        if (c == cp) return g + mid;
++        if (c < cp)  lo = mid + 1;
++        else         hi = mid - 1;
++    }
++    return NULL;
++}
++
+ /**
+   Returns the TxfGlyph for a glyph or zero if it is not available.
+   Automatically substitutes uppercase letters with lowercase if
+@@ -160,7 +203,49 @@ int txf_genText(TxfDrawState* ds, float* uvs, float* vertex, int stride,
+         }
+         */
+ 
+-        if (*it > ' ')
++        if (*it >= 0x80 && g_cjkFont)
++        {
++            int cp;
++            it += txf_utf8(it, end, &cp);
++            tgi = txf_glyphCp(g_cjkFont, cp);
++            if (tgi)
++            {
++                float cjkPR = scale *
++                              (g_cjkFont->pixelRange / g_cjkFont->fontSize);
++                gx = ds->x;
++                ds->x += tgi->advance * scale;
++                gy = ds->y;
++                gr = gx + tgi->emRect[2] * scale;
++                gt = gy + tgi->emRect[3] * scale;
++                gx = gx + tgi->emRect[0] * scale;
++                gy = gy + tgi->emRect[1] * scale;
++                min_s = tgi->tcRect[0];
++                max_s = tgi->tcRect[2];
++                min_t = 1.0f - tgi->tcRect[1];
++                max_t = 1.0f - tgi->tcRect[3];
++
++#define CJK_ATTR(s,t,x,y) \
++    uvs[0] = s; uvs[1] = t; uvs[2] = cjkPR; uvs[3] = ds->colorIndex; \
++    uvs += stride; \
++    vertex[0] = x; vertex[1] = y; vertex[2] = 0.0f; vertex += stride
++
++                CJK_ATTR( min_s, min_t, gx, gy );
++                CJK_ATTR( max_s, min_t, gr, gy );
++                CJK_ATTR( max_s, max_t, gr, gt );
++                if (ds->emitTris) {
++                    CJK_ATTR( max_s, max_t, gr, gt );
++                    CJK_ATTR( min_s, max_t, gx, gt );
++                    CJK_ATTR( min_s, min_t, gx, gy );
++                } else {
++                    CJK_ATTR( min_s, max_t, gx, gt );
++                }
++#undef CJK_ATTR
++                ++drawn;
++            }
++            ds->prev = NULL;
++            continue;
++        }
++        else if (*it > ' ')
+         {
+             tgi = txf_glyph(ds->tf, *it++);
+             if (tgi)
+@@ -257,6 +342,15 @@ static float txf_width2(const TxfHeader* tf, const uint8_t* it,
+     int ch;
+ 
+     while( it != end ) {
++        if (*it >= 0x80 && g_cjkFont) {
++            int cp;
++            it += txf_utf8(it, end, &cp);
++            tgi = txf_glyphCp(g_cjkFont, cp);
++            if (tgi)
++                width += tgi->advance;
++            prev = 0;
++            continue;
++        }
+         ch = *it++;
+         if (ch == TC_Font || ch == TC_Color) {
+             if (++it == end)
+diff --git a/src/support/txf_draw.h b/src/support/txf_draw.h
+index dce16b5..42e5504 100644
+--- a/src/support/txf_draw.h
++++ b/src/support/txf_draw.h
+@@ -59,6 +59,9 @@ extern "C" {
+ 
+ void txf_begin(TxfDrawState* ds, int fontN, float pointSize, float x, float y);
+ void txf_setFontSize(TxfDrawState* ds, float pointSize);
++/* 註冊 CJK 後備字型(稀疏碼位 .txf)。bytes >= 0x80 的 UTF-8 字改由此字型
++   查表算繪,使 SDF GUI 文字層(模組瀏覽器等)能顯示中文。傳 NULL 可停用。 */
++void txf_setCJKFont(const TxfHeader* tf);
+ int  txf_genText(TxfDrawState* ds, float* uvs, float* vertex, int stride,
+                  const uint8_t* it, unsigned int len);
+ float txf_emWidth(const TxfHeader*, const uint8_t* it, unsigned int len);
 diff --git a/src/textview.cpp b/src/textview.cpp
 index eb6fcc0..b5e0191 100644
 --- a/src/textview.cpp
