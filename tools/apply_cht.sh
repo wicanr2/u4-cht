@@ -54,5 +54,16 @@ python3 "$ROOT/tools/patch_vendor_boron.py" \
   --vendors "$XU4/module/Ultima-IV/vendors.b" \
   --bilingual "$ROOT/dumps/vendor_bilingual.json"
 
+# FM Towns 主題(選用):若已用 tools/extract_fmtowns.sh 從自有光碟設好模組
+# (tileset 存在),把 U4-FMTowns.mod 加進 build;否則 F2 主題循環會優雅跳過 FM Towns。
+if [ -f "$XU4/module/U4-FMTowns/image/fmt_tileset.png" ]; then
+  echo "[5] 啟用 FM Towns 主題(偵測到模組 tileset)"
+  grep -q "U4-FMTowns.mod" "$XU4/Makefile" || \
+    sed -i 's/^MODULES=\(.*\)/MODULES=\1 U4-FMTowns.mod/' "$XU4/Makefile"
+  grep -q "^U4-FMTowns.mod:" "$XU4/Makefile" || \
+    printf '\nU4-FMTowns.mod: module/U4-FMTowns/*.b module/U4-FMTowns/image/*.png\n\t$(BORON) -s tools/pack-xu4.b module/U4-FMTowns\n' >> "$XU4/Makefile"
+fi
+
 echo "完成。重建:docker build -f docker/Dockerfile.zh -t u4cht/xu4-allegro xu4"
 echo "自測截圖:docker run --rm -e U4CHT_SELFTEST=1 -v /tmp/u4shot:/out u4cht/xu4-test 6 3"
+echo "FM Towns 主題(選用):bash tools/extract_fmtowns.sh xu4 <FM Towns .chd> 後再 apply + 重建"
