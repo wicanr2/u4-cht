@@ -162,3 +162,52 @@ python3 tools/build_cjk_font.py --font /tmp/bkai/usr/share/fonts/truetype/arphic
 # 用 Firefly 宋體跑
 docker run --rm -e U4CHT_FONT=firefly -v /tmp/u4shot:/out u4cht/xu4-test 22 1
 ```
+
+## 8. 全平台打包
+
+前置:`bash tools/apply_cht.sh`(套 patch + 產資產到 `xu4/`)。
+
+```bash
+# Linux AppImage(Allegro5,遞迴 ldd 收庫,靜態 runtime)
+docker build -f dist/appimage/Dockerfile -t u4cht/appimage xu4
+docker run --rm -v "$PWD/dist/out":/out u4cht/appimage          # → u4-cht-x86_64.AppImage
+
+# Linux tarball
+bash dist/make-release.sh "$PWD/dist/out/u4-cht-linux-x86_64.tar.gz"
+
+# Windows x64(mingw64 交叉編譯,GLFW 後端 + 全 DLL)
+docker build -f dist/win/Dockerfile -t u4cht/win xu4
+bash dist/win/make-zip.sh "$PWD/dist/out/u4-cht-windows-x64.zip" # → exe + 全 DLL + 模組 + 字型 + 資料
+```
+
+| 平台 | 方式 | 後端 | 驗證 |
+|---|---|---|---|
+| Linux AppImage / tarball | 本地 Docker | Allegro 5 | ✅ 本地實建 |
+| Windows x64 zip | 本地 Docker(mingw64) | GLFW | ✅ objdump 確認全 DLL |
+| macOS(arm64/x86_64) | GitHub Actions `build-mac.yml` | Allegro 5 | CI(macOS runner) |
+| Android APK | GitHub Actions `build-android.yml` | GLV | CI(scaffold,需驗證) |
+
+- **Mac/Android 走 CI**:Mac 需 macOS runner(Linux 無法跨編 Mach-O);Android 用 xu4 上游
+  GLV 移植 + NDK。觸發:`gh workflow run build-mac.yml` / `build-android.yml`,或 push `v*` tag
+  自動建並附到 Release。CI 會自行 clone xu4 上游(pinned commit)+ 跑 `apply_cht.sh`。
+
+## 9. dev-setup-bundle(換機接續 + claude -r)
+
+把整個開發環境打包成私用 tar.zst,讓另一台機器 (1) 重建 build/打包環境 (2) 用 `claude -r`
+接續同一個 Claude 對話與記憶。詳見 `previous-work.md`。**屬私用,含對話記錄與版權素材,勿公開。**
+
+```bash
+# 打包(排除可重建的 build 產物與 image)
+ENC=-home-anr2-u3-cht-u4-cht                       # cwd 編碼:絕對路徑 / → -,開頭加 -
+mkdir -p claude-session/projects
+cp -a ~/.claude/projects/$ENC claude-session/projects/   # *.jsonl + memory/
+tar --zstd -cf ../u4-cht-dev-setup-$(date +%Y%m%d).tar.zst \
+  --exclude='*/dist/out' --exclude='*/.copr' --exclude='*/obj' --exclude='__pycache__' \
+  --exclude='*.AppImage' --exclude='*/build' \
+  -C "$(dirname "$PWD")" "$(basename "$PWD")"
+
+# 另一台機器:解到相同絕對路徑 → 還原 claude-session → cd 專案
+cp -a claude-session/projects/$ENC ~/.claude/projects/
+cd /home/anr2/u3-cht/u4-cht && claude --continue
+#   路徑不同時:claude --resume 942d4cbc-4e7e-4387-85e3-86546d359c87  (用 UUID 不卡路徑)
+```
