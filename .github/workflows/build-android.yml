@@ -1,0 +1,118 @@
+name: build-android
+
+# 在 GitHub ubuntu runner 編譯 Ultima IV 繁中版 Android APK。
+# xu4 上游本身有 Android 移植(GLV 後端 / NativeActivity / ndk-build),預建相依
+# (boron/faun/vorbis/ogg/png 靜態庫)由 android/setup.sh 下載的 xu4-android-sdk 提供。
+# 繁中化:cht-engine.patch 已把 cht.cpp 加進 Android.mk、app_main.c 擴充解出 .bin/.tab;
+# 本流程再把 cjk 字型/u4_cht.tab/模組/freeware 資料放進 android/assets。
+#
+# ⚠️ 狀態:scaffold,需首次 CI run 驗證 ——(a) xu4-android-sdk 下載連結(SourceForge,
+# 可能搬遷);(b) CHARSET CJK 算繪在 GLV 後端的實機表現;(c) 模組瀏覽器 SDF(gpu_opengl
+# 路徑)是否隨 GLV 編入。CHARSET 文字路徑(screen.cpp/textview.cpp)為後端無關,風險低。
+
+on:
+  workflow_dispatch:
+  push:
+    tags: [ 'v*' ]
+
+env:
+  XU4_UPSTREAM: https://github.com/xu4-engine/u4.git
+  XU4_COMMIT: 6a7ee3d0079cfdc1c8fb9ba7a3c710a957155a71
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 取出 cht repo
+        uses: actions/checkout@v4
+        with:
+          path: cht
+
+      - name: JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Android SDK + NDK r25
+        uses: android-actions/setup-android@v3
+
+      - name: 裝 NDK r25 + build-tools + python(SDF 字型)
+        run: |
+          yes | sdkmanager --licenses >/dev/null 2>&1 || true
+          sdkmanager "ndk;25.1.8937393" "platforms;android-32" "build-tools;34.0.0" >/dev/null
+          python3 -m pip install --quiet pillow numpy scipy
+
+      - name: clone xu4 上游(pinned)+ submodule(faun / glv)
+        run: |
+          git clone "$XU4_UPSTREAM" cht/xu4
+          cd cht/xu4
+          git checkout "$XU4_COMMIT"
+          git submodule update --init src/faun src/glv
+
+      - name: Boron 程式(產模組 / copr 用,Linux 端)
+        run: |
+          git clone https://git.code.sf.net/p/urlan/boron/code /tmp/boron
+          cd /tmp/boron && git checkout v2.0.8
+          ./configure --static --thread && make && sudo make install && sudo make install-dev
+
+      - name: 取中文字型(Noto Sans CJK,OTF index 0)
+        run: |
+          mkdir -p /tmp/noto
+          curl -fsSL -A "Mozilla/5.0" -o /tmp/noto/NotoSansCJK.otf \
+            "https://github.com/googlefonts/noto-cjk/raw/main/Sans/OTF/TraditionalChinese/NotoSansCJKtc-Medium.otf"
+
+      - name: 套繁中化 patch + 產 cjk 資產
+        run: |
+          cd cht
+          NOTO=/tmp/noto/NotoSansCJK.otf NOTO_INDEX=0 bash tools/apply_cht.sh xu4
+
+      - name: 產模組 + 取 freeware 資料(Linux 端,平台無關產物)
+        run: |
+          cd cht/xu4
+          # 桌面 build 一次以產 *.mod / render.pak / 下載 ultima4.zip(Android 復用)
+          sudo apt-get update && sudo apt-get install -y --no-install-recommends \
+            liballegro5-dev liballegro-acodec5-dev liballegro-audio5-dev \
+            libpng-dev libvorbis-dev libogg-dev libpulse-dev
+          ( cd src/faun && ./configure --no_flac && make && sudo make install )
+          ./configure --allegro && make download && make
+          test -f Ultima-IV.mod
+
+      - name: 注入 assets(模組 + cjk 字型 + tab + freeware 資料)
+        run: |
+          cd cht/xu4/android
+          bash setup.sh   # 取 glv submodule + 下載 xu4-android-sdk(預建相依)
+          mkdir -p assets
+          cp ../Ultima-IV.mod ../U4-Upgrade.mod ../render.pak assets/
+          cp ../cjk_font*.bin ../u4_cht.tab assets/
+          cp ../ultima4.zip ../u4upgrad.zip assets/ 2>/dev/null || true
+          ls -la assets/
+
+      - name: Gradle 建 debug APK
+        run: |
+          cd cht/xu4/android
+          # 確保 gradle 找得到 NDK
+          echo "ndk.dir=$ANDROID_NDK_HOME" >> local.properties 2>/dev/null || true
+          chmod +x gradlew 2>/dev/null || true
+          if [ -x ./gradlew ]; then ./gradlew assembleDebug --no-daemon; \
+          else gradle assembleDebug --no-daemon; fi
+          find . -name "*.apk" -path "*debug*"
+
+      - name: 收 APK
+        run: |
+          mkdir -p "$GITHUB_WORKSPACE/out"
+          find cht/xu4/android -name "*-debug.apk" -exec cp {} \
+            "$GITHUB_WORKSPACE/out/Ultima4-cht-android.apk" \;
+          ls -la "$GITHUB_WORKSPACE/out/"
+
+      - name: 上傳 artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Ultima4-cht-android
+          path: out/Ultima4-cht-android.apk
+
+      - name: 附到 Release(僅 tag)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: out/Ultima4-cht-android.apk

@@ -1,0 +1,145 @@
+name: build-mac
+
+# 在 GitHub macOS runner 原生編譯 Ultima IV 繁中版 .app(Linux 無法可靠跨編 Mach-O)。
+# xu4 引擎走 Allegro 5 後端(brew),Boron/Faun 由源碼建。U4 為 freeware → make download
+# 取得遊戲資料一併打包,.app 解壓即玩(首次右鍵「打開」繞 Gatekeeper)。
+# 每 arch 分開建(xu4 非 CMake,universal binary 較難):macos-14=arm64、macos-13=x86_64。
+
+on:
+  workflow_dispatch:
+  push:
+    tags: [ 'v*' ]
+
+env:
+  XU4_UPSTREAM: https://github.com/xu4-engine/u4.git
+  XU4_COMMIT: 6a7ee3d0079cfdc1c8fb9ba7a3c710a957155a71
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-14   # Apple Silicon
+            arch: arm64
+          - os: macos-13   # Intel
+            arch: x86_64
+    steps:
+      - name: 取出 cht repo(patches / tools / dumps / assets / dist)
+        uses: actions/checkout@v4
+        with:
+          path: cht
+
+      - name: 安裝相依(Allegro 5 + 工具 + dylibbundler)
+        run: |
+          brew update
+          brew install allegro pkg-config libpng libvorbis libogg dylibbundler curl || true
+          python3 -m pip install --break-system-packages pillow numpy scipy \
+            || pip3 install pillow numpy scipy
+
+      - name: clone xu4 上游(pinned)+ submodule(faun / glv)
+        run: |
+          git clone "$XU4_UPSTREAM" cht/xu4
+          cd cht/xu4
+          git checkout "$XU4_COMMIT"
+          git submodule update --init src/faun src/glv
+
+      - name: 建 Boron(程式 + 靜態庫)
+        run: |
+          git clone https://git.code.sf.net/p/urlan/boron/code /tmp/boron
+          cd /tmp/boron && git checkout v2.0.8
+          ./configure --static --thread
+          make
+          sudo make DESTDIR= install
+          sudo make DESTDIR= install-dev
+
+      - name: 取中文字型(Noto Sans CJK,OTF index 0)
+        run: |
+          mkdir -p /tmp/noto
+          curl -fsSL -A "Mozilla/5.0" -o /tmp/noto/NotoSansCJK.otf \
+            "https://github.com/googlefonts/noto-cjk/raw/main/Sans/OTF/TraditionalChinese/NotoSansCJKtc-Medium.otf"
+          test -s /tmp/noto/NotoSansCJK.otf
+
+      - name: 套繁中化 patch + 產資產(apply_cht.sh)
+        run: |
+          cd cht
+          NOTO=/tmp/noto/NotoSansCJK.otf NOTO_INDEX=0 bash tools/apply_cht.sh xu4
+
+      - name: 建 Faun + xu4(Allegro 後端)+ 取 U4 freeware 資料
+        run: |
+          cd cht/xu4
+          ( cd src/faun && ./configure --no_flac && make && sudo make install )
+          ./configure --allegro
+          make download
+          make
+          test -x src/xu4
+
+      - name: 組裝 Ultima4-cht.app + bundle dylib + 簽章
+        run: |
+          cd cht/xu4
+          APP="Ultima4-cht.app"
+          mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources/share"
+          cp src/xu4 "$APP/Contents/MacOS/xu4"
+          cp Ultima-IV.mod U4-Upgrade.mod render.pak cjk_font*.bin u4_cht.tab \
+             "$APP/Contents/Resources/share/"
+          cp ultima4.zip u4upgrad.zip "$APP/Contents/Resources/share/" 2>/dev/null || true
+          # launch wrapper:cd 到 Resources/share(資產同目錄)後執行
+          cat > "$APP/Contents/MacOS/launch" <<'LAUNCH'
+          #!/bin/bash
+          D="$(cd "$(dirname "$0")/../Resources/share" && pwd)"
+          cd "$D"
+          # 字形:export U4CHT_FONT=firefly(或 kai),省略=Noto
+          exec "$(dirname "$0")/xu4" -s 2 --filter xBRZ "$@"
+          LAUNCH
+          chmod +x "$APP/Contents/MacOS/launch" "$APP/Contents/MacOS/xu4"
+          cat > "$APP/Contents/Info.plist" <<'PLIST'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0"><dict>
+            <key>CFBundleName</key><string>Ultima4-cht</string>
+            <key>CFBundleExecutable</key><string>launch</string>
+            <key>CFBundleIdentifier</key><string>tw.xu4.ultima4cht</string>
+            <key>CFBundlePackageType</key><string>APPL</string>
+            <key>NSHighResolutionCapable</key><true/>
+          </dict></plist>
+          PLIST
+          # 把 Homebrew 的 Allegro/vorbis/png dylib 包進 .app(別人機器沒 brew)
+          dylibbundler -od -b \
+            -x "$APP/Contents/MacOS/xu4" \
+            -d "$APP/Contents/Frameworks/" \
+            -p "@executable_path/../Frameworks/"
+          # ad-hoc 簽章(降低 Gatekeeper 直接拒)
+          codesign --force --deep --sign - "$APP" || true
+          lipo -info "$APP/Contents/MacOS/xu4" || true
+
+      - name: 打包 zip + dmg(雙保險)+ 說明
+        run: |
+          cd cht/xu4
+          cat > 安裝說明.txt <<'EOF'
+          Ultima IV: Quest of the Avatar 繁體中文版(macOS / xu4 640x400 2x)
+          1. 解壓得到 Ultima4-cht.app(已含 freeware 遊戲資料,解壓即玩)。
+          2. 首次開啟若被 Gatekeeper 擋:右鍵「打開」→「打開」,或終端機:
+             xattr -dr com.apple.quarantine Ultima4-cht.app
+          熱鍵:F2 切 EGA/VGA 美術 · F3 切解析度。字形:export U4CHT_FONT=firefly(或 kai)。
+          EOF
+          ditto -c -k --sequesterRsrc --keepParent Ultima4-cht.app Ultima4-cht-mac-${{ matrix.arch }}.zip
+          zip -j Ultima4-cht-mac-${{ matrix.arch }}.zip 安裝說明.txt
+          hdiutil create -volname "Ultima4-cht" -srcfolder Ultima4-cht.app \
+            -ov -format UDZO Ultima4-cht-mac-${{ matrix.arch }}.dmg || true
+
+      - name: 上傳 artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Ultima4-cht-mac-${{ matrix.arch }}
+          path: |
+            cht/xu4/Ultima4-cht-mac-${{ matrix.arch }}.zip
+            cht/xu4/Ultima4-cht-mac-${{ matrix.arch }}.dmg
+
+      - name: 附到 Release(僅 tag)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            cht/xu4/Ultima4-cht-mac-${{ matrix.arch }}.zip
+            cht/xu4/Ultima4-cht-mac-${{ matrix.arch }}.dmg

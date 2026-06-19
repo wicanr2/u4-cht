@@ -1,3 +1,30 @@
+diff --git a/android/Android.mk b/android/Android.mk
+index 263dad7..103fde2 100644
+--- a/android/Android.mk
++++ b/android/Android.mk
+@@ -58,6 +58,7 @@ LOCAL_SRC_FILES := app_main.c \
+ 	../src/screen_glv.cpp \
+ 	../src/sound_faun.cpp \
+ 	../src/config_boron.cpp \
++	../src/cht.cpp \
+ 	../src/module.c \
+ 	../src/support/cdi.c \
+ 	../src/annotation.cpp \
+diff --git a/android/app_main.c b/android/app_main.c
+index edeeec2..aa16285 100644
+--- a/android/app_main.c
++++ b/android/app_main.c
+@@ -125,7 +125,9 @@ static void extractModules( struct android_app* app )
+                 ext = fn + len - 4;
+                 if (strcmp(ext, ".mod") == 0 ||
+                     strcmp(ext, ".pak") == 0 ||
+-                    strcmp(ext, ".zip") == 0) {
++                    strcmp(ext, ".zip") == 0 ||
++                    strcmp(ext, ".bin") == 0 ||   /* U4 繁中化:CJK 點陣字 */
++                    strcmp(ext, ".tab") == 0) {   /* U4 繁中化:en→zh lookup */
+                     if (! extractAsset(app->activity, fn, buf, lenCopy)) {
+                         errorFatal("Cannot extract module %s", fn);
+                         break;
 diff --git a/project.b b/project.b
 index f83a553..b3f2c0c 100644
 --- a/project.b

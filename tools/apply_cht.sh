@@ -19,11 +19,13 @@ git -C "$XU4" apply --check "$ROOT/patches/engine/cht-engine.patch" 2>/dev/null 
 echo "[3/3] 產生並安裝資產"
 # 三套 CJK atlas:Noto(預設)+ AR PL 宋(firefly)/ 楷(kai)。字集涵蓋 6 份雙語表
 # (含 castle/ui),新增字後須刪 .bin 重建。重建環境見 docker/Dockerfile.font。
-NOTO=/usr/share/fonts/opentype/noto/NotoSansCJK-Medium.ttc
-BSMI=/usr/share/fonts/truetype/arphic-bsmi00lp/bsmi00lp.ttf
-BKAI=/usr/share/fonts/truetype/arphic-bkai00mp/bkai00mp.ttf
+# 字型路徑可由環境變數覆寫(Mac / Android CI 的 Noto 不在 Linux 預設路徑)。
+NOTO="${NOTO:-/usr/share/fonts/opentype/noto/NotoSansCJK-Medium.ttc}"
+BSMI="${BSMI:-/usr/share/fonts/truetype/arphic-bsmi00lp/bsmi00lp.ttf}"
+BKAI="${BKAI:-/usr/share/fonts/truetype/arphic-bkai00mp/bkai00mp.ttf}"
+NOTO_INDEX="${NOTO_INDEX:-3}"
 if [ ! -f "$ROOT/assets/cjk_font.bin" ] && [ -f "$NOTO" ]; then
-  python3 "$ROOT/tools/build_cjk_font.py" --font "$NOTO" --index 3 --size 14 --cell 16 \
+  python3 "$ROOT/tools/build_cjk_font.py" --font "$NOTO" --index "$NOTO_INDEX" --size 14 --cell 16 \
     --out "$ROOT/assets/cjk_font.bin" --preview "$ROOT/assets/cjk_preview.png"
 fi
 if [ ! -f "$ROOT/assets/cjk_font_firefly.bin" ] && [ -f "$BSMI" ]; then
@@ -38,7 +40,7 @@ fi
 # 走 MSDF shader 的 median(r,g,b),單通道 SDF 寫進 R=G=B 即可,毋須 msdfgen。
 # 需 numpy/scipy(見 docker/Dockerfile.font)。idempotent:已產則略過。
 if [ ! -f "$XU4/module/render/font/cfont-cjk.txf" ] && [ -f "$NOTO" ]; then
-  python3 "$ROOT/tools/build_cjk_txf.py" --font "$NOTO" --index 3 \
+  python3 "$ROOT/tools/build_cjk_txf.py" --font "$NOTO" --index "$NOTO_INDEX" \
     --atlas "$XU4/module/render/font/cfont.png" \
     --out-txf "$XU4/module/render/font/cfont-cjk.txf"
 fi
