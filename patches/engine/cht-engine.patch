@@ -299,10 +299,10 @@ index 0bef0c9..f919e16 100644
          return false;
      }
 diff --git a/src/game.cpp b/src/game.cpp
-index 5c359b0..f673f85 100644
+index 5c359b0..25215fb 100644
 --- a/src/game.cpp
 +++ b/src/game.cpp
-@@ -418,6 +418,57 @@ void gameUpdateScreen() {
+@@ -418,6 +418,65 @@ void gameUpdateScreen() {
      }
  }
  
@@ -324,25 +324,33 @@ index 5c359b0..f673f85 100644
 +    if (xu4.stage != StagePlay || !xu4.imageMgr || !c || !c->location)
 +        return false;
 +
-+    static Config* egaCfg = NULL;
-+    static Config* vgaCfg = NULL;
++    /* U4 繁中化:F2 主題循環(可擴)。EGA → VGA → FM Towns → 循環。
++       新增主題 = 加一個 extension 模組 + 在此清單加一列。 */
++    static const struct { const char* mod; const char* label; } themes[] = {
++        { "Ultima-IV",  "圖形:EGA" },
++        { "U4-Upgrade", "圖形:VGA" },
++        { "U4-FMTowns", "圖形:FM Towns" },
++    };
++    const int N = (int)(sizeof(themes) / sizeof(themes[0]));
++    static Config* cache[8] = { NULL };
++    static int cur = -1;
 +
-+    bool curVGA = xu4.imageMgr->usingVGA();
-+    if (!egaCfg && !vgaCfg) {
-+        if (curVGA) vgaCfg = xu4.config; else egaCfg = xu4.config;
++    if (cur < 0) {                              /* 首次:判斷目前主題(EGA/VGA)*/
++        cur = xu4.imageMgr->usingVGA() ? 1 : 0;
++        cache[cur] = xu4.config;
 +    }
 +
-+    bool toVGA = !curVGA;
-+    Config*& slot = toVGA ? vgaCfg : egaCfg;
-+    if (!slot) {
-+        slot = configInit(toVGA ? "U4-Upgrade" : "Ultima-IV",
-+                          xu4.settings->soundtrack);
-+        if (!slot)
-+            return false;
++    int nxt = (cur + 1) % N;
++    if (! cache[nxt]) {
++        cache[nxt] = configInit(themes[nxt].mod, xu4.settings->soundtrack);
++        if (! cache[nxt]) {                     /* 載入失敗(如模組缺)→ 跳過該主題 */
++            nxt = (nxt + 1) % N;
++            if (! cache[nxt]) return false;
++        }
 +    }
 +
-+    /* full swap + 重建 graphics(symbol 一致)*/
-+    xu4.config = slot;
++    cur = nxt;
++    xu4.config = cache[cur];
 +    screenReInit();
 +
 +    /* 把 location 堆疊每張 map 重新指向新 config 同 ID 的 map(不用 setMap)*/
@@ -352,7 +360,7 @@ index 5c359b0..f673f85 100644
 +    }
 +    xu4.game->mapArea.reinit();     /* mapArea.tileset 重新指向新 config 的 tileset */
 +
-+    screenMessage(toVGA ? "\n圖形:VGA\n" : "\n圖形:EGA\n");
++    screenMessage("\n%s\n", themes[cur].label);
 +    gameUpdateScreen();
 +    return true;
 +}
@@ -360,7 +368,7 @@ index 5c359b0..f673f85 100644
  void GameController::setMap(Map *map, bool saveLocation, const Portal *portal, TurnController *turnCompleter) {
      int viewMode;
      LocationContext context;
-@@ -3452,7 +3503,7 @@ showMixturesSuper(int page = 0) {
+@@ -3452,7 +3511,7 @@ showMixturesSuper(int page = 0) {
  
      const Spell *s = getSpell(i + 13 * page);
      int line = i + 8;
