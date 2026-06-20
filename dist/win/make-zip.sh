@@ -30,5 +30,6 @@ Ultima IV: Quest of the Avatar 繁體中文版 (xu4 640x400 2x)
 
 字形切換:執行前 set U4CHT_FONT=firefly(或 kai),省略=Noto。
 TXT
+rm -f "$OUT"          # zip 對既有檔是「附加」,不先刪會疊加上一版內容(重複目錄、體積翻倍)
 ( cd "$(dirname "$D")" && zip -qr "$OUT" u4-cht-windows )
 echo "→ $OUT ($(du -h "$OUT" | cut -f1))"
