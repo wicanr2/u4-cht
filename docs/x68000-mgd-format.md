@@ -24,7 +24,8 @@ ult.mgd ──解析──► voice 定義(FM patch)+ track 事件(音符/時值
 - `tools/x68000/ymfm/render.cpp` —— register event → WAV 的 C++ harness(連 ymfm)。
 - `tools/x68000/ymfm/build.sh` —— docker 內 clone ymfm(BSD,不入 repo)+ 編譯。
 - `tools/x68000/ymfm/mgd_voice.py` —— 抽單一 voice(音色)渲染音階,驗證音色提取。
-- `tools/x68000/ymfm/mgd_track.py` —— 解一條 track 的音符序列,渲染旋律。
+- `tools/x68000/ymfm/mgd_track.py` —— 解單 track 旋律。
+- `tools/x68000/ymfm/mgd_song.py` —— 多 track 合奏(分配 8 channel + 絕對時間合併)。
 
 ## 逆出來的 MGD 結構
 
