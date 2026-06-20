@@ -71,8 +71,20 @@ description: 把同一款經典遊戲(此處 Ultima IV)各家移植版的 tilese
   row 擠 1 row 的假象)。Program disk 另有 `shape.pat`(212KB,autocorr lag=18 結構不同,疑
   portrait/大圖)、`FONT.PAT`、`MOON.PAT`、`intro1-7.img`/`title.img`。`MAP.BIN` 已驗證
   = 256×256 世界地圖(水=0 佔 34009)。
-  **殘餘**:① palette(2bpp 每 tile 4 色,X68000 GVRAM 子盤;完整 16 色在 `ult4.x`/`init.x`
-  的 GRB 5-5-5 word,掃到多候選 0x3c/0x3e/0x46 需逐一 pin)② 找 tile 0=水 對齊點 + xu4 256 序。
+- **✅ 地圖 + palette 已破解(map oracle 法)**:
+  - `MAP.BIN`(65536)= **16×16 個 chunk,每 chunk 16×16 tile**(chunk row-major、chunk 內
+    row-major)→ de-chunk 後**完整還原 Britannia 世界地圖**(大陸/中央湖/群島/山脈)。
+    tile 索引語意 = canonical U4(0=水、4-7=草林、8+=山)→ **SWSHAPE 序 = xu4 256 序**(免對映)。
+  - **palette**:`init.x @0x140`(RGB555 `xRRRRRGGGGGBBBBB`)= 室外 4 色盤
+    `綠(90,197,0)/亮灰(156,172,205)/黑/藍(16,49,131)`。用 MAP oracle 自動評分(水區藍+陸區綠)
+    找到;`maprender.py` 渲染地圖對照參考圖一致確認。
+  - `build_tileset.py` 用此 palette 把 SWSHAPE → xu4 16×4096 PNG,**解出可辨識 U4 tile**
+    (水藍、樹、生物)。
+  - **殘餘**:① 室外只 4 色(2bpp 本質),山的棕需 **per-scene 子盤**(town/dungeon/combat
+    各重載 palette block,在 `ult4.x` 繪圖碼)→ 完整多場景彩色需抽 block 表或 emulator dump
+    ② 模組 + F2 整合(tileset 已可產,差包裝)。
+  - **方法論**:console/computer 的地圖常是 **chunk 化**(U4 經典 16×16 chunk),線性讀=帶狀
+    噪訊,de-chunk 即還原;有了「已知該長怎樣」的地圖就是**最強 palette/tile oracle**。
 - **音樂(YODEL/BIG-X)檔案層可抽,免錄音**:`ult.mgd`(MML 曲譜)+ `ult.smp`(PCM)+
   `ult.efc`(音效)是磁碟獨立檔。轉現代格式需逆向 MGD 結構(較重),但抽檔本身已可。
 - **可行性:易-中**。**教訓**:「Human68k 讀不出」是 boot sector 無 BPB 的假象,底層仍 FAT12,
