@@ -120,10 +120,12 @@ jobs:
           # launch wrapper:cd 到 Resources/share(資產同目錄)後執行
           cat > "$APP/Contents/MacOS/launch" <<'LAUNCH'
           #!/bin/bash
-          D="$(cd "$(dirname "$0")/../Resources/share" && pwd)"
-          cd "$D"
+          # 先把自己所在的 MacOS 目錄轉成絕對路徑(雙擊時 $0 為絕對、終端機 ./launch 為相對;
+          # 必須在 cd 前算好,否則 cd 後 dirname $0 會指錯)。
+          HERE="$(cd "$(dirname "$0")" && pwd)"
+          cd "$HERE/../Resources/share"   # 遊戲資料(mod/字型/u4_cht.tab/zip)在此,xu4 以 cwd 找
           # 字形:export U4CHT_FONT=firefly(或 kai),省略=Noto
-          exec "$(dirname "$0")/xu4" -s 2 --filter xBRZ "$@"
+          exec "$HERE/xu4" -s 2 --filter xBRZ "$@"
           LAUNCH
           chmod +x "$APP/Contents/MacOS/launch" "$APP/Contents/MacOS/xu4"
           cat > "$APP/Contents/Info.plist" <<'PLIST'
