@@ -29,13 +29,32 @@ TILE_W, TILE_H = 12, 16
 BYTES_PER_TILE = TILE_H * 6          # 96
 N_TILES = 256
 
-# MSX2 SCREEN5(V9938)預設 16 色近似(sRGB)
+# Ultima IV(MSX2 / Pony Canyon)實際載入的 16 色自訂 palette。
+# 來源:disk_1.dsk offset 0x02de9f 的 32-byte VDP palette table
+#  (每色 2 byte:byte0=0RRR0BBB、byte1=00000GGG,各 3-bit → 8-bit)。
+# 驗證方法:套用後渲染 II1X.MSX 風景圖,天空/樹/草/河顏色全部正確
+#  (藍天、綠樹綠草、藍河、棕幹),確認為遊戲真實 palette 而非 SCREEN5 近似。
 MSX2_PAL = [
-    (0, 0, 0), (0, 0, 0), (33, 200, 66), (94, 220, 120),
-    (84, 85, 237), (125, 118, 252), (181, 82, 77), (102, 235, 250),
-    (252, 85, 84), (255, 121, 120), (212, 193, 84), (230, 206, 128),
-    (33, 176, 59), (201, 91, 186), (204, 204, 204), (255, 255, 255),
+    (0, 0, 0), (0, 0, 0), (0, 0, 255), (255, 0, 0),
+    (218, 145, 0), (0, 255, 0), (0, 255, 255), (255, 255, 109),
+    (72, 109, 145), (255, 218, 218), (182, 182, 182), (0, 109, 36),
+    (0, 36, 72), (72, 36, 36), (109, 109, 109), (255, 255, 255),
 ]
+
+
+def _3to8(v):
+    return (v * 255) // 7
+
+
+def load_palette(pal_path, off):
+    """從含 32-byte VDP palette table 的檔案讀 16 色(MSX2 SCREEN5 格式)。"""
+    pd = open(pal_path, "rb").read()
+    pal = []
+    for i in range(16):
+        b0, b1 = pd[off + 2 * i], pd[off + 2 * i + 1]
+        r, b, g = (b0 >> 4) & 7, b0 & 7, b1 & 7
+        pal.append((_3to8(r), _3to8(g), _3to8(b)))
+    return pal
 
 
 def decode_tile(tb):
@@ -53,7 +72,14 @@ def main():
     ap.add_argument("--out", required=True, help="輸出 tileset PNG")
     ap.add_argument("--cols", type=int, default=16, help="每列幾個 tile")
     ap.add_argument("--scale", type=int, default=2)
+    ap.add_argument("--palette", help="含 VDP palette table 的檔案(預設用內建真 palette)")
+    ap.add_argument("--palette-off", default="0x02de9f",
+                    help="palette table 在 --palette 檔內的 offset(hex)")
     args = ap.parse_args()
+
+    pal = MSX2_PAL
+    if args.palette:
+        pal = load_palette(args.palette, int(args.palette_off, 16))
 
     d = open(args.shape, "rb").read()
     need = N_TILES * BYTES_PER_TILE
@@ -68,7 +94,7 @@ def main():
         px = decode_tile(d[t * BYTES_PER_TILE:(t + 1) * BYTES_PER_TILE])
         ox, oy = (t % cols) * TILE_W, (t // cols) * TILE_H
         for i, idx in enumerate(px):
-            p[ox + (i % TILE_W), oy + (i // TILE_W)] = MSX2_PAL[idx & 0xF]
+            p[ox + (i % TILE_W), oy + (i // TILE_W)] = pal[idx & 0xF]
     if args.scale > 1:
         img = img.resize((img.size[0] * args.scale, img.size[1] * args.scale),
                          Image.NEAREST)

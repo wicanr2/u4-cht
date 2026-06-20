@@ -54,10 +54,17 @@ mcopy -i "Disk 1 of 3.dsk" ::SHAPE.DAT . # 取檔
    nibble-plane split(hi 左/lo 右)。
 
 **殘餘待校正(非結構性)**:
-- 🟡 **調色盤**:目前用 SCREEN5 預設 16 色近似,畫面偏 dither;遊戲可能載自訂
-  palette(VDP RAMP),需從 `U4MAP.BIN` / 開機碼 或 openMSX VRAM(`VDP palette`)取真值。
+- ✅ **調色盤已解**:真 16 色 palette 在 `disk_1.dsk @ offset 0x02de9f`(32-byte VDP
+  table,SCREEN5 格式 `byte0=0RRR0BBB`、`byte1=00000GGG`,3-bit/分量→8-bit)。
+  `build_msx2_tileset.py` 已內建(並加 `--palette <file> --palette-off <hex>` 參數)。
+  **驗證**:套用後渲染 II1X.MSX 風景圖天空/樹/草/河/幹顏色全對(dither 是 SCREEN5
+  原生有序抖動,非 palette 錯)。**找法**:寫 palette pattern 掃描器掃三張 .dsk,
+  disk_1 出乾淨候選,用 II1X 當 ground-truth 一發命中(未動 emulator)。
 - 🟡 **12 寬 vs xu4 的 16×16**:MSX 邏輯 tile 寬 12,整合進 xu4 16×16 grid 需置中補邊
   或等比放寬;或直接以 openMSX VRAM dump(整屏 tilesheet)取 16×16 版本繞過。
+- 🟡 **SHAPE.DAT 前段非 tile?**:套真 palette 後,tileset **下半部 sprite 顏色正確可辨識**
+  (膚色、藍/紅衣、綠地形),但**上半部仍噪訊** → 前段可能是非 tile 資料(header/字型/
+  meta)或不同編碼,**非 palette 問題**。下一步:用 II1X 同套 palette 比對 SHAPE 前段是什麼。
 - ✅ **ground-truth 校正建議**:openMSX headless 跑遊戲 → 進地圖畫面 → dump VRAM page
   存 PNG,一次校正調色盤 + 確認 tile 真實寬度,終結 file-format 推測。
 

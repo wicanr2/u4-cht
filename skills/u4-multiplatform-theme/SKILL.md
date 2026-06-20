@@ -76,14 +76,22 @@ description: 把同一款經典遊戲(此處 Ultima IV)各家移植版的 tilese
 > @0x7FF0)。`7z x` 出 ROM,複製本機。
 - **tile 格式**:SMS VDP tile = **8×8 4bpp planar**,每 row 4 byte(plane0..3,weight
   1/2/4/8),MSB=左,32B/tile。`tools/sms/sms_tiles.py`(overview 掃 + page 放大)。
-- **圖形區已定位**:整 ROM overview 多為 code/壓縮(帶狀噪訊);**raw tile 區約
-  `0x40A00–0x41900`**(~4KB=128 個 8×8 tile),page 解出**清楚 U4 地形**(磚牆、水/草
-  交界 = 藍+綠)→ 確認格式對、tile 未壓縮。
-- **殘餘**:① 完整圖形區範圍(僅 128 個 8×8 = 32 個 16×16,不足 256,需找其他 bank 或
-  判斷是否壓縮其餘) ② palette:SMS CRAM 32 byte(2 pal×16 色,`--BBGGRR` 6-bit)需在
-  ROM 找 ③ 8×8 → U4 16×16 組裝(4 子 tile)+ 對齊 xu4 256-tile 序。
-- **方法論**:flat ROM 無 FS → 整 ROM 當 tile strip overview 找「圖形區 vs code 區」
-  外觀差異,再放大定位;raw 區直接 8×8 planar 解。
+- **圖形區已定位但切不出 tile bank(架構性卡點)**:整 ROM overview 多 code/未壓縮資料
+  (熵 <6.5,**非壓縮**);唯一清晰圖形區 `0x40000–0x44000` 放大後是**「已用 name-table
+  排好的整張場景 bitmap」**(連續磚牆+草地+水域 + 標題曲線),**不是** 256 個分離 16×16
+  sprite。SMS 走 **VDP name-table + pattern bank**:8×8 pattern 散在 VRAM、靠 name-table
+  組畫面;raw ROM 線性序 ≠ xu4 邏輯 tile 序,缺 name-table 對映無法歸位 → **靜態切 ROM
+  做不出對齊 xu4 的 256-tile sheet(0/256)**。tile 格式(8×8 4bpp planar)本身已驗證正確。
+- **palette**:ROM 內找不到能讓 idx2=草綠/idx4=水藍/idx14=磚白同時成立的 16-byte CRAM
+  table;用 0x40A00 地形區 index 直方圖**反推**固定盤可正確彩現(`build_sms_tileset.py`
+  的 SMS_PAL),但非 ROM 原盤。
+- **✅ 正解(待執行):SMS 模擬器 VRAM dump**。Meka(`-debug` VRAM/CRAM viewer + tile
+  export)或 Emulicious 跑 `u4.sms` → 進世界/城/戰鬥畫面各 dump:VRAM pattern table =
+  當下 tile,CRAM = 真 palette(免反推),再靠 name-table 對 xu4 序。輔助:jmimu
+  Master-Tile-Converter。**這是 SMS 完整化的下一步(等同一次 emulator 錄製工程)**。
+- **方法論教訓**:console ROM 的圖形未必是「tile bank」——可能是 name-table 排好的
+  **場景 bitmap**;raw ROM 線性切 ≠ 邏輯 tile 序。確認方式:放大看是「連續鋪滿的畫面」
+  還是「格狀分離 sprite」。FM Towns 有現成 256-tile sheet(省事),SMS/console 多半要 VRAM dump。
 
 ### Amiga — ⏳ 未動
 - `7z` 解 → planar bitplane tile(Amiga 5-6 plane);音樂 MOD/samples。
