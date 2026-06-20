@@ -517,7 +517,7 @@ index fd2d981..a309fe5 100644
      uint8_t fixup;              /**< a routine to do miscellaneous fixes to the image */
      Image *image;               /**< the image we're describing */
 diff --git a/src/intro.cpp b/src/intro.cpp
-index acdf1f7..e297619 100644
+index acdf1f7..fbfe2ba 100644
 --- a/src/intro.cpp
 +++ b/src/intro.cpp
 @@ -20,6 +20,7 @@
@@ -552,7 +552,7 @@ index acdf1f7..e297619 100644
                          vertoffset);
  }
  
-@@ -721,7 +725,24 @@ void IntroController::drawCard(int card, int x, int y) {
+@@ -721,7 +725,27 @@ void IntroController::drawCard(int card, int x, int y) {
      };
      ASSERT(card < 8, "invalid card: %d", card);
  
@@ -568,17 +568,20 @@ index acdf1f7..e297619 100644
 +    xu4.imageMgr->imageInfo(sym, &csub);
 +    if (csub) {
 +        int cw = csub->width, ch = csub->height;
-+        int plateH = CHAR_HEIGHT + 14;                 // 加高以完全蓋住原英文橫幅
-+        int py = y + ch - plateH - 3;                  // 卡底橫幅
++        // 原英文卡名橫幅含「白字行」位於中文上方約一個字高;遮罩板須向上多蓋一行
++        // 才能完全壓掉英文(實測:英文白字距卡底比中文高 ~CHAR_HEIGHT)。
++        int plateH = 2 * CHAR_HEIGHT + 10;             // 夠高:同時蓋英文行 + 中文行
++        int py = y + ch - plateH - 3;                  // 板底貼齊卡底橫幅
 +        int nameW = 2 * CHAR_WIDTH;                     // 德目名皆 2 字
 +        int nx = x + (cw - nameW) / 2;
 +        xu4.screenImage->fillRect(x + 4, py, cw - 8, plateH, 16, 12, 22);
-+        screenDrawCJKPixel(virtueZh[card], nx, py + (plateH - CHAR_HEIGHT) / 2);
++        // 中文錨在板下緣(原中文位置),非置中,避免被加高的板往上推
++        screenDrawCJKPixel(virtueZh[card], nx, py + plateH - CHAR_HEIGHT - 6);
 +    }
  }
  
  /**
-@@ -764,7 +785,7 @@ void IntroController::updateScreen() {
+@@ -764,7 +788,7 @@ void IntroController::updateScreen() {
      case INTRO_MENU:
          // draw the extended background for all option screens
          backgroundArea.draw(BKGD_INTRO);
@@ -587,7 +590,7 @@ index acdf1f7..e297619 100644
  
          // if there is an error message to display, show it
          if (xu4.errorMessage)
-@@ -780,7 +801,7 @@ void IntroController::updateScreen() {
+@@ -780,7 +804,7 @@ void IntroController::updateScreen() {
              EventHandler::wait_msecs(3000);
              // clear the screen again
              backgroundArea.draw(BKGD_INTRO);
@@ -596,7 +599,7 @@ index acdf1f7..e297619 100644
          }
  
          menuArea.textAt(1,  1, "In another world, in a time to come.");
-@@ -808,7 +829,7 @@ void IntroController::updateScreen() {
+@@ -808,7 +832,7 @@ void IntroController::updateScreen() {
  void IntroController::initiateNewGame() {
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_INTRO);
@@ -605,7 +608,7 @@ index acdf1f7..e297619 100644
  
      // display name prompt and read name from keyboard
      menuArea.textAt(3, 3, "By what name shalt thou be known");
-@@ -831,7 +852,7 @@ void IntroController::initiateNewGame() {
+@@ -831,7 +855,7 @@ void IntroController::initiateNewGame() {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_INTRO);
@@ -614,7 +617,7 @@ index acdf1f7..e297619 100644
  
      // display sex prompt and read sex from keyboard
      menuArea.textAt(3, 3, "Art thou Male or Female?");
-@@ -1103,7 +1124,7 @@ void IntroController::journeyOnward() {
+@@ -1103,7 +1127,7 @@ void IntroController::journeyOnward() {
  void IntroController::about() {
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_INTRO);
@@ -623,7 +626,7 @@ index acdf1f7..e297619 100644
  
      screenHideCursor();
      menuArea.textAtFmt(14, 1, "XU4 %s", VERSION);
-@@ -1125,7 +1146,9 @@ void IntroController::about() {
+@@ -1125,7 +1149,9 @@ void IntroController::about() {
   * Shows text in the question area.
   */
  void IntroController::showText(const string &text) {
@@ -634,7 +637,7 @@ index acdf1f7..e297619 100644
      int lineNo = 0;
  
      questionArea.clear();
-@@ -1270,7 +1293,7 @@ void IntroController::updateConfMenu(MenuEvent &event) {
+@@ -1270,7 +1296,7 @@ void IntroController::updateConfMenu(MenuEvent &event) {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -643,7 +646,7 @@ index acdf1f7..e297619 100644
  }
  
  void IntroController::updateVideoMenu(MenuEvent &event) {
-@@ -1307,7 +1330,7 @@ void IntroController::updateVideoMenu(MenuEvent &event) {
+@@ -1307,7 +1333,7 @@ void IntroController::updateVideoMenu(MenuEvent &event) {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -652,7 +655,7 @@ index acdf1f7..e297619 100644
  }
  
  void IntroController::updateGfxMenu(MenuEvent &event)
-@@ -1327,7 +1350,7 @@ void IntroController::updateGfxMenu(MenuEvent &event)
+@@ -1327,7 +1353,7 @@ void IntroController::updateGfxMenu(MenuEvent &event)
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -661,7 +664,7 @@ index acdf1f7..e297619 100644
  }
  
  void IntroController::updateSoundMenu(MenuEvent &event) {
-@@ -1361,7 +1384,7 @@ void IntroController::updateSoundMenu(MenuEvent &event) {
+@@ -1361,7 +1387,7 @@ void IntroController::updateSoundMenu(MenuEvent &event) {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -670,7 +673,7 @@ index acdf1f7..e297619 100644
  }
  
  void IntroController::updateInputMenu(MenuEvent &event) {
-@@ -1389,7 +1412,7 @@ void IntroController::updateInputMenu(MenuEvent &event) {
+@@ -1389,7 +1415,7 @@ void IntroController::updateInputMenu(MenuEvent &event) {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -679,7 +682,7 @@ index acdf1f7..e297619 100644
  
      // after drawing the menu, extra menu text can be added here
      extendedMenuArea.textAt(0, 5, "Mouse Options:");
-@@ -1420,7 +1443,7 @@ void IntroController::updateSpeedMenu(MenuEvent &event) {
+@@ -1420,7 +1446,7 @@ void IntroController::updateSpeedMenu(MenuEvent &event) {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -688,7 +691,7 @@ index acdf1f7..e297619 100644
  }
  
  void IntroController::updateGameplayMenu(MenuEvent &event) {
-@@ -1444,7 +1467,7 @@ void IntroController::updateGameplayMenu(MenuEvent &event) {
+@@ -1444,7 +1470,7 @@ void IntroController::updateGameplayMenu(MenuEvent &event) {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -697,7 +700,7 @@ index acdf1f7..e297619 100644
  }
  
  void IntroController::updateInterfaceMenu(MenuEvent &event) {
-@@ -1468,7 +1491,7 @@ void IntroController::updateInterfaceMenu(MenuEvent &event) {
+@@ -1468,7 +1494,7 @@ void IntroController::updateInterfaceMenu(MenuEvent &event) {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -706,7 +709,7 @@ index acdf1f7..e297619 100644
  
      // after drawing the menu, extra menu text can be added here
      extendedMenuArea.textAt(2, 3, "  (Open, Jimmy, etc.)");
-@@ -1703,8 +1726,8 @@ void IntroController::initTitles()
+@@ -1703,8 +1729,8 @@ void IntroController::initTitles()
  void IntroController::addTitle(int x, int y, int w, int h, AnimType method, int delay, int duration)
  {
      AnimElement data = {
@@ -717,7 +720,7 @@ index acdf1f7..e297619 100644
          method,             // render method
          0,                  // animStep
          0,                  // animStepMax
-@@ -1777,8 +1800,8 @@ void IntroController::getTitleSourceData()
+@@ -1777,8 +1803,8 @@ void IntroController::getTitleSourceData()
                          color = info->image->setColor(255, (y == 2 ? 250 : 255), blue[y-1]);
                      }
                      AnimPlot plot = {
@@ -728,7 +731,7 @@ index acdf1f7..e297619 100644
                          uint8_t(color.r),
                          uint8_t(color.g),
                          uint8_t(color.b),
-@@ -1800,15 +1823,15 @@ void IntroController::getTitleSourceData()
+@@ -1800,15 +1826,15 @@ void IntroController::getTitleSourceData()
              {
                  for (int y=0; y < titles[i].rh; y++)
                  {
@@ -747,7 +750,7 @@ index acdf1f7..e297619 100644
                                  uint8_t(r), uint8_t(g), uint8_t(b), uint8_t(a)
                              };
                              titles[i].plotData.push_back(plot);
-@@ -1904,12 +1927,12 @@ bool IntroController::updateTitle()
+@@ -1904,12 +1930,12 @@ bool IntroController::updateTitle()
          {
              while (animStepTarget > title->animStep)
              {
