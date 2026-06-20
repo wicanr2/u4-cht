@@ -65,6 +65,9 @@ int main(int argc, char **argv){
     void (*retro_run)(void) = SYM(retro_run);
     void *(*retro_u4_get_vram)(void) = SYM(retro_u4_get_vram);
     void *(*retro_u4_get_cram)(void) = SYM(retro_u4_get_cram);
+    size_t (*retro_serialize_size)(void) = SYM(retro_serialize_size);
+    bool (*retro_serialize)(void*,size_t) = SYM(retro_serialize);
+    bool (*retro_unserialize)(const void*,size_t) = SYM(retro_unserialize);
 
     if(!retro_init||!retro_load_game||!retro_run||!retro_u4_get_vram){
         fprintf(stderr,"missing core symbols\n"); return 1;
@@ -90,6 +93,17 @@ int main(int argc, char **argv){
     gi.path = rompath; gi.data = rom; gi.size = sz;
     if(!retro_load_game(&gi)){ fprintf(stderr,"load_game failed\n"); return 1; }
 
+    /* U4_LOADSTATE=<file>:載入先前存的 savestate,從該點續跑(分段導航)。 */
+    const char *lsf = getenv("U4_LOADSTATE");
+    if(lsf && retro_unserialize){
+        FILE *sf=fopen(lsf,"rb");
+        if(sf){ fseek(sf,0,SEEK_END); long ss=ftell(sf); fseek(sf,0,SEEK_SET);
+            void *sd=malloc(ss); if(fread(sd,1,ss,sf)==(size_t)ss){
+                if(retro_unserialize(sd,ss)) fprintf(stderr,"loaded state %s (%ld B)\n",lsf,ss);
+                else fprintf(stderr,"unserialize failed\n"); }
+            free(sd); fclose(sf); }
+    }
+
     /* 輸入腳本:可由 env U4_BTN 指定固定要脈衝的 button id(預設 START=3)。
      * 每 40 幀按 8 幀放 32 幀(產生 edge);前 60 幀放開過 logo。
      * 每 600 幀 dump 快照,事後挑含地形 tile 的畫面。
@@ -101,11 +115,20 @@ int main(int argc, char **argv){
     /* U4_BTN2:在 U4_SW 幀之後改按這個 button(階段切換,例:先 START 進完整 title,再 A 進遊戲)。*/
     int btn2 = getenv("U4_BTN2") ? atoi(getenv("U4_BTN2")) : -999;
     long swf = getenv("U4_SW") ? atol(getenv("U4_SW")) : 1<<30;
+    /* U4_SCRIPT="f0:b0,f1:b1,...":到 fN 幀起改按 bN(離散 edge:每 60 幀按 6 放 54)。
+     * 比 2-phase 更彈性,可逐段導航 menu(命名→END→性別→問答→世界)。b=-1 放開。 */
+    long scf[64]; int scb[64], scn=0;
+    const char *sc = getenv("U4_SCRIPT");
+    if(sc){ char buf[1024]; strncpy(buf,sc,sizeof(buf)-1); buf[sizeof(buf)-1]=0;
+        char *p=strtok(buf,","); while(p && scn<64){ long f; int b;
+            if(sscanf(p,"%ld:%d",&f,&b)==2){ scf[scn]=f; scb[scn]=b; scn++; } p=strtok(NULL,","); } }
     for(long i=0;i<frames;i++){
         long period = seq ? 120 : 40;
         long ph = i % period;
         int curbtn = (i >= swf && btn2 != -999) ? btn2 : btn;
-        g_btn = (i > 60 && ph < 4) ? curbtn : -1;
+        if(scn){ int cb=-1; for(int k=0;k<scn;k++) if(i>=scf[k]) cb=scb[k];
+            long sph=i%60; g_btn=(cb!=-1 && sph<6)?cb:-1; }
+        else g_btn = (i > 60 && ph < 4) ? curbtn : -1;
         retro_run();
         if(i>0 && i%600==0){
             unsigned char *v=retro_u4_get_vram(), *c=retro_u4_get_cram();
@@ -116,6 +139,16 @@ int main(int argc, char **argv){
         }
     }
     g_btn = -1;
+
+    /* U4_SAVESTATE=<file>:跑完後存 savestate,供下一段 U4_LOADSTATE 續跑。 */
+    const char *ssf = getenv("U4_SAVESTATE");
+    if(ssf && retro_serialize && retro_serialize_size){
+        size_t ss=retro_serialize_size(); void *sd=malloc(ss);
+        if(retro_serialize(sd,ss)){ FILE *sf=fopen(ssf,"wb"); fwrite(sd,1,ss,sf); fclose(sf);
+            fprintf(stderr,"saved state %s (%zu B)\n",ssf,ss); }
+        else fprintf(stderr,"serialize failed\n");
+        free(sd);
+    }
 
     /* dump VRAM + CRAM */
     unsigned char *vram = retro_u4_get_vram();
