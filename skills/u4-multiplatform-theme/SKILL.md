@@ -126,10 +126,16 @@ description: 把同一款經典遊戲(此處 Ultima IV)各家移植版的 tilese
 - **palette**:ROM 內找不到能讓 idx2=草綠/idx4=水藍/idx14=磚白同時成立的 16-byte CRAM
   table;用 0x40A00 地形區 index 直方圖**反推**固定盤可正確彩現(`build_sms_tileset.py`
   的 SMS_PAL),但非 ROM 原盤。
-- **✅ 正解(待執行):SMS 模擬器 VRAM dump**。Meka(`-debug` VRAM/CRAM viewer + tile
-  export)或 Emulicious 跑 `u4.sms` → 進世界/城/戰鬥畫面各 dump:VRAM pattern table =
-  當下 tile,CRAM = 真 palette(免反推),再靠 name-table 對 xu4 序。輔助:jmimu
-  Master-Tile-Converter。**這是 SMS 完整化的下一步(等同一次 emulator 錄製工程)**。
+- **✅ 已解:libretro genesis-plus-gx 核心 headless dump VRAM**(`tools/sms/lr_dump.c` +
+  `dump_vram.py`)。用 libretro core 跑 `u4.sms`、進世界/城/title 畫面,dump **VRAM(64K)+
+  CRAM(128B)**:
+  - VRAM = pattern generator table(8×8 4bpp planar,32B/tile,前 16K=448 tile);
+  - CRAM = 32 色真 palette(genesis-plus-gx 把每色 1 byte `--BBGGRR` 存成 uint16 低 byte;
+    取低 byte → RRGGBB 各 2-bit → 0/85/170/255 四階)。**免反推、色彩正確**。
+  - 解出**色彩完美的世界地圖**(藍水/綠林/金船/灰城堡/洞穴/山),SMS 從「受阻」變「已解」。
+  - **殘餘**:VRAM 只含「當下載入」的 tile(進不同畫面 dump 不同子集),要湊滿 256 + 對 xu4
+    序需多畫面 dump 合併;但 emulator headless dump 的**核心方法已通**(libretro core 是最
+    容易 headless 自動化的路,比 GUI 模擬器穩)。
 - **方法論教訓**:console ROM 的圖形未必是「tile bank」——可能是 name-table 排好的
   **場景 bitmap**;raw ROM 線性切 ≠ 邏輯 tile 序。確認方式:放大看是「連續鋪滿的畫面」
   還是「格狀分離 sprite」。FM Towns 有現成 256-tile sheet(省事),SMS/console 多半要 VRAM dump。
