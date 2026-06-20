@@ -1,7 +1,13 @@
+# 多平台 U4 資產抽取工具容器:CD/ROM/磁碟 → tileset/intro/音樂。
 FROM ubuntu:24.04
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends \
-      mame-tools ffmpeg p7zip-full unzip mtools dosfstools python3 python3-pil \
-      ca-certificates xxd binutils \
+      mame-tools ffmpeg p7zip-full unzip mtools dosfstools bchunk \
+      python3 python3-pil python3-numpy xxd binutils \
+      default-jre-headless curl ca-certificates \
+ && curl -fsSL -o /usr/local/lib/ac.jar \
+      https://github.com/AppleCommander/AppleCommander/releases/download/1-9-0/AppleCommander-ac-1.9.0.jar \
+ && printf '#!/bin/sh\nexec java -jar /usr/local/lib/ac.jar "$@"\n' > /usr/local/bin/ac \
+ && chmod +x /usr/local/bin/ac \
  && rm -rf /var/lib/apt/lists/*
 WORKDIR /work

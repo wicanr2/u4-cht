@@ -45,20 +45,20 @@ description: 把同一款經典遊戲(此處 Ultima IV)各家移植版的 tilese
 - **intro**:`U4OPEN/*.TIF` 是**標準 TIFF**(`4949 2a00`)→ `ffmpeg` 直接轉 PNG(32 張)。
 - 整合:`tools/extract_fmtowns.sh`(端到端)+ `tools/fmtowns/module/{config.b,graphics.b}`。
 
-### MSX2(1987,Pony Canyon)— 🟡 tile 解碼 mid-RE
+### MSX2(1987,Pony Canyon)— 🟢 tile 解碼破解(到可辨識,待調色盤校正)
+> 詳細單平台 SOP + 方法論見 `skills/u4-msx2-extract/`。
 - 媒體:`.dsk`(MSX-DOS **FAT12**,`mtools` 可讀:`mdir -i x.dsk ::`,需 `MTOOLS_SKIP_CHECK=1`)。
 - 檔案:`SHAPE.DAT`(24576)=tileset、`FONT.DAT`(8064)、`CARD1-3.MSX`(吉普賽卡)、
-  `II1X-7X.MSX`/`RUNE*.MSX`/`ENDPIC.MSX`(intro/結局,~19460/11620,SCREEN 圖)、
-  `U4MAP.BIN`/`TALKDATA.BIN` 等 game data。`mcopy -i x.dsk ::FILE .` 取檔。
-- **像素格式已確認**:`II1X.MSX`(19460 = 256×152×4bpp + **4-byte header**)從 offset 4
-  以 **row-major chunky 4bpp(高 nibble 先)** + MSX2 SCREEN5 標準 16 色解出**可辨識
-  風景圖**(intro 樹/丘陵)→ **MSX intro 畫面可抽取**(II*/RUNE*/ENDPIC/CARD* 同法,
-  各自算 W×H 與 header)。略有色噪 → 可能 Y-interlace(偶/奇行分開)未處理。
-- **`SHAPE.DAT` tile 排列未解**(像素格式同上,但 tile 在檔內排法不同):24576 已試
-  ①連續 16×16×128B(高/低 nibble) ②planar 4bpp ③3-plane 96B ④256×192 整圖切格 —
-  **皆噪訊**。**下一步**:先處理 intro 的 Y-interlace 確認完整 MSX layout,再回頭試
-  SHAPE.DAT 的 row-interleave / VRAM-stride(256 寬 stride 下 16×16 tile 行距 128B)排法;
-  或對照 II*.MSX 內若含 tile 樣本反推。tile 數 192(非 256)。
+  `II*.MSX`/`RUNE*.MSX`/`ENDPIC.MSX`(intro/結局)、`U4MAP.BIN`/`TALKDATA.BIN` 等。
+- **像素格式**:全螢幕圖 = row-major chunky 4bpp(高 nibble 先)+ SCREEN5 16 色。
+  `II1X.MSX`(19460 = 4B header + 256×152×4bpp)解出清楚風景 ✅(`build_msx2_intro.py`)。
+- **`SHAPE.DAT` tileset 已破解**(`build_msx2_tileset.py`):**byte 自相關**鎖定
+  dominant `lag=6`(row)/`lag=96`(tile)/`lag=192` → `256 tile × 96B`、`16 row × 6B`、
+  `6B = 12px × 4bpp chunky`(**非** 192-tile/128B,**非** 3bpp planar)→ 解出可辨識
+  sprite + dither 地形、無剪切。**殘餘**:調色盤為 SCREEN5 近似(偏 dither)、12 寬
+  對齊 xu4 16×16。**校正法**:openMSX headless 跑到地圖畫面 dump VRAM 取 ground-truth。
+- **教訓**:先用全螢幕圖定像素格式,再用 byte 自相關量 tile/row stride(別盲猜維度);
+  uniform-tile 正確+細節噪訊 = 格式對、tile 內序錯;無對角剪切 = stride 正確。
 
 ### X68000 — 🔴 最難(未動)
 - 媒體:`.hdm`(**Human68k FS**,`7z`/`mtools` **讀不出**)→ 需 Human68k 專屬讀碟工具。

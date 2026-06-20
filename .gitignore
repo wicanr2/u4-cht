@@ -5,6 +5,11 @@
 # 原始遊戲資料(Origin © 1985,不重新散布;由 make download 重建)
 /data/
 
+# 各平台移植版的原始磁碟/光碟/ROM 與抽出的版權資產(引擎/資料分離)
+# 使用者自有媒體 + 解碼產物,只留本機,絕不入 repo;repo 只放解碼工具
+/materals/
+/materials/
+
 # 建置/執行產物
 *.mod
 *.pak
