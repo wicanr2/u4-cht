@@ -54,15 +54,24 @@ python3 "$ROOT/tools/patch_vendor_boron.py" \
   --vendors "$XU4/module/Ultima-IV/vendors.b" \
   --bilingual "$ROOT/dumps/vendor_bilingual.json"
 
-# FM Towns 主題(選用):若已用 tools/extract_fmtowns.sh 從自有光碟設好模組
-# (tileset 存在),把 U4-FMTowns.mod 加進 build;否則 F2 主題循環會優雅跳過 FM Towns。
-if [ -f "$XU4/module/U4-FMTowns/image/fmt_tileset.png" ]; then
-  echo "[5] 啟用 FM Towns 主題(偵測到模組 tileset)"
-  grep -q "U4-FMTowns.mod" "$XU4/Makefile" || \
-    sed -i 's/^MODULES=\(.*\)/MODULES=\1 U4-FMTowns.mod/' "$XU4/Makefile"
-  grep -q "^U4-FMTowns.mod:" "$XU4/Makefile" || \
-    printf '\nU4-FMTowns.mod: module/U4-FMTowns/*.b module/U4-FMTowns/image/*.png\n\t$(BORON) -s tools/pack-xu4.b module/U4-FMTowns\n' >> "$XU4/Makefile"
-fi
+# 多平台美術主題(選用):各平台若已用對應解碼器從自有媒體產出 tileset(模組 image/
+# 下有 <tileset>.png),就把該 .mod 加進 build;否則 F2 主題循環會優雅跳過該主題。
+# 平台:模組名:tileset 檔名(對齊 game.cpp 的 themes[] 與各 tools/<p>/module)。
+enable_theme() {   # $1=模組名 $2=tileset 檔名
+  local mod="$1" ts="$2"
+  [ -f "$XU4/module/$mod/image/$ts" ] || return 0
+  echo "[5] 啟用主題 $mod(偵測到 $ts)"
+  grep -q "$mod.mod" "$XU4/Makefile" || \
+    sed -i "s/^MODULES=\\(.*\\)/MODULES=\\1 $mod.mod/" "$XU4/Makefile"
+  grep -q "^$mod.mod:" "$XU4/Makefile" || \
+    printf '\n%s.mod: module/%s/*.b module/%s/image/*.png\n\t$(BORON) -s tools/pack-xu4.b module/%s\n' \
+      "$mod" "$mod" "$mod" "$mod" >> "$XU4/Makefile"
+}
+enable_theme U4-FMTowns fmt_tileset.png
+enable_theme U4-Amiga   amiga_tileset.png
+enable_theme U4-MSX2    msx_tileset.png
+enable_theme U4-X68000  x68k_tileset.png
+enable_theme U4-SMS     sms_tileset.png
 
 echo "完成。重建:docker build -f docker/Dockerfile.zh -t u4cht/xu4-allegro xu4"
 echo "自測截圖:docker run --rm -e U4CHT_SELFTEST=1 -v /tmp/u4shot:/out u4cht/xu4-test 6 3"

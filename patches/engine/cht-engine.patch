@@ -299,10 +299,10 @@ index 0bef0c9..f919e16 100644
          return false;
      }
 diff --git a/src/game.cpp b/src/game.cpp
-index 5c359b0..024a9c5 100644
+index 5c359b0..3434275 100644
 --- a/src/game.cpp
 +++ b/src/game.cpp
-@@ -418,6 +418,71 @@ void gameUpdateScreen() {
+@@ -418,6 +418,77 @@ void gameUpdateScreen() {
      }
  }
  
@@ -330,6 +330,10 @@ index 5c359b0..024a9c5 100644
 +        { "Ultima-IV",  "圖形:EGA" },
 +        { "U4-Upgrade", "圖形:VGA" },
 +        { "U4-FMTowns", "圖形:FM Towns" },
++        { "U4-Amiga",   "圖形:Amiga" },
++        { "U4-MSX2",    "圖形:MSX2" },
++        { "U4-X68000",  "圖形:X68000" },
++        { "U4-SMS",     "圖形:Sega MS" },
 +    };
 +    const int N = (int)(sizeof(themes) / sizeof(themes[0]));
 +    static Config* cache[8] = { NULL };
@@ -340,14 +344,16 @@ index 5c359b0..024a9c5 100644
 +        cache[cur] = xu4.config;
 +    }
 +
-+    int nxt = (cur + 1) % N;
-+    if (! cache[nxt]) {
-+        cache[nxt] = configInit(themes[nxt].mod, xu4.settings->soundtrack);
-+        if (! cache[nxt]) {                     /* 載入失敗(如模組缺)→ 跳過該主題 */
-+            nxt = (nxt + 1) % N;
-+            if (! cache[nxt]) return false;
-+        }
++    /* 迴圈找下一個「可載入」的主題:缺模組(使用者沒放該平台資產)就跳過,
++       連續多個缺失也能跳過,繞一圈都沒有就維持原狀(return false)。 */
++    int nxt = cur;
++    for (int tries = 0; tries < N - 1; ++tries) {
++        nxt = (nxt + 1) % N;
++        if (! cache[nxt])
++            cache[nxt] = configInit(themes[nxt].mod, xu4.settings->soundtrack);
++        if (cache[nxt]) break;                  /* 找到可用主題 */
 +    }
++    if (nxt == cur || ! cache[nxt]) return false;   /* 沒有其他可用主題 */
 +
 +    cur = nxt;
 +    xu4.config = cache[cur];
@@ -374,7 +380,7 @@ index 5c359b0..024a9c5 100644
  void GameController::setMap(Map *map, bool saveLocation, const Portal *portal, TurnController *turnCompleter) {
      int viewMode;
      LocationContext context;
-@@ -3452,7 +3517,7 @@ showMixturesSuper(int page = 0) {
+@@ -3452,7 +3523,7 @@ showMixturesSuper(int page = 0) {
  
      const Spell *s = getSpell(i + 13 * page);
      int line = i + 8;

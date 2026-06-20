@@ -1,5 +1,5 @@
 graphics: [
-    image (name: tiles filename: "sms_tileset.png" tiles: 256 fixup: blackTransparencyHack) [
+    image (name: tiles filename: "x68k_tileset.png" tiles: 256 fixup: blackTransparencyHack) [
         at 0,0 size 16,16
         ; subimages
         tile_sea
