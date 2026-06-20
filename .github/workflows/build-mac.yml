@@ -51,8 +51,10 @@ jobs:
           cd /tmp/boron && git checkout v2.0.8
           ./configure --static --thread
           make
-          sudo make DESTDIR= install
-          sudo make DESTDIR= install-dev
+          # macOS 的 / 根目錄(/lib /share)受 SIP 唯讀;Boron 預設 PREFIX=/ → 改裝到
+          # /usr/local(可寫 + clang 預設搜尋路徑),對應 Linux 的 DESTDIR=/usr。
+          sudo make DESTDIR=/usr/local install
+          sudo make DESTDIR=/usr/local install-dev
 
       - name: 取中文字型(Noto Sans CJK,OTF index 0)
         run: |
