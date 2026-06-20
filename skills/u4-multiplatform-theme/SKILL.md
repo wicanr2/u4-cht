@@ -133,9 +133,13 @@ description: 把同一款經典遊戲(此處 Ultima IV)各家移植版的 tilese
   - CRAM = 32 色真 palette(genesis-plus-gx 把每色 1 byte `--BBGGRR` 存成 uint16 低 byte;
     取低 byte → RRGGBB 各 2-bit → 0/85/170/255 四階)。**免反推、色彩正確**。
   - 解出**色彩完美的世界地圖**(藍水/綠林/金船/灰城堡/洞穴/山),SMS 從「受阻」變「已解」。
-  - **殘餘**:VRAM 只含「當下載入」的 tile(進不同畫面 dump 不同子集),要湊滿 256 + 對 xu4
-    序需多畫面 dump 合併;但 emulator headless dump 的**核心方法已通**(libretro core 是最
-    容易 headless 自動化的路,比 GUI 模擬器穩)。
+  - **demo/attract loop dump**:`lr_dump` 跑 ~2400 frame(`U4_BTN=START` 跳 title)進 intro
+    demo,VRAM 含**世界地圖 game tile**(水/岸/建築/船,色彩正確)。比手動導航穩(input 機制
+    僅單 button pulse,穿不過創角)。
+  - **殘餘(xu4 整合的硬骨頭)**:VRAM tile 是**遊戲 VRAM 載入序、非 xu4 256 canonical 序**,
+    直接當 tileset 會在遊戲裡錯位。要對齊需 **dump name-table**(SMS Mode4 ~`0x3800`)取螢幕
+    tile 排列 → 對照**已知世界地圖**(可用 X68000 已解的 `MAP.BIN` 當 ground truth)反推
+    「哪個 VRAM tile = 水/草/…」→ 重排成 xu4 序。SMS 美術+palette 已證可取,**就差這層對映**。
 - **方法論教訓**:console ROM 的圖形未必是「tile bank」——可能是 name-table 排好的
   **場景 bitmap**;raw ROM 線性切 ≠ 邏輯 tile 序。確認方式:放大看是「連續鋪滿的畫面」
   還是「格狀分離 sprite」。FM Towns 有現成 256-tile sheet(省事),SMS/console 多半要 VRAM dump。
