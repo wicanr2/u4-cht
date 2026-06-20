@@ -184,12 +184,20 @@ bash dist/win/make-zip.sh "$PWD/dist/out/u4-cht-windows-x64.zip" # → exe + 全
 |---|---|---|---|
 | Linux AppImage / tarball | 本地 Docker | Allegro 5 | ✅ 本地實建 |
 | Windows x64 zip | 本地 Docker(mingw64) | GLFW | ✅ objdump 確認全 DLL |
-| macOS(arm64/x86_64) | GitHub Actions `build-mac.yml` | Allegro 5 | CI(macOS runner) |
-| Android APK | GitHub Actions `build-android.yml` | GLV | CI(scaffold,需驗證) |
+| macOS arm64(Apple Silicon) | GitHub Actions `build-mac.yml` | Allegro 5 | ✅ CI 全綠(build+連結+打包 .app/zip/dmg) |
+| macOS x86_64(Intel) | GitHub Actions `build-mac.yml` | Allegro 5 | 🟡 同碼,卡 macos-13 runner 供給 |
+| Android APK | GitHub Actions `build-android.yml` | GLV | ⛔ scaffold,上游依賴已失效 |
 
-- **Mac/Android 走 CI**:Mac 需 macOS runner(Linux 無法跨編 Mach-O);Android 用 xu4 上游
-  GLV 移植 + NDK。觸發:`gh workflow run build-mac.yml` / `build-android.yml`,或 push `v*` tag
-  自動建並附到 Release。CI 會自行 clone xu4 上游(pinned commit)+ 跑 `apply_cht.sh`。
+- **Mac/Android 走 CI**:Mac 需 macOS runner(Linux 無法跨編 Mach-O)。觸發:
+  `gh workflow run build-mac.yml`,或 push `v*` tag 自動建並附到 Release。CI 會自行 clone xu4
+  上游(pinned commit)+ 跑 `apply_cht.sh`。
+- **macOS 是完整原生移植**:上游 xu4/faun 本無 macOS 支援,本專案補了五層 —— CoreAudio
+  音訊後端(`patches/mac/sys_coreaudio.c`)、faun tmsg 的 Apple `MsgTime`/dispatch 逾時、
+  build 改走 `src/Makefile`(避開壞掉的 `Makefile.macosx`)、OpenGL 改 `<OpenGL/gl3.h>`、
+  靜態 faun 連結相依 + framework。所有 patch 都在 `build-mac.yml` 內以 perl 注入(xu4/ 重 clone)。
+  完整過程見 `docs/macos-port.md`。**真機 runtime 尚待實測**(CI 只證明可建可包)。
+  iteration 教訓:`git push` 後要等幾秒再 `workflow_dispatch`,並驗 `headSha == 本地 HEAD`,
+  否則會跑到舊 commit。
 
 ## 9. dev-setup-bundle(換機接續 + claude -r)
 
