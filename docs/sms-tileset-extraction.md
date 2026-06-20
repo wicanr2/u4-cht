@@ -77,3 +77,13 @@ SMS 有 2 個 palette(背景 / sprite),不同 tile 用不同 palette(name-table 
 
 > ROM / 抽出的 tile 屬版權資料,不入 repo;libretro core 與 ymfm 同為外部相依,於 docker
 > 內取得。repo 只放解碼/dump 工具與本方法。相關:[多平台主題 skill](../skills/u4-multiplatform-theme/SKILL.md)。
+
+## 組裝 xu4 序 tileset(`map_oracle.py` + `build_world_tileset.py`)
+
+- `map_oracle.py`:SMS 世界畫面水/陸 pattern 滑動匹配 `MAP.BIN` → 找到 Britannia 對應位置
+  (實測 (216,110)、吻合 83%)→ 導出 VRAM tile → 邏輯 tile 對映。
+- `build_world_tileset.py`:反建(邏輯→VRAM)+ 8×8 放大 16×16 → xu4 序 PNG。
+- **實測**:單一世界畫面只能對到 **~15 個邏輯 tile**(該畫面可見的地形),其餘用水填。
+- **結論**:完整 256 tile 需**多畫面 dump**(world=地形、town=建築/NPC、dungeon、combat=生物、
+  命名畫面=字型),各用 savestate 導航到位、各跑一次 oracle 對映、合併。method 已全通,
+  完整化是系統化的多畫面套用。
