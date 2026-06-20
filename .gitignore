@@ -37,3 +37,8 @@ docs/reference/parts/
 # Python bytecode(docker 產)
 __pycache__/
 *.pyc
+
+# 模擬器/抽取 agent 的工作目錄(build 產物)
+tools/*/emu_work/
+tools/*/lr_work/
+materals/_extracted/amiga_work/
