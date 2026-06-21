@@ -363,10 +363,10 @@ index 8f3dce0..5b8bddc 100644
          case ALLEGRO_EVENT_DISPLAY_SWITCH_IN:
              expose();
 diff --git a/src/game.cpp b/src/game.cpp
-index 5c359b0..c3d19d6 100644
+index 5c359b0..389fd01 100644
 --- a/src/game.cpp
 +++ b/src/game.cpp
-@@ -418,6 +418,96 @@ void gameUpdateScreen() {
+@@ -418,6 +418,99 @@ void gameUpdateScreen() {
      }
  }
  
@@ -441,11 +441,14 @@ index 5c359b0..c3d19d6 100644
 +    /* 遊戲中(有 location)才更新地圖堆疊 / 音樂 / 訊息;intro 預覽時 c 為 NULL,
 +       由呼叫端(IntroController)負責重載 intro 美術並重畫。 */
 +    if (c && c->location) {
-+        /* 把 location 堆疊每張 map 重新指向新 config 同 ID 的 map(不用 setMap)*/
-+        for (Location* loc = c->location; loc; loc = loc->prev) {
-+            Map* nm = xu4.config->map(loc->map->id);
-+            if (nm) loc->map = nm;
-+        }
++        /* U4 繁中化:不要把 loc->map 換成新 config 的 map 物件 —— 那是另一個 Map,
++           自帶空的 objects deque,會丟掉現場 runtime 物件(NPC/怪物/party 觸發物)→
++           切換主題後現場人物全消失。改成只把『同一張 map』的 tileset 指標換成新 config
++           的 tileset:地圖資料與所有物件原封不動,只換繪製用的圖塊集。Object 存的是
++           MapTile(id),與 config 無關,渲染時用新 tileset 查 id → 圖會跟著主題變。 */
++        const Tileset* nts = xu4.config->tileset();
++        for (Location* loc = c->location; loc; loc = loc->prev)
++            loc->map->tileset = nts;
 +        xu4.game->mapArea.reinit(); /* mapArea.tileset 重新指向新 config 的 tileset */
 +
 +        /* U4 繁中化:音樂跟主題切換 —— 各主題用自己 config 的音樂(EGA/VGA=DOS、
@@ -463,7 +466,7 @@ index 5c359b0..c3d19d6 100644
  void GameController::setMap(Map *map, bool saveLocation, const Portal *portal, TurnController *turnCompleter) {
      int viewMode;
      LocationContext context;
-@@ -3452,7 +3542,7 @@ showMixturesSuper(int page = 0) {
+@@ -3452,7 +3545,7 @@ showMixturesSuper(int page = 0) {
  
      const Spell *s = getSpell(i + 13 * page);
      int line = i + 8;

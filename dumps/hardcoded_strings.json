@@ -1,3924 +1,3964 @@
 {
-  "_meta": {
-    "source": "xu4/src(靜態抽取 screenMessage/N/Center/TextAt 字面)",
-    "total_call_sites_with_literal": 420,
-    "unique_strings": 318,
-    "with_format_specifier": 128,
-    "dynamic_first_arg": 26,
-    "note": "en = 硬編格式字串(含 %s/%d、\\n);zh 待填。含 % 者於 H1 hook 需 format-aware 處理(post-vsnprintf 比對 / fragment 替換)。",
-    "translation": {
-      "status": "translated",
-      "date": "2026-06-04",
-      "method": "平行 agent + docs/glossary-u4.md",
-      "validated": "format/佔位符 0 不符"
+ "_meta": {
+  "source": "xu4/src(靜態抽取 screenMessage/N/Center/TextAt 字面)",
+  "total_call_sites_with_literal": 420,
+  "unique_strings": 318,
+  "with_format_specifier": 128,
+  "dynamic_first_arg": 26,
+  "note": "en = 硬編格式字串(含 %s/%d、\\n);zh 待填。含 % 者於 H1 hook 需 format-aware 處理(post-vsnprintf 比對 / fragment 替換)。",
+  "translation": {
+   "status": "translated",
+   "date": "2026-06-04",
+   "method": "平行 agent + docs/glossary-u4.md",
+   "validated": "format/佔位符 0 不符"
+  }
+ },
+ "strings": [
+  {
+   "en": "\n",
+   "zh": "\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:294"
+    },
+    {
+     "func": "screenMessage",
+     "at": "event.cpp:777"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1334"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1744"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1779"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2463"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2798"
+    },
+    {
+     "func": "screenMessage",
+     "at": "codex.cpp:67"
+    },
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:407"
+    },
+    {
+     "func": "screenMessage",
+     "at": "shrine.cpp:157"
     }
+   ]
   },
-  "strings": [
+  {
+   "en": "%s\n",
+   "zh": "%s\n",
+   "has_format": true,
+   "occurrences": [
     {
-      "en": "\n",
-      "zh": "\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:294"
-        },
-        {
-          "func": "screenMessage",
-          "at": "event.cpp:777"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1334"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1744"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1779"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2463"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2798"
-        },
-        {
-          "func": "screenMessage",
-          "at": "codex.cpp:67"
-        },
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:407"
-        },
-        {
-          "func": "screenMessage",
-          "at": "shrine.cpp:157"
-        }
-      ]
+     "func": "screenMessage",
+     "at": "combat.cpp:894"
     },
     {
-      "en": "%s\n",
-      "zh": "%s\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:894"
-        },
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:1148"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1456"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1482"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2197"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2468"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2803"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:3528"
-        },
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:288"
-        },
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:299"
-        }
-      ]
+     "func": "screenMessage",
+     "at": "combat.cpp:1148"
     },
     {
-      "en": "%s",
-      "zh": "%s",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenTextAt",
-          "at": "intro.cpp:760"
-        },
-        {
-          "func": "screenTextAt",
-          "at": "game.cpp:184"
-        },
-        {
-          "func": "screenTextAt",
-          "at": "game.cpp:3455"
-        },
-        {
-          "func": "screenTextAt",
-          "at": "game.cpp:3494"
-        },
-        {
-          "func": "screenTextAt",
-          "at": "game.cpp:3498"
-        },
-        {
-          "func": "screenTextAt",
-          "at": "game.cpp:3504"
-        },
-        {
-          "func": "screenMessage",
-          "at": "codex.cpp:393"
-        },
-        {
-          "func": "screenMessage",
-          "at": "codex.cpp:401"
-        }
-      ]
+     "func": "screenMessage",
+     "at": "game.cpp:1456"
     },
     {
-      "en": "\nHmm...No effect!\n",
-      "zh": "\n嗯…無效果!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "item.cpp:188"
-        },
-        {
-          "func": "screenMessage",
-          "at": "item.cpp:191"
-        },
-        {
-          "func": "screenMessage",
-          "at": "item.cpp:210"
-        },
-        {
-          "func": "screenMessage",
-          "at": "item.cpp:315"
-        },
-        {
-          "func": "screenMessage",
-          "at": "item.cpp:337"
-        },
-        {
-          "func": "screenMessage",
-          "at": "item.cpp:366"
-        }
-      ]
+     "func": "screenMessage",
+     "at": "game.cpp:1482"
     },
     {
-      "en": "%cNot here!%c\n",
-      "zh": "%c此處不可!%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:864"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1112"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1140"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1165"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2039"
-        }
-      ]
+     "func": "screenMessage",
+     "at": "game.cpp:2197"
     },
     {
-      "en": "%cNot Here!%c\n",
-      "zh": "%c此處不可!%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1078"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1975"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2390"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2406"
-        }
-      ]
+     "func": "screenMessage",
+     "at": "game.cpp:2468"
     },
     {
-      "en": "Dir: ",
-      "zh": "方向:",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:1143"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1760"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1785"
-        },
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:291"
-        }
-      ]
+     "func": "screenMessage",
+     "at": "game.cpp:2803"
     },
     {
-      "en": "Music: %d%s\n",
-      "zh": "音樂:%d%s\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:977"
-        },
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:982"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1033"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1038"
-        }
-      ]
+     "func": "screenMessage",
+     "at": "game.cpp:3528"
     },
     {
-      "en": "Not here!\n",
-      "zh": "此處不可!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:1022"
-        },
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:1050"
-        },
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:1104"
-        },
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:71"
-        }
-      ]
+     "func": "screenMessage",
+     "at": "cheat.cpp:288"
     },
     {
-      "en": "Sound: %d%s\n",
-      "zh": "音效:%d%s\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:989"
-        },
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:995"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1045"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1051"
-        }
-      ]
-    },
-    {
-      "en": "\nHmmm--No Effect!\n",
-      "zh": "\n嗯——毫無作用!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "dungeon.cpp:175"
-        },
-        {
-          "func": "screenMessage",
-          "at": "dungeon.cpp:183"
-        },
-        {
-          "func": "screenMessage",
-          "at": "dungeon.cpp:199"
-        }
-      ]
-    },
-    {
-      "en": "\nNone owned!\n",
-      "zh": "\n未持有!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "item.cpp:223"
-        },
-        {
-          "func": "screenMessage",
-          "at": "item.cpp:524"
-        },
-        {
-          "func": "screenMessage",
-          "at": "item.cpp:564"
-        }
-      ]
-    },
-    {
-      "en": "\nPassage is not granted.\n\n",
-      "zh": "\n通行未獲准許。\n\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "codex.cpp:146"
-        },
-        {
-          "func": "screenMessage",
-          "at": "codex.cpp:150"
-        },
-        {
-          "func": "screenMessage",
-          "at": "codex.cpp:153"
-        }
-      ]
-    },
-    {
-      "en": "%c",
-      "zh": "%c",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "script_boron.cpp:293"
-        },
-        {
-          "func": "screenTextAt",
-          "at": "event.cpp:580"
-        },
-        {
-          "func": "screenMessage",
-          "at": "screen.cpp:369"
-        }
-      ]
-    },
-    {
-      "en": "%cBlocked!%c\n",
-      "zh": "%c受阻!%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:903"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2242"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2308"
-        }
-      ]
-    },
-    {
-      "en": "%cNone left!%c\n",
-      "zh": "%c已用盡!%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1110"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2471"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2806"
-        }
-      ]
-    },
-    {
-      "en": "%cSlow progress!%c\n",
-      "zh": "%c進展緩慢!%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:907"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2203"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2250"
-        }
-      ]
-    },
-    {
-      "en": "Leaving...\n",
-      "zh": "離開中…\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:346"
-        },
-        {
-          "func": "screenMessage",
-          "at": "spell.cpp:707"
-        },
-        {
-          "func": "screenMessage",
-          "at": "spell.cpp:733"
-        }
-      ]
-    },
-    {
-      "en": "Missed!\n",
-      "zh": "未命中!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:598"
-        },
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:1210"
-        },
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:1258"
-        }
-      ]
-    },
-    {
-      "en": "\n\n",
-      "zh": "\n\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2576"
-        },
-        {
-          "func": "screenMessage",
-          "at": "shrine.cpp:76"
-        }
-      ]
-    },
-    {
-      "en": "\n\n%s",
-      "zh": "\n\n%s",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "codex.cpp:387"
-        },
-        {
-          "func": "screenMessage",
-          "at": "codex.cpp:398"
-        }
-      ]
-    },
-    {
-      "en": "\n%cYou don't have enough reagents to mix %d spells!%c\n",
-      "zh": "\n%c汝的材料不足以調製 %d 道法術!%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1507"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:3553"
-        }
-      ]
-    },
-    {
-      "en": "\n%s",
-      "zh": "\n%s",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "event.cpp:781"
-        },
-        {
-          "func": "screenMessage",
-          "at": "shrine.cpp:197"
-        }
-      ]
-    },
-    {
-      "en": "\n%s\n",
-      "zh": "\n%s\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:129"
-        },
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:139"
-        }
-      ]
-    },
-    {
-      "en": "\nNo place to Use them!\n",
-      "zh": "\n無處可用!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "item.cpp:379"
-        },
-        {
-          "func": "screenMessage",
-          "at": "item.cpp:385"
-        }
-      ]
-    },
-    {
-      "en": "\nNone mixed!\n",
-      "zh": "\n未調製!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1492"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:3549"
-        }
-      ]
-    },
-    {
-      "en": "\nNot a Usable item!\n",
-      "zh": "\n此物不可使用!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "item.cpp:519"
-        },
-        {
-          "func": "screenMessage",
-          "at": "item.cpp:533"
-        }
-      ]
-    },
-    {
-      "en": " ",
-      "zh": " ",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenTextAt",
-          "at": "event.cpp:557"
-        },
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:220"
-        }
-      ]
-    },
-    {
-      "en": "%cBoard What?%c\n",
-      "zh": "%c登上何物?%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1684"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1699"
-        }
-      ]
-    },
-    {
-      "en": "%cDrift only!%c\n",
-      "zh": "%c僅能漂流!%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1925"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2495"
-        }
-      ]
-    },
-    {
-      "en": "%cLeaving...%c\n",
-      "zh": "%c離開中…%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2269"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2314"
-        }
-      ]
-    },
-    {
-      "en": "%cNothing Here!%c\n",
-      "zh": "%c此處空無一物!%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1184"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1191"
-        }
-      ]
-    },
-    {
-      "en": "%cWhat?%c\n",
-      "zh": "%c什麼?%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1239"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2674"
-        }
-      ]
-    },
-    {
-      "en": "%s Destroyed!\n",
-      "zh": "%s 被摧毀!\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1586"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1590"
-        }
-      ]
-    },
-    {
-      "en": "%s, You must lead!\n",
-      "zh": "%s,汝須領隊!\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2657"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2669"
-        }
-      ]
-    },
-    {
-      "en": "Battle Speed:\nNormal\n",
-      "zh": "戰鬥速度:\n正常\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:962"
-        },
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:968"
-        }
-      ]
-    },
-    {
-      "en": "Failed.\n",
-      "zh": "失敗。\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:668"
-        },
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:689"
-        }
-      ]
-    },
-    {
-      "en": "For Spell: ",
-      "zh": "施法咒文:",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2546"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:3519"
-        }
-      ]
-    },
-    {
-      "en": "Funny, no response!\n",
-      "zh": "奇怪,無回應!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2513"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2736"
-        }
-      ]
-    },
-    {
-      "en": "Get Chest!\n",
-      "zh": "取得寶箱!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:1010"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1921"
-        }
-      ]
-    },
-    {
-      "en": "How many? ",
-      "zh": "數量?",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2636"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:3544"
-        }
-      ]
-    },
-    {
-      "en": "It Fizzles!\n\n",
-      "zh": "法術消散!\n\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1521"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2600"
-        }
-      ]
-    },
-    {
-      "en": "Mix reagents\n",
-      "zh": "調製材料\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2527"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:3474"
-        }
-      ]
-    },
-    {
-      "en": "None\n",
-      "zh": "無\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1448"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1742"
-        }
-      ]
-    },
-    {
-      "en": "Not Here!\n",
-      "zh": "此處不可!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:337"
-        },
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:356"
-        }
-      ]
-    },
-    {
-      "en": "Pass\n",
-      "zh": "略過\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:937"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:998"
-        }
-      ]
-    },
-    {
-      "en": "Reagent: ",
-      "zh": "材料:",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2586"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2614"
-        }
-      ]
-    },
-    {
-      "en": "Speed: Normal\n",
-      "zh": "速度:正常\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1018"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1024"
-        }
-      ]
-    },
-    {
-      "en": "Success!\n\n",
-      "zh": "成功!\n\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1514"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2597"
-        }
-      ]
-    },
-    {
-      "en": "Use which item:\n",
-      "zh": "使用何物:\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:1054"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1201"
-        }
-      ]
-    },
-    {
-      "en": "Volume Off!\n",
-      "zh": "音量關閉!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:1063"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1216"
-        }
-      ]
-    },
-    {
-      "en": "Volume On!\n",
-      "zh": "音量開啟!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:1061"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1214"
-        }
-      ]
-    },
-    {
-      "en": "XU4 %s\n",
-      "zh": "XU4 %s\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:1068"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1351"
-        }
-      ]
-    },
-    {
-      "en": "You find...\n%s!\n",
-      "zh": "汝尋得…\n%s!\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "dungeon.cpp:148"
-        },
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1187"
-        }
-      ]
-    },
-    {
-      "en": "\b\b\b\b",
-      "zh": "\b\b\b\b",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1475"
-        }
-      ]
-    },
-    {
-      "en": "\b%s\n",
-      "zh": "\b%s\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2554"
-        }
-      ]
-    },
-    {
-      "en": "\n\nA voice rings out:  What virtue exists independently of Truth, Love, and Courage?\n\n",
-      "zh": "\n\n一個聲音迴響:有何美德能獨立於真理、愛與勇氣之外?\n\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "item.cpp:356"
-        }
-      ]
-    },
-    {
-      "en": "\n\nAs thou doth approach, a voice rings out: What virtue dost stem from %s?\n\n",
-      "zh": "\n\n汝趨近時,一道聲音響起:何種美德源自%s?\n\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "item.cpp:355"
-        }
-      ]
-    },
-    {
-      "en": "\n\nFor how many Cycles (0-3)? ",
-      "zh": "\n\n要幾個週期(0-3)? ",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "shrine.cpp:68"
-        }
-      ]
-    },
-    {
-      "en": "\n\nNo place to put %s!\n\n",
-      "zh": "\n\n無處可放置 %s!\n\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:426"
-        }
-      ]
-    },
-    {
-      "en": "\n\nThe Voice says: Use thy Stone.\n\nColor:\n",
-      "zh": "\n\n那聲音道:使用汝之寶石。\n\n顏色:\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "item.cpp:361"
-        }
-      ]
-    },
-    {
-      "en": "\n\nThe altar changes before thyne eyes!\n",
-      "zh": "\n\n聖壇在汝眼前變化!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "item.cpp:328"
-        }
-      ]
-    },
-    {
-      "en": "\n\nThen what is the one thing which encompasses and is the whole of all undeniable Truth, unending Love, and unyielding Courage?\n\n",
-      "zh": "\n\n那麼,何為那唯一囊括並統合一切不容否認之真理、無盡之愛與不屈之勇氣者?\n\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "codex.cpp:333"
-        }
-      ]
-    },
-    {
-      "en": "\n\nThere are holes for 4 stones.\nWhat colors:\nA:",
-      "zh": "\n\n此處有四枚寶石之孔。\n何種顏色:\nA:",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "item.cpp:376"
-        }
-      ]
-    },
-    {
-      "en": "\n\nYou cast the Skull of Mondain into the Abyss!\n",
-      "zh": "\n\n汝將蒙丹之顱擲入深淵!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "item.cpp:229"
-        }
-      ]
-    },
-    {
-      "en": "\n\nYou hold the evil Skull of Mondain the Wizard aloft...\n",
-      "zh": "\n\n汝高舉巫師蒙丹的邪惡頭骨…\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "item.cpp:237"
-        }
-      ]
-    },
-    {
-      "en": "\n\nYou mix the Reagents, and...\n",
-      "zh": "\n\n汝調配材料,然後…\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2594"
-        }
-      ]
-    },
-    {
-      "en": "\n %cThou hast lost\n  an eighth!%c\n",
-      "zh": "\n %c汝失去了\n  八分之一!%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:681"
-        }
-      ]
-    },
-    {
-      "en": "\n%c%s\nThou art now Level %d%c\n",
-      "zh": "\n%c%s\n汝今已達等級 %d%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:686"
-        }
-      ]
-    },
-    {
-      "en": "\n%c%s Flees!%c\n",
-      "zh": "\n%c%s 逃走!%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "creature.cpp:451"
-        }
-      ]
-    },
-    {
-      "en": "\n%c%s is Killed!%c\n",
-      "zh": "\n%c%s 被擊殺!%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:1271"
-        }
-      ]
-    },
-    {
-      "en": "\n%c****%c COMBAT %c****%c\n",
-      "zh": "\n%c****%c 戰鬥 %c****%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:205"
-        }
-      ]
-    },
-    {
-      "en": "\n%c:",
-      "zh": "\n%c:",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "item.cpp:297"
-        }
-      ]
-    },
-    {
-      "en": "\n%cA %s may NOT use %s %s%c\n",
-      "zh": "\n%c%s 不可使用 %s %s%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2484"
-        }
-      ]
-    },
-    {
-      "en": "\n%cA %s may NOT use %s%c\n",
-      "zh": "\n%c%s 無法使用 %s%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2809"
-        }
-      ]
-    },
-    {
-      "en": "\n%cDrift only!%c\n",
-      "zh": "\n%c只能漂流!%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1606"
-        }
-      ]
-    },
-    {
-      "en": "\n%cNone Left!%c\n",
-      "zh": "\n%c已無剩餘!%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2613"
-        }
-      ]
-    },
-    {
-      "en": "\n%cOnly need %d!%c\n",
-      "zh": "\n%c只需 %d!%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1500"
-        }
-      ]
-    },
-    {
-      "en": "\n%cStarving!!!%c\n",
-      "zh": "\n%c飢餓!!!%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:696"
-        }
-      ]
-    },
-    {
-      "en": "\n%cYou cannot mix any more of that spell!%c\n",
-      "zh": "\n%c該咒文無法再調配更多!%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2558"
-        }
-      ]
-    },
-    {
-      "en": "\n%cYou cannot mix that much more of that spell!%c\n",
-      "zh": "\n%c該法術無法再調製這麼多!%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:3551"
-        }
-      ]
-    },
-    {
-      "en": "\n%s\n\n",
-      "zh": "\n%s\n\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "codex.cpp:267"
-        }
-      ]
-    },
-    {
-      "en": "\n%s %c%s Hit%c!\n",
-      "zh": "\n%s %c%s 命中%c!\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:702"
-        }
-      ]
-    },
-    {
-      "en": "\n%s Hit!\n",
-      "zh": "\n%s 命中!\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:713"
-        }
-      ]
-    },
-    {
-      "en": "\n%s not found\n",
-      "zh": "\n找不到 %s\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:430"
-        }
-      ]
-    },
-    {
-      "en": "\n%s summoned!\n",
-      "zh": "\n%s 已被召喚!\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:424"
-        }
-      ]
-    },
-    {
-      "en": "\n%s with %s\n\u000020",
-      "zh": "\n%s 以 %s\n\u000020",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:470"
-        }
-      ]
-    },
-    {
-      "en": "\n...and kneel before the altar.\n",
-      "zh": "\n…並跪於聖壇之前。\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "shrine.cpp:125"
-        }
-      ]
-    },
-    {
-      "en": "\nA voice rings out:\n",
-      "zh": "\n一個聲音迴響:\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "codex.cpp:216"
-        }
-      ]
-    },
-    {
-      "en": "\nAbove the din, the voice asks:\n\nIf all eight virtues of the Avatar combine into and are derived from the Three Principles of Truth, Love and Courage...",
-      "zh": "\n喧囂之上,那聲音問道:\n\n若聖者之八德皆融匯並源自真理、仁愛與勇氣三大原則…",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "codex.cpp:328"
-        }
-      ]
-    },
-    {
-      "en": "\nAhh-Refreshing!\n",
-      "zh": "\n啊—暢快!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "dungeon.cpp:181"
-        }
-      ]
-    },
-    {
-      "en": "\nAlready used!\n",
-      "zh": "\n已經使用過!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "item.cpp:287"
-        }
-      ]
-    },
-    {
-      "en": "\nAlt-Q: Main Menu\nAlt-V: Version\nAlt-X: Quit\n\n\n\n\n\n\n\n\n",
-      "zh": "\nAlt-Q:主選單\nAlt-V:版本\nAlt-X:離開\n\n\n\n\n\n\n\n\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1308"
-        }
-      ]
-    },
-    {
-      "en": "\nArgh-Choke-Gasp!\n",
-      "zh": "\n啊—嗆—喘!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "dungeon.cpp:207"
-        }
-      ]
-    },
-    {
-      "en": "\nAs you light the Candle the Earth Trembles!\n",
-      "zh": "\n當汝點燃蠟燭,大地震動!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "item.cpp:185"
-        }
-      ]
-    },
-    {
-      "en": "\nAttacked by %s\n",
-      "zh": "\n遭 %s 攻擊\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:3049"
-        }
-      ]
-    },
-    {
-      "en": "\nBattle is lost!\n\n",
-      "zh": "\n戰鬥失敗!\n\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:265"
-        }
-      ]
-    },
-    {
-      "en": "\nBleck--Nasty!\n",
-      "zh": "\n噁——真難喝!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "dungeon.cpp:191"
-        }
-      ]
-    },
-    {
-      "en": "\nBridge Trolls!\n",
-      "zh": "\n橋下巨魔!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:3281"
-        }
-      ]
-    },
-    {
-      "en": "\nDone.\n",
-      "zh": "\n完成。\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:3523"
-        }
-      ]
-    },
-    {
-      "en": "\nFalling Rocks!\n",
-      "zh": "\n落石!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "dungeon.cpp:284"
-        }
-      ]
-    },
-    {
-      "en": "\nFull Virtues!\n",
-      "zh": "\n美德已滿!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:320"
-        }
-      ]
-    },
-    {
-      "en": "\nHe says: ",
-      "zh": "\n他說: ",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessageN",
-          "at": "discourse_castle.cpp:264"
-        }
-      ]
-    },
-    {
-      "en": "\nHmm--No Effect!\n",
-      "zh": "\n嗯——無效果!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "dungeon.cpp:210"
-        }
-      ]
-    },
-    {
-      "en": "\nHmmm--Delicious!\n",
-      "zh": "\n嗯——美味!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "dungeon.cpp:197"
-        }
-      ]
-    },
-    {
-      "en": "\nIn the middle of the night while out on a stroll...\n\n",
-      "zh": "\n夜半外出散步之際…\n\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "camp.cpp:206"
-        }
-      ]
-    },
-    {
-      "en": "\nLocation:\n%s\nx: %d\ny: %d\n",
-      "zh": "\n位置:\n%s\nx: %d\ny: %d\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:229"
-        }
-      ]
-    },
-    {
-      "en": "\nLocation:\n%s\nx: %d\ny: %d\nz: %d\n",
-      "zh": "\n位置:\n%s\nx: %d\ny: %d\nz: %d\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:231"
-        }
-      ]
-    },
-    {
-      "en": "\nLocation:\nx:%d\ny:%d\nz:%d\n",
-      "zh": "\n位置:\nx:%d\ny:%d\nz:%d\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:1017"
-        }
-      ]
-    },
-    {
-      "en": "\nMantra: ",
-      "zh": "\n真言:",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "shrine.cpp:154"
-        }
-      ]
-    },
-    {
-      "en": "\nMixing %d...\n",
-      "zh": "\n調配 %d…\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1503"
-        }
-      ]
-    },
-    {
-      "en": "\nMorning!\n",
-      "zh": "\n早安!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "camp.cpp:150"
-        }
-      ]
-    },
-    {
-      "en": "\nNot a Usable Item!\n",
-      "zh": "\n此物不可使用!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "item.cpp:341"
-        }
-      ]
-    },
-    {
-      "en": "\nOnce mounted, the Wheel glows with a blue light!\n",
-      "zh": "\n裝上後,船舵泛起藍光!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "item.cpp:207"
-        }
-      ]
-    },
-    {
-      "en": "\nOops, you just got too close to beating the game.\nBAD AVATAR!\n",
-      "zh": "\n糟糕,汝太接近通關了。\n壞聖者!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "codex.cpp:172"
-        }
-      ]
-    },
-    {
-      "en": "\nOpened!\n",
-      "zh": "\n已開啟!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2431"
-        }
-      ]
-    },
-    {
-      "en": "\nPit!\n",
-      "zh": "\n陷坑!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "dungeon.cpp:287"
-        }
-      ]
-    },
-    {
-      "en": "\nSleep!\n",
-      "zh": "\n入眠!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "creature.cpp:387"
-        }
-      ]
-    },
-    {
-      "en": "\nSuccess!\n\n",
-      "zh": "\n成功!\n\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:3561"
-        }
-      ]
-    },
-    {
-      "en": "\nThe Altar Room of %s\n",
-      "zh": "\n%s之祭壇室\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:199"
-        }
-      ]
-    },
-    {
-      "en": "\nThe Bell rings on and on!\n",
-      "zh": "\n鐘聲不絕於耳!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "item.cpp:175"
-        }
-      ]
-    },
-    {
-      "en": "\nThe Horn sounds an eerie tone!\n",
-      "zh": "\n號角發出詭異之音!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "item.cpp:198"
-        }
-      ]
-    },
-    {
-      "en": "\nThe words resonate with the ringing!\n",
-      "zh": "\n話語與鳴響共鳴!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "item.cpp:180"
-        }
-      ]
-    },
-    {
-      "en": "\nThou art granted a vision!\n",
-      "zh": "\n汝獲賜一段異象!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "shrine.cpp:191"
-        }
-      ]
-    },
-    {
-      "en": "\nThou dost not have the Key of Three Parts.\n\n",
-      "zh": "\n汝未持有三部之鑰。\n\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "codex.cpp:142"
-        }
-      ]
-    },
-    {
-      "en": "\nThou dost not know the true nature of the Universe.\n\n",
-      "zh": "\n汝尚不知宇宙之真諦。\n\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "codex.cpp:169"
-        }
-      ]
-    },
-    {
-      "en": "\nThou doth find one third of the Three Part Key!\n",
-      "zh": "\n汝尋得三段之鑰的三分之一!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "item.cpp:312"
-        }
-      ]
-    },
-    {
-      "en": "\nThou hast achieved partial Avatarhood in the Virtue of %s\n",
-      "zh": "\n汝已在 %s 之美德達成部分聖者之境\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "shrine.cpp:175"
-        }
-      ]
-    },
-    {
-      "en": "\nThy quest is not yet complete.\n\n",
-      "zh": "\n汝之任務尚未完成。\n\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "codex.cpp:166"
-        }
-      ]
-    },
-    {
-      "en": "\nThy ship sinks!\n\n",
-      "zh": "\n汝之船沉沒!\n\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:3201"
-        }
-      ]
-    },
-    {
-      "en": "\nThy thoughts are pure. Thou art granted a vision!\n",
-      "zh": "\n汝之意念純淨。汝獲賜一則異象!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "shrine.cpp:179"
-        }
-      ]
-    },
-    {
-      "en": "\nToggle View!\n",
-      "zh": "\n切換視角!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:253"
-        }
-      ]
-    },
-    {
-      "en": "\nTrapped at sea without thy ship, thou dost drown!\n\n",
-      "zh": "\n失船困於海上,汝溺斃!\n\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:536"
-        }
-      ]
-    },
-    {
-      "en": "\nUnlocked!\n",
-      "zh": "\n已解鎖!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2377"
-        }
-      ]
-    },
-    {
-      "en": "\nUpon which virtue dost thou meditate?\n",
-      "zh": "\n汝欲冥想何種美德?\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "shrine.cpp:65"
-        }
-      ]
-    },
-    {
-      "en": "\nVictory!\n\n",
-      "zh": "\n勝利!\n\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:260"
-        }
-      ]
-    },
-    {
-      "en": "\nWinds!\n",
-      "zh": "\n起風!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "dungeon.cpp:279"
-        }
-      ]
-    },
-    {
-      "en": "\nX-it!\n",
-      "zh": "\n離開!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:335"
-        }
-      ]
-    },
-    {
-      "en": "\nYou mix the Reagents, and...\n",
-      "zh": "\n汝調製材料,而後…\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1512"
-        }
-      ]
-    },
-    {
-      "en": "\ncan't find\n%s!\n",
-      "zh": "\n找不到\n%s!\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:145"
-        }
-      ]
-    },
-    {
-      "en": "\nj: Jimmy lock\nk: Klimb\nl: Locate\nm: Mix reagents\nn: New Order\no: Open door\np: Peer at Gem\nq: Quit & Save\nr: Ready weapon\ns: Search\nt: Talk\n(more)",
-      "zh": "\nj:撬鎖\nk:攀爬\nl:定位\nm:調配材料\nn:重整隊序\no:開門\np:窺視寶珠\nq:離開並存檔\nr:備妥武器\ns:搜尋\nt:交談\n(更多)",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1276"
-        }
-      ]
-    },
-    {
-      "en": "\nk - Show Karma\nl - Location\nm - Mixtures\no - Opacity\np - Peer\nr - Reagents\ns - Summon\nt - Transports\nv - Full Virtues\nw - Change Wind\nx - Exit Map\n(more)",
-      "zh": "\nk - 顯示業力\nl - 位置\nm - 調製\no - 透明度\np - 凝視\nr - 材料\ns - 召喚\nt - 載具\nv - 完整美德\nw - 改變風向\nx - 離開地圖\n(更多)",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:165"
-        }
-      ]
-    },
-    {
-      "en": "\nu: Use Item\nv: Volume On/Off\nw: Wear armour\nx: eXit\ny: Yell\nz: Ztats\nSpace: Pass\n,: - Music Vol\n.: + Music Vol\n<: - Sound Vol\n>: + Sound Vol\n(more)",
-      "zh": "\nu: 使用物品\nv: 音量開關\nw: 穿戴護甲\nx: 退出\ny: 呼喊\nz: 屬性\nSpace: 略過\n,: - 音樂音量\n.: + 音樂音量\n<: - 音效音量\n>: + 音效音量\n(更多)",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1292"
-        }
-      ]
-    },
-    {
-      "en": "\ny - Y-up\nz - Z-down\n",
-      "zh": "\ny - 向上\nz - 向下\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:181"
-        }
-      ]
-    },
-    {
-      "en": "    \n",
-      "zh": "    \n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1478"
-        }
-      ]
-    },
-    {
-      "en": "    with # ",
-      "zh": "    以 # ",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2661"
-        }
-      ]
-    },
-    {
-      "en": "  %.1X%.1X  %.3d %.1X%.1X %.1X%.1X\n",
-      "zh": "  %.1X%.1X  %.3d %.1X%.1X %.1X%.1X\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:1039"
-        }
-      ]
-    },
-    {
-      "en": "\"What is the Word of Passage?\"\n\n",
-      "zh": "「通行之語為何?」\n\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "codex.cpp:222"
-        }
-      ]
-    },
-    {
-      "en": "%.1d)xy tile xy xy\n",
-      "zh": "%.1d)xy tile xy xy\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:1038"
-        }
-      ]
-    },
-    {
-      "en": "%.2d\n",
-      "zh": "%.2d\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:222"
-        }
-      ]
-    },
-    {
-      "en": "%2d",
-      "zh": "%2d",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenTextAt",
-          "at": "game.cpp:3467"
-        }
-      ]
-    },
-    {
-      "en": "%3u",
-      "zh": "%3u",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenTextAt",
-          "at": "game.cpp:3457"
-        }
-      ]
-    },
-    {
-      "en": "%c\n",
-      "zh": "%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "event.cpp:773"
-        }
-      ]
-    },
-    {
-      "en": "%c%s Fleeing!%c\n",
-      "zh": "%c%s 逃跑!%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "creature.cpp:717"
-        }
-      ]
-    },
-    {
-      "en": "%c%s Killed!%c\n",
-      "zh": "%c%s 被擊殺!%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "creature.cpp:702"
-        }
-      ]
-    },
-    {
-      "en": "%c%s Killed!%c\nExp. %d\n",
-      "zh": "%c%s 被擊殺!%c\n經驗 %d\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "creature.cpp:700"
-        }
-      ]
-    },
-    {
-      "en": "%cAcid%c Trap!\n",
-      "zh": "%c酸液%c陷阱!\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2005"
-        }
-      ]
-    },
-    {
-      "en": "%cAlready Landed!%c\n",
-      "zh": "%c已經著陸!%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1073"
-        }
-      ]
-    },
-    {
-      "en": "%cBad command%c\n",
-      "zh": "%c無效指令%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:787"
-        }
-      ]
-    },
-    {
-      "en": "%cBomb%c Trap!\n",
-      "zh": "%c炸彈%c陷阱!\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2011"
-        }
-      ]
-    },
-    {
-      "en": "%cBroadsides Only!%c\n",
-      "zh": "%c只能側舷齊射!%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1836"
-        }
-      ]
-    },
-    {
-      "en": "%cCan't!%c\n",
-      "zh": "%c不可!%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2421"
-        }
-      ]
-    },
-    {
-      "en": "%cDescend what?%c\n",
-      "zh": "%c下降何處?%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1080"
-        }
-      ]
-    },
-    {
-      "en": "%cDisabled!%c\n",
-      "zh": "%c已停用!%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1461"
-        }
-      ]
-    },
-    {
-      "en": "%cDrift Only!%c\n",
-      "zh": "%c僅能漂流!%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2208"
-        }
-      ]
-    },
-    {
-      "en": "%cEnter what?%c\n",
-      "zh": "%c進入何處?%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1087"
-        }
-      ]
-    },
-    {
-      "en": "%cFire What?%c\n",
-      "zh": "%c發射什麼?%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1823"
-        }
-      ]
-    },
-    {
-      "en": "%cJimmy what?%c\n",
-      "zh": "%c撬何處鎖?%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2357"
-        }
-      ]
-    },
-    {
-      "en": "%cKlimb what?%c\n",
-      "zh": "%c攀爬何處?%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1126"
-        }
-      ]
-    },
-    {
-      "en": "%cLocate position with what?%c\n",
-      "zh": "%c用何物定位?%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1138"
-        }
-      ]
-    },
-    {
-      "en": "%cNo keys left!%c\n",
-      "zh": "%c已無鑰匙!%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2379"
-        }
-      ]
-    },
-    {
-      "en": "%cNone Left!%c",
-      "zh": "%c已用盡!%c",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2541"
-        }
-      ]
-    },
-    {
-      "en": "%cNothing there!%c\n",
-      "zh": "%c那裡空無一物!%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1577"
-        }
-      ]
-    },
-    {
-      "en": "%cNothing to Attack!%c\n",
-      "zh": "%c無可攻擊!%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1622"
-        }
-      ]
-    },
-    {
-      "en": "%cOnly on foot!%c\n",
-      "zh": "%c僅限徒步!%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2044"
-        }
-      ]
-    },
-    {
-      "en": "%cPeer at What?%c\n",
-      "zh": "%c凝視何處?%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2711"
-        }
-      ]
-    },
-    {
-      "en": "%cPoison%c Trap!\n",
-      "zh": "%c毒%c陷阱!\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2007"
-        }
-      ]
-    },
-    {
-      "en": "%cSleep%c Trap!\n",
-      "zh": "%c沉睡%c陷阱!\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2009"
-        }
-      ]
-    },
-    {
-      "en": "%cX-it What?%c\n",
-      "zh": "%c退出何處?%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2827"
-        }
-      ]
-    },
-    {
-      "en": "%d\n",
-      "zh": "%d\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:1159"
-        }
-      ]
-    },
-    {
-      "en": "%s\n\n",
-      "zh": "%s\n\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "codex.cpp:311"
-        }
-      ]
-    },
-    {
-      "en": "%s Barely Wounded!\n",
-      "zh": "%s 受輕傷!\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "creature.cpp:733"
-        }
-      ]
-    },
-    {
-      "en": "%s Critical!\n",
-      "zh": "%s 重傷!\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "creature.cpp:721"
-        }
-      ]
-    },
-    {
-      "en": "%s Divides!\n",
-      "zh": "%s 分裂!\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "creature.cpp:519"
-        }
-      ]
-    },
-    {
-      "en": "%s Heavily Wounded!\n",
-      "zh": "%s 受重傷!\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "creature.cpp:725"
-        }
-      ]
-    },
-    {
-      "en": "%s Lightly Wounded!\n",
-      "zh": "%s 輕傷!\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "creature.cpp:729"
-        }
-      ]
-    },
-    {
-      "en": "%s created!\n",
-      "zh": "%s 已創建!\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:310"
-        }
-      ]
-    },
-    {
-      "en": "%s!\n",
-      "zh": "%s!\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1723"
-        }
-      ]
-    },
-    {
-      "en": "%s%d%s",
-      "zh": "%s%d%s",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "codex.cpp:411"
-        }
-      ]
-    },
-    {
-      "en": "%s, Thou shalt live again!\n",
-      "zh": "%s,汝將重獲新生!\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "discourse_castle.cpp:302"
-        }
-      ]
-    },
-    {
-      "en": "%s:",
-      "zh": "%s:",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:218"
-        }
-      ]
-    },
-    {
-      "en": "%sOnly on foot!\n",
-      "zh": "%s僅限徒步!\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "portal.cpp:69"
-        }
-      ]
-    },
-    {
-      "en": "( Paused )",
-      "zh": "( 已暫停 )",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenTextAt",
-          "at": "event.cpp:209"
-        }
-      ]
-    },
-    {
-      "en": "--\n",
-      "zh": "--\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:223"
-        }
-      ]
-    },
-    {
-      "en": ".",
-      "zh": ".",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "shrine.cpp:144"
-        }
-      ]
-    },
-    {
-      "en": "3-D view %s\n",
-      "zh": "3-D 視角 %s\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:990"
-        }
-      ]
-    },
-    {
-      "en": "Advance Moons!\n",
-      "zh": "推進月相!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:79"
-        }
-      ]
-    },
-    {
-      "en": "All must use same exit!\n",
-      "zh": "所有人須由同一出口離開!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:899"
-        }
-      ]
-    },
-    {
-      "en": "Ambushed!\n",
-      "zh": "遭伏擊!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "camp.cpp:61"
-        }
-      ]
-    },
-    {
-      "en": "Armour: ",
-      "zh": "護甲: ",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2788"
-        }
-      ]
-    },
-    {
-      "en": "Attack: ",
-      "zh": "攻擊:",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1603"
-        }
-      ]
-    },
-    {
-      "en": "Battle Speed:\nDown (%d)\n",
-      "zh": "戰鬥速度:\n調降 (%d)\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:965"
-        }
-      ]
-    },
-    {
-      "en": "Battle Speed:\nUp (%d)\n",
-      "zh": "戰鬥速度:\n提升 (%d)\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:964"
-        }
-      ]
-    },
-    {
-      "en": "Begin Meditation\n",
-      "zh": "開始冥想\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "shrine.cpp:85"
-        }
-      ]
-    },
-    {
-      "en": "Board Balloon!\n",
-      "zh": "登上熱氣球!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1697"
-        }
-      ]
-    },
-    {
-      "en": "Board Frigate!\n",
-      "zh": "登上戰艦!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1690"
-        }
-      ]
-    },
-    {
-      "en": "Board: %cCan't!%c\n",
-      "zh": "登乘:%c不可!%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1678"
-        }
-      ]
-    },
-    {
-      "en": "Can't place %s there!\n",
-      "zh": "無法將 %s 置於該處!\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:312"
-        }
-      ]
-    },
-    {
-      "en": "Cast Spell!\n",
-      "zh": "施放法術!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:1005"
-        }
-      ]
-    },
-    {
-      "en": "Cast Spell!\nPlayer: ",
-      "zh": "施放法術!\n玩家:",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1710"
-        }
-      ]
-    },
-    {
-      "en": "Cmd (h = help):",
-      "zh": "指令 (h = 說明):",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:953"
-        }
-      ]
-    },
-    {
-      "en": "Collision detection %s!\n",
-      "zh": "碰撞偵測 %s!\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:87"
-        }
-      ]
-    },
-    {
-      "en": "Create transport!\nWhich? ",
-      "zh": "創建載具!\n何者?",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:273"
-        }
-      ]
-    },
-    {
-      "en": "Destroy Object\nDir: ",
-      "zh": "摧毀物件\n方向:",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1563"
-        }
-      ]
-    },
-    {
-      "en": "Dexterity + 5\n",
-      "zh": "敏捷 + 5\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "dungeon.cpp:252"
-        }
-      ]
-    },
-    {
-      "en": "Dir: %5s",
-      "zh": "方向:%5s",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenTextAt",
-          "at": "screen.cpp:1032"
-        }
-      ]
-    },
-    {
-      "en": "Dir?",
-      "zh": "方向?",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1471"
-        }
-      ]
-    },
-    {
-      "en": "Disabled!\n",
-      "zh": "已停用!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:3223"
-        }
-      ]
-    },
-    {
-      "en": "Dropped some!\n",
-      "zh": "丟下一些!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "item.cpp:456"
-        }
-      ]
-    },
-    {
-      "en": "Energy type? ",
-      "zh": "能量類型?",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1767"
-        }
-      ]
-    },
-    {
-      "en": "Enter %s!\n\n",
-      "zh": "進入 %s!\n\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "portal.cpp:92"
-        }
-      ]
-    },
-    {
-      "en": "Enter Can't!\n",
-      "zh": "無法進入!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "item.cpp:545"
-        }
-      ]
-    },
-    {
-      "en": "Enter dungeon!\n\n",
-      "zh": "進入地牢!\n\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "portal.cpp:100"
-        }
-      ]
-    },
-    {
-      "en": "Enter the %s!\n\n",
-      "zh": "進入 %s!\n\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "portal.cpp:97"
-        }
-      ]
-    },
-    {
-      "en": "Equipment!\n",
-      "zh": "裝備!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:91"
-        }
-      ]
-    },
-    {
-      "en": "Error opening %s\n",
-      "zh": "開啟 %s 發生錯誤\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:314"
-        }
-      ]
-    },
-    {
-      "en": "Error writing to %s\n",
-      "zh": "寫入 %s 時發生錯誤\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:378"
-        }
-      ]
-    },
-    {
-      "en": "Evaded!\n",
-      "zh": "閃避!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2026"
-        }
-      ]
-    },
-    {
-      "en": "Failed!\n",
-      "zh": "失敗!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1800"
-        }
-      ]
-    },
-    {
-      "en": "Fire Cannon!\nDir: ",
-      "zh": "發射火砲!\n方向: ",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1827"
-        }
-      ]
-    },
-    {
-      "en": "From Dir: ",
-      "zh": "來向:",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1812"
-        }
-      ]
-    },
-    {
-      "en": "Full Stats!\n",
-      "zh": "屬性已滿!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:104"
-        }
-      ]
-    },
-    {
-      "en": "Gate %d!\n",
-      "zh": "月之門 %d!\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:63"
-        }
-      ]
-    },
-    {
-      "en": "Giddyup!\n",
-      "zh": "駕!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1232"
-        }
-      ]
-    },
-    {
-      "en": "Goto: ",
-      "zh": "前往:",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:119"
-        }
-      ]
-    },
-    {
-      "en": "Help!\n",
-      "zh": "求助!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:971"
-        }
-      ]
-    },
-    {
-      "en": "Help:\n1-8   - Gate\nF1-F8 - +Virtue\na - Adv. Moons\nc - Collision\ne - Equipment\nf - Full Stats\ng - Goto\nh - Help\ni - Items\nj - Join Compan.\n(more)",
-      "zh": "說明:\n1-8   - 月之門\nF1-F8 - +美德\na - 推進月相\nc - 碰撞\ne - 裝備\nf - 完整屬性\ng - 前往\nh - 說明\ni - 物品\nj - 加入夥伴\n(更多)",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:150"
-        }
-      ]
-    },
-    {
-      "en": "Hole up & Camp!\n",
-      "zh": "紮營歇息!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2036"
-        }
-      ]
-    },
-    {
-      "en": "Ignite torch!\n",
-      "zh": "點燃火炬!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1107"
-        }
-      ]
-    },
-    {
-      "en": "Improve %s!\n",
-      "zh": "提升 %s!\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:367"
-        }
-      ]
-    },
-    {
-      "en": "Intelligence + 5\n",
-      "zh": "智力 + 5\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "dungeon.cpp:257"
-        }
-      ]
-    },
-    {
-      "en": "It's Dark!\n",
-      "zh": "一片漆黑!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:602"
-        }
-      ]
-    },
-    {
-      "en": "Items!\n",
-      "zh": "物品!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:189"
-        }
-      ]
-    },
-    {
-      "en": "Jimmy: ",
-      "zh": "撬鎖:",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2344"
-        }
-      ]
-    },
-    {
-      "en": "Joined by companions!\n",
-      "zh": "夥伴加入!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:203"
-        }
-      ]
-    },
-    {
-      "en": "Karma!\n\n",
-      "zh": "業力!\n\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:215"
-        }
-      ]
-    },
-    {
-      "en": "Key Reference:\nArrow Keys: Move\na: Attack\nb: Board\nc: Cast Spell\nd: Descend\ne: Enter\nf: Fire Cannons\ng: Get Chest\nh: Hole up\ni: Ignite torch\n(more)",
-      "zh": "按鍵參考:\n方向鍵:移動\na:攻擊\nb:登乘\nc:施法\nd:下降\ne:進入\nf:發射火砲\ng:取寶箱\nh:紮營\ni:點燃火把\n(更多)",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1261"
-        }
-      ]
-    },
-    {
-      "en": "Klimb altitude\n",
-      "zh": "攀爬高度\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1124"
-        }
-      ]
-    },
-    {
-      "en": "Land Balloon\n",
-      "zh": "降落熱氣球\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1071"
-        }
-      ]
-    },
-    {
-      "en": "Last One!\n",
-      "zh": "最後一個!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:1243"
-        }
-      ]
-    },
-    {
-      "en": "Leave Room!\n",
-      "zh": "離開房間!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:275"
-        }
-      ]
-    },
-    {
-      "en": "Loading...",
-      "zh": "載入中…",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenTextAt",
-          "at": "xu4.cpp:400"
-        }
-      ]
-    },
-    {
-      "en": "Locate position\nwith sextant\n Latitude: %c'%c\"\nLongitude: %c'%c\"\n",
-      "zh": "以六分儀\n定位\n 緯度: %c'%c\"\n經度: %c'%c\"\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1134"
-        }
-      ]
-    },
-    {
-      "en": "Mixtures!\n",
-      "zh": "調製!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:235"
-        }
-      ]
-    },
-    {
-      "en": "Mount Horse!\n",
-      "zh": "騎上馬匹!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1695"
-        }
-      ]
-    },
-    {
-      "en": "New Order!\nExchange # ",
-      "zh": "重整隊序!\n交換編號 ",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2649"
-        }
-      ]
-    },
-    {
-      "en": "None!\n",
-      "zh": "無!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:315"
-        }
-      ]
-    },
-    {
-      "en": "Nothing\n",
-      "zh": "無\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:380"
-        }
-      ]
-    },
-    {
-      "en": "Nothing Here!\n",
-      "zh": "此處空無一物!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "dungeon.cpp:145"
-        }
-      ]
-    },
-    {
-      "en": "Only on foot!\n",
-      "zh": "僅限徒步!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "portal.cpp:114"
-        }
-      ]
-    },
-    {
-      "en": "Opacity %s!\n",
-      "zh": "不透明度 %s!\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:242"
-        }
-      ]
-    },
-    {
-      "en": "Open: ",
-      "zh": "開啟:",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2387"
-        }
-      ]
-    },
-    {
-      "en": "Peer at a Gem!\n",
-      "zh": "凝視寶石!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2716"
-        }
-      ]
-    },
-    {
-      "en": "Press Alt-h for help\n",
-      "zh": "按 Alt-h 取得說明\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:151"
-        }
-      ]
-    },
-    {
-      "en": "Press Alt-x to quit\n",
-      "zh": "按 Alt-x 離開\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1163"
-        }
-      ]
-    },
-    {
-      "en": "Quit & Save...\n%d moves\n",
-      "zh": "退出並存檔…\n%d 步\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1160"
-        }
-      ]
-    },
-    {
-      "en": "Quit to menu?",
-      "zh": "退出至選單?",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1331"
-        }
-      ]
-    },
-    {
-      "en": "Range: ",
-      "zh": "範圍:",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:1155"
-        }
-      ]
-    },
-    {
-      "en": "Ready a weapon for: ",
-      "zh": "為其裝備武器: ",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2444"
-        }
-      ]
-    },
-    {
-      "en": "Reagents!\n",
-      "zh": "材料!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:257"
-        }
-      ]
-    },
-    {
-      "en": "Resting...\n",
-      "zh": "歇息中…\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "camp.cpp:48"
-        }
-      ]
-    },
-    {
-      "en": "Sail %s!\n",
-      "zh": "航行 %s!\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2205"
-        }
-      ]
-    },
-    {
-      "en": "Search...\n\n",
-      "zh": "搜尋…\n\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "dungeon.cpp:127"
-        }
-      ]
-    },
-    {
-      "en": "Searching...\n",
-      "zh": "搜尋中…\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1179"
-        }
-      ]
-    },
-    {
-      "en": "Searching...\n%cDrift only!%c\n",
-      "zh": "搜尋中…\n%c僅能漂流!%c\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1177"
-        }
-      ]
-    },
-    {
-      "en": "Set Active Player: %s!\n",
-      "zh": "設定當前玩家:%s!\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:3220"
-        }
-      ]
-    },
-    {
-      "en": "Set Active Player: None!\n",
-      "zh": "設定當前角色:無!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:3217"
-        }
-      ]
-    },
-    {
-      "en": "Sound FX %s!\n",
-      "zh": "音效 %s!\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1359"
-        }
-      ]
-    },
-    {
-      "en": "Speed Down (%d)\n",
-      "zh": "降速 (%d)\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1021"
-        }
-      ]
-    },
-    {
-      "en": "Speed Up (%d)\n",
-      "zh": "加速 (%d)\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1020"
-        }
-      ]
-    },
-    {
-      "en": "Spell: ",
-      "zh": "法術: ",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1718"
-        }
-      ]
-    },
-    {
-      "en": "Strength + 5\n",
-      "zh": "力量 + 5\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "dungeon.cpp:247"
-        }
-      ]
-    },
-    {
-      "en": "Summon!\n",
-      "zh": "召喚!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:263"
-        }
-      ]
-    },
-    {
-      "en": "Talk: ",
-      "zh": "交談: ",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2492"
-        }
-      ]
-    },
-    {
-      "en": "The Chest Holds: %d Gold\n",
-      "zh": "寶箱內有:%d 金幣\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1966"
-        }
-      ]
-    },
-    {
-      "en": "Thou art not able to focus thy thoughts with that Mantra!\n",
-      "zh": "汝無法以該真言凝聚心神!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "shrine.cpp:161"
-        }
-      ]
-    },
-    {
-      "en": "Thou art unable to focus thy thoughts on this subject!\n",
-      "zh": "汝無法將心神集中於此事!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "shrine.cpp:80"
-        }
-      ]
-    },
-    {
-      "en": "Thou dost not bear the rune of entry!  A strange force keeps you out!\n",
-      "zh": "汝未持有入門之符文!一股奇異之力將汝拒於門外!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "shrine.cpp:25"
-        }
-      ]
-    },
-    {
-      "en": "Thy mind is still weary from thy last Meditation!\n",
-      "zh": "汝之心神仍因上回冥想而疲憊!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "shrine.cpp:89"
-        }
-      ]
-    },
-    {
-      "en": "To Phase: ",
-      "zh": "至月相: ",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1739"
-        }
-      ]
-    },
-    {
-      "en": "Torch: %d\n",
-      "zh": "火把:%d\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:945"
-        }
-      ]
-    },
-    {
-      "en": "Triggers!\n",
-      "zh": "機關!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:1035"
-        }
-      ]
-    },
-    {
-      "en": "Turn %s!\n",
-      "zh": "轉向 %s!\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2201"
-        }
-      ]
-    },
-    {
-      "en": "Weapon: ",
-      "zh": "武器:",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2452"
-        }
-      ]
-    },
-    {
-      "en": "Wear Armour\nfor: ",
-      "zh": "穿戴護甲\n對象:",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2781"
-        }
-      ]
-    },
-    {
-      "en": "What?\n",
-      "zh": "什麼?\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:264"
-        }
-      ]
-    },
-    {
-      "en": "Who opens? ",
-      "zh": "由誰開啟?",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1949"
-        }
-      ]
-    },
-    {
-      "en": "Who: ",
-      "zh": "何人:",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1750"
-        }
-      ]
-    },
-    {
-      "en": "Whoa!\n",
-      "zh": "哇!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1235"
-        }
-      ]
-    },
-    {
-      "en": "Wind %5s",
-      "zh": "風 %5s",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenTextAt",
-          "at": "screen.cpp:1037"
-        }
-      ]
-    },
-    {
-      "en": "Wind %s!\n",
-      "zh": "風向 %s!\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:440"
-        }
-      ]
-    },
-    {
-      "en": "Wind Dir ('l' to lock):\n",
-      "zh": "風向('l' 鎖定):\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:327"
-        }
-      ]
-    },
-    {
-      "en": "Wind direction is %slocked!\n",
-      "zh": "風向%s鎖定!\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:446"
-        }
-      ]
-    },
-    {
-      "en": "X-it\n",
-      "zh": "離開\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2825"
-        }
-      ]
-    },
-    {
-      "en": "Y-up!\n",
-      "zh": "Y 上升!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:342"
-        }
-      ]
-    },
-    {
-      "en": "Yell ",
-      "zh": "呼喊 ",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:1229"
-        }
-      ]
-    },
-    {
-      "en": "Yes or no!\n",
-      "zh": "是或否!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "discourse_tlk.cpp:61"
-        }
-      ]
-    },
-    {
-      "en": "You approach\nthe ancient\nshrine...\n",
-      "zh": "汝走近\n古老的\n聖壇…\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "shrine.cpp:102"
-        }
-      ]
-    },
-    {
-      "en": "You can make %d.\n",
-      "zh": "汝可製作 %d 個。\n",
-      "has_format": true,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:3543"
-        }
-      ]
-    },
-    {
-      "en": "You enter the ancient shrine and sit before the altar...",
-      "zh": "汝步入古老聖壇,於祭壇前端坐…",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "shrine.cpp:63"
-        }
-      ]
-    },
-    {
-      "en": "You find Nothing!\n",
-      "zh": "汝一無所獲!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "dungeon.cpp:152"
-        }
-      ]
-    },
-    {
-      "en": "You find a Fountain.\nWho drinks? ",
-      "zh": "汝發現一座噴泉。\n由誰飲用?",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "dungeon.cpp:163"
-        }
-      ]
-    },
-    {
-      "en": "You find a Magical Ball...\nWho touches? ",
-      "zh": "汝發現一顆魔法球…\n何人觸碰?",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "dungeon.cpp:222"
-        }
-      ]
-    },
-    {
-      "en": "You see a knob\non the telescope\nmarked A-P\nYou Select: ",
-      "zh": "汝見望遠鏡上\n有一旋鈕\n標記 A-P\n汝選擇: ",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "item.cpp:437"
-        }
-      ]
-    },
-    {
-      "en": "Z-down!\n",
-      "zh": "下降!\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "cheat.cpp:353"
-        }
-      ]
-    },
-    {
-      "en": "Ztats\n",
-      "zh": "角色屬性\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "combat.cpp:1080"
-        }
-      ]
-    },
-    {
-      "en": "Ztats for: ",
-      "zh": "屬性查看: ",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:2836"
-        }
-      ]
-    },
-    {
-      "en": "Zzzzzz\n",
-      "zh": "呼嚕嚕\n",
-      "has_format": false,
-      "occurrences": [
-        {
-          "func": "screenMessage",
-          "at": "game.cpp:594"
-        }
-      ]
+     "func": "screenMessage",
+     "at": "cheat.cpp:299"
     }
-  ]
+   ]
+  },
+  {
+   "en": "%s",
+   "zh": "%s",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenTextAt",
+     "at": "intro.cpp:760"
+    },
+    {
+     "func": "screenTextAt",
+     "at": "game.cpp:184"
+    },
+    {
+     "func": "screenTextAt",
+     "at": "game.cpp:3455"
+    },
+    {
+     "func": "screenTextAt",
+     "at": "game.cpp:3494"
+    },
+    {
+     "func": "screenTextAt",
+     "at": "game.cpp:3498"
+    },
+    {
+     "func": "screenTextAt",
+     "at": "game.cpp:3504"
+    },
+    {
+     "func": "screenMessage",
+     "at": "codex.cpp:393"
+    },
+    {
+     "func": "screenMessage",
+     "at": "codex.cpp:401"
+    }
+   ]
+  },
+  {
+   "en": "\nHmm...No effect!\n",
+   "zh": "\n嗯…無效果!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp:188"
+    },
+    {
+     "func": "screenMessage",
+     "at": "item.cpp:191"
+    },
+    {
+     "func": "screenMessage",
+     "at": "item.cpp:210"
+    },
+    {
+     "func": "screenMessage",
+     "at": "item.cpp:315"
+    },
+    {
+     "func": "screenMessage",
+     "at": "item.cpp:337"
+    },
+    {
+     "func": "screenMessage",
+     "at": "item.cpp:366"
+    }
+   ]
+  },
+  {
+   "en": "%cNot here!%c\n",
+   "zh": "%c此處不可!%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:864"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1112"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1140"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1165"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2039"
+    }
+   ]
+  },
+  {
+   "en": "%cNot Here!%c\n",
+   "zh": "%c此處不可!%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1078"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1975"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2390"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2406"
+    }
+   ]
+  },
+  {
+   "en": "Dir: ",
+   "zh": "方向:",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:1143"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1760"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1785"
+    },
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:291"
+    }
+   ]
+  },
+  {
+   "en": "Music: %d%s\n",
+   "zh": "音樂:%d%s\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:977"
+    },
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:982"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1033"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1038"
+    }
+   ]
+  },
+  {
+   "en": "Not here!\n",
+   "zh": "此處不可!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:1022"
+    },
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:1050"
+    },
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:1104"
+    },
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:71"
+    }
+   ]
+  },
+  {
+   "en": "Sound: %d%s\n",
+   "zh": "音效:%d%s\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:989"
+    },
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:995"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1045"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1051"
+    }
+   ]
+  },
+  {
+   "en": "\nHmmm--No Effect!\n",
+   "zh": "\n嗯——毫無作用!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "dungeon.cpp:175"
+    },
+    {
+     "func": "screenMessage",
+     "at": "dungeon.cpp:183"
+    },
+    {
+     "func": "screenMessage",
+     "at": "dungeon.cpp:199"
+    }
+   ]
+  },
+  {
+   "en": "\nNone owned!\n",
+   "zh": "\n未持有!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp:223"
+    },
+    {
+     "func": "screenMessage",
+     "at": "item.cpp:524"
+    },
+    {
+     "func": "screenMessage",
+     "at": "item.cpp:564"
+    }
+   ]
+  },
+  {
+   "en": "\nPassage is not granted.\n\n",
+   "zh": "\n通行未獲准許。\n\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "codex.cpp:146"
+    },
+    {
+     "func": "screenMessage",
+     "at": "codex.cpp:150"
+    },
+    {
+     "func": "screenMessage",
+     "at": "codex.cpp:153"
+    }
+   ]
+  },
+  {
+   "en": "%c",
+   "zh": "%c",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "script_boron.cpp:293"
+    },
+    {
+     "func": "screenTextAt",
+     "at": "event.cpp:580"
+    },
+    {
+     "func": "screenMessage",
+     "at": "screen.cpp:369"
+    }
+   ]
+  },
+  {
+   "en": "%cBlocked!%c\n",
+   "zh": "%c受阻!%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:903"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2242"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2308"
+    }
+   ]
+  },
+  {
+   "en": "%cNone left!%c\n",
+   "zh": "%c已用盡!%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1110"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2471"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2806"
+    }
+   ]
+  },
+  {
+   "en": "%cSlow progress!%c\n",
+   "zh": "%c進展緩慢!%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:907"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2203"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2250"
+    }
+   ]
+  },
+  {
+   "en": "Leaving...\n",
+   "zh": "離開中…\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:346"
+    },
+    {
+     "func": "screenMessage",
+     "at": "spell.cpp:707"
+    },
+    {
+     "func": "screenMessage",
+     "at": "spell.cpp:733"
+    }
+   ]
+  },
+  {
+   "en": "Missed!\n",
+   "zh": "未命中!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:598"
+    },
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:1210"
+    },
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:1258"
+    }
+   ]
+  },
+  {
+   "en": "\n\n",
+   "zh": "\n\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2576"
+    },
+    {
+     "func": "screenMessage",
+     "at": "shrine.cpp:76"
+    }
+   ]
+  },
+  {
+   "en": "\n\n%s",
+   "zh": "\n\n%s",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "codex.cpp:387"
+    },
+    {
+     "func": "screenMessage",
+     "at": "codex.cpp:398"
+    }
+   ]
+  },
+  {
+   "en": "\n%cYou don't have enough reagents to mix %d spells!%c\n",
+   "zh": "\n%c汝的材料不足以調製 %d 道法術!%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1507"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:3553"
+    }
+   ]
+  },
+  {
+   "en": "\n%s",
+   "zh": "\n%s",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "event.cpp:781"
+    },
+    {
+     "func": "screenMessage",
+     "at": "shrine.cpp:197"
+    }
+   ]
+  },
+  {
+   "en": "\n%s\n",
+   "zh": "\n%s\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:129"
+    },
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:139"
+    }
+   ]
+  },
+  {
+   "en": "\nNo place to Use them!\n",
+   "zh": "\n無處可用!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp:379"
+    },
+    {
+     "func": "screenMessage",
+     "at": "item.cpp:385"
+    }
+   ]
+  },
+  {
+   "en": "\nNone mixed!\n",
+   "zh": "\n未調製!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1492"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:3549"
+    }
+   ]
+  },
+  {
+   "en": "\nNot a Usable item!\n",
+   "zh": "\n此物不可使用!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp:519"
+    },
+    {
+     "func": "screenMessage",
+     "at": "item.cpp:533"
+    }
+   ]
+  },
+  {
+   "en": " ",
+   "zh": " ",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenTextAt",
+     "at": "event.cpp:557"
+    },
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:220"
+    }
+   ]
+  },
+  {
+   "en": "%cBoard What?%c\n",
+   "zh": "%c登上何物?%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1684"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1699"
+    }
+   ]
+  },
+  {
+   "en": "%cDrift only!%c\n",
+   "zh": "%c僅能漂流!%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1925"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2495"
+    }
+   ]
+  },
+  {
+   "en": "%cLeaving...%c\n",
+   "zh": "%c離開中…%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2269"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2314"
+    }
+   ]
+  },
+  {
+   "en": "%cNothing Here!%c\n",
+   "zh": "%c此處空無一物!%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1184"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1191"
+    }
+   ]
+  },
+  {
+   "en": "%cWhat?%c\n",
+   "zh": "%c什麼?%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1239"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2674"
+    }
+   ]
+  },
+  {
+   "en": "%s Destroyed!\n",
+   "zh": "%s 被摧毀!\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1586"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1590"
+    }
+   ]
+  },
+  {
+   "en": "%s, You must lead!\n",
+   "zh": "%s,汝須領隊!\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2657"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2669"
+    }
+   ]
+  },
+  {
+   "en": "Battle Speed:\nNormal\n",
+   "zh": "戰鬥速度:\n正常\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:962"
+    },
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:968"
+    }
+   ]
+  },
+  {
+   "en": "Failed.\n",
+   "zh": "失敗。\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:668"
+    },
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:689"
+    }
+   ]
+  },
+  {
+   "en": "For Spell: ",
+   "zh": "施法咒文:",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2546"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:3519"
+    }
+   ]
+  },
+  {
+   "en": "Funny, no response!\n",
+   "zh": "奇怪,無回應!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2513"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2736"
+    }
+   ]
+  },
+  {
+   "en": "Get Chest!\n",
+   "zh": "取得寶箱!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:1010"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1921"
+    }
+   ]
+  },
+  {
+   "en": "How many? ",
+   "zh": "數量?",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2636"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:3544"
+    }
+   ]
+  },
+  {
+   "en": "It Fizzles!\n\n",
+   "zh": "法術消散!\n\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1521"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2600"
+    }
+   ]
+  },
+  {
+   "en": "Mix reagents\n",
+   "zh": "調製材料\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2527"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:3474"
+    }
+   ]
+  },
+  {
+   "en": "None\n",
+   "zh": "無\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1448"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1742"
+    }
+   ]
+  },
+  {
+   "en": "Not Here!\n",
+   "zh": "此處不可!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:337"
+    },
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:356"
+    }
+   ]
+  },
+  {
+   "en": "Pass\n",
+   "zh": "略過\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:937"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:998"
+    }
+   ]
+  },
+  {
+   "en": "Reagent: ",
+   "zh": "材料:",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2586"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2614"
+    }
+   ]
+  },
+  {
+   "en": "Speed: Normal\n",
+   "zh": "速度:正常\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1018"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1024"
+    }
+   ]
+  },
+  {
+   "en": "Success!\n\n",
+   "zh": "成功!\n\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1514"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2597"
+    }
+   ]
+  },
+  {
+   "en": "Use which item:\n",
+   "zh": "使用何物:\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:1054"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1201"
+    }
+   ]
+  },
+  {
+   "en": "Volume Off!\n",
+   "zh": "音量關閉!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:1063"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1216"
+    }
+   ]
+  },
+  {
+   "en": "Volume On!\n",
+   "zh": "音量開啟!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:1061"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1214"
+    }
+   ]
+  },
+  {
+   "en": "XU4 %s\n",
+   "zh": "XU4 %s\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:1068"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1351"
+    }
+   ]
+  },
+  {
+   "en": "You find...\n%s!\n",
+   "zh": "汝尋得…\n%s!\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "dungeon.cpp:148"
+    },
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1187"
+    }
+   ]
+  },
+  {
+   "en": "\b\b\b\b",
+   "zh": "\b\b\b\b",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1475"
+    }
+   ]
+  },
+  {
+   "en": "\b%s\n",
+   "zh": "\b%s\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2554"
+    }
+   ]
+  },
+  {
+   "en": "\n\nA voice rings out:  What virtue exists independently of Truth, Love, and Courage?\n\n",
+   "zh": "\n\n一個聲音迴響:有何美德能獨立於真理、愛與勇氣之外?\n\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp:356"
+    }
+   ]
+  },
+  {
+   "en": "\n\nAs thou doth approach, a voice rings out: What virtue dost stem from %s?\n\n",
+   "zh": "\n\n汝趨近時,一道聲音響起:何種美德源自%s?\n\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp:355"
+    }
+   ]
+  },
+  {
+   "en": "\n\nFor how many Cycles (0-3)? ",
+   "zh": "\n\n要幾個週期(0-3)? ",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "shrine.cpp:68"
+    }
+   ]
+  },
+  {
+   "en": "\n\nNo place to put %s!\n\n",
+   "zh": "\n\n無處可放置 %s!\n\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:426"
+    }
+   ]
+  },
+  {
+   "en": "\n\nThe Voice says: Use thy Stone.\n\nColor:\n",
+   "zh": "\n\n那聲音道:使用汝之寶石。\n\n顏色:\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp:361"
+    }
+   ]
+  },
+  {
+   "en": "\n\nThe altar changes before thyne eyes!\n",
+   "zh": "\n\n聖壇在汝眼前變化!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp:328"
+    }
+   ]
+  },
+  {
+   "en": "\n\nThen what is the one thing which encompasses and is the whole of all undeniable Truth, unending Love, and unyielding Courage?\n\n",
+   "zh": "\n\n那麼,何為那唯一囊括並統合一切不容否認之真理、無盡之愛與不屈之勇氣者?\n\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "codex.cpp:333"
+    }
+   ]
+  },
+  {
+   "en": "\n\nThere are holes for 4 stones.\nWhat colors:\nA:",
+   "zh": "\n\n此處有四枚寶石之孔。\n何種顏色:\nA:",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp:376"
+    }
+   ]
+  },
+  {
+   "en": "\n\nYou cast the Skull of Mondain into the Abyss!\n",
+   "zh": "\n\n汝將蒙丹之顱擲入深淵!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp:229"
+    }
+   ]
+  },
+  {
+   "en": "\n\nYou hold the evil Skull of Mondain the Wizard aloft...\n",
+   "zh": "\n\n汝高舉巫師蒙丹的邪惡頭骨…\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp:237"
+    }
+   ]
+  },
+  {
+   "en": "\n\nYou mix the Reagents, and...\n",
+   "zh": "\n\n汝調配材料,然後…\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2594"
+    }
+   ]
+  },
+  {
+   "en": "\n %cThou hast lost\n  an eighth!%c\n",
+   "zh": "\n %c汝失去了\n  八分之一!%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:681"
+    }
+   ]
+  },
+  {
+   "en": "\n%c%s\nThou art now Level %d%c\n",
+   "zh": "\n%c%s\n汝今已達等級 %d%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:686"
+    }
+   ]
+  },
+  {
+   "en": "\n%c%s Flees!%c\n",
+   "zh": "\n%c%s 逃走!%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "creature.cpp:451"
+    }
+   ]
+  },
+  {
+   "en": "\n%c%s is Killed!%c\n",
+   "zh": "\n%c%s 被擊殺!%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:1271"
+    }
+   ]
+  },
+  {
+   "en": "\n%c****%c COMBAT %c****%c\n",
+   "zh": "\n%c****%c 戰鬥 %c****%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:205"
+    }
+   ]
+  },
+  {
+   "en": "\n%c:",
+   "zh": "\n%c:",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp:297"
+    }
+   ]
+  },
+  {
+   "en": "\n%cA %s may NOT use %s %s%c\n",
+   "zh": "\n%c%s 不可使用 %s %s%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2484"
+    }
+   ]
+  },
+  {
+   "en": "\n%cA %s may NOT use %s%c\n",
+   "zh": "\n%c%s 無法使用 %s%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2809"
+    }
+   ]
+  },
+  {
+   "en": "\n%cDrift only!%c\n",
+   "zh": "\n%c只能漂流!%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1606"
+    }
+   ]
+  },
+  {
+   "en": "\n%cNone Left!%c\n",
+   "zh": "\n%c已無剩餘!%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2613"
+    }
+   ]
+  },
+  {
+   "en": "\n%cOnly need %d!%c\n",
+   "zh": "\n%c只需 %d!%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1500"
+    }
+   ]
+  },
+  {
+   "en": "\n%cStarving!!!%c\n",
+   "zh": "\n%c飢餓!!!%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:696"
+    }
+   ]
+  },
+  {
+   "en": "\n%cYou cannot mix any more of that spell!%c\n",
+   "zh": "\n%c該咒文無法再調配更多!%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2558"
+    }
+   ]
+  },
+  {
+   "en": "\n%cYou cannot mix that much more of that spell!%c\n",
+   "zh": "\n%c該法術無法再調製這麼多!%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:3551"
+    }
+   ]
+  },
+  {
+   "en": "\n%s\n\n",
+   "zh": "\n%s\n\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "codex.cpp:267"
+    }
+   ]
+  },
+  {
+   "en": "\n%s %c%s Hit%c!\n",
+   "zh": "\n%s %c%s 命中%c!\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:702"
+    }
+   ]
+  },
+  {
+   "en": "\n%s Hit!\n",
+   "zh": "\n%s 命中!\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:713"
+    }
+   ]
+  },
+  {
+   "en": "\n%s not found\n",
+   "zh": "\n找不到 %s\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:430"
+    }
+   ]
+  },
+  {
+   "en": "\n%s summoned!\n",
+   "zh": "\n%s 已被召喚!\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:424"
+    }
+   ]
+  },
+  {
+   "en": "\n%s with %s\n\u000020",
+   "zh": "\n%s 以 %s\n\u000020",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:470"
+    }
+   ]
+  },
+  {
+   "en": "\n...and kneel before the altar.\n",
+   "zh": "\n…並跪於聖壇之前。\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "shrine.cpp:125"
+    }
+   ]
+  },
+  {
+   "en": "\nA voice rings out:\n",
+   "zh": "\n一個聲音迴響:\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "codex.cpp:216"
+    }
+   ]
+  },
+  {
+   "en": "\nAbove the din, the voice asks:\n\nIf all eight virtues of the Avatar combine into and are derived from the Three Principles of Truth, Love and Courage...",
+   "zh": "\n喧囂之上,那聲音問道:\n\n若聖者之八德皆融匯並源自真理、仁愛與勇氣三大原則…",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "codex.cpp:328"
+    }
+   ]
+  },
+  {
+   "en": "\nAhh-Refreshing!\n",
+   "zh": "\n啊—暢快!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "dungeon.cpp:181"
+    }
+   ]
+  },
+  {
+   "en": "\nAlready used!\n",
+   "zh": "\n已經使用過!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp:287"
+    }
+   ]
+  },
+  {
+   "en": "\nAlt-Q: Main Menu\nAlt-V: Version\nAlt-X: Quit\n\n\n\n\n\n\n\n\n",
+   "zh": "\nAlt-Q:主選單\nAlt-V:版本\nAlt-X:離開\n\n\n\n\n\n\n\n\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1308"
+    }
+   ]
+  },
+  {
+   "en": "\nArgh-Choke-Gasp!\n",
+   "zh": "\n啊—嗆—喘!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "dungeon.cpp:207"
+    }
+   ]
+  },
+  {
+   "en": "\nAs you light the Candle the Earth Trembles!\n",
+   "zh": "\n當汝點燃蠟燭,大地震動!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp:185"
+    }
+   ]
+  },
+  {
+   "en": "\nAttacked by %s\n",
+   "zh": "\n遭 %s 攻擊\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:3049"
+    }
+   ]
+  },
+  {
+   "en": "\nBattle is lost!\n\n",
+   "zh": "\n戰鬥失敗!\n\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:265"
+    }
+   ]
+  },
+  {
+   "en": "\nBleck--Nasty!\n",
+   "zh": "\n噁——真難喝!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "dungeon.cpp:191"
+    }
+   ]
+  },
+  {
+   "en": "\nBridge Trolls!\n",
+   "zh": "\n橋下巨魔!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:3281"
+    }
+   ]
+  },
+  {
+   "en": "\nDone.\n",
+   "zh": "\n完成。\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:3523"
+    }
+   ]
+  },
+  {
+   "en": "\nFalling Rocks!\n",
+   "zh": "\n落石!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "dungeon.cpp:284"
+    }
+   ]
+  },
+  {
+   "en": "\nFull Virtues!\n",
+   "zh": "\n美德已滿!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:320"
+    }
+   ]
+  },
+  {
+   "en": "\nHe says: ",
+   "zh": "\n他說: ",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessageN",
+     "at": "discourse_castle.cpp:264"
+    }
+   ]
+  },
+  {
+   "en": "\nHmm--No Effect!\n",
+   "zh": "\n嗯——無效果!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "dungeon.cpp:210"
+    }
+   ]
+  },
+  {
+   "en": "\nHmmm--Delicious!\n",
+   "zh": "\n嗯——美味!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "dungeon.cpp:197"
+    }
+   ]
+  },
+  {
+   "en": "\nIn the middle of the night while out on a stroll...\n\n",
+   "zh": "\n夜半外出散步之際…\n\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "camp.cpp:206"
+    }
+   ]
+  },
+  {
+   "en": "\nLocation:\n%s\nx: %d\ny: %d\n",
+   "zh": "\n位置:\n%s\nx: %d\ny: %d\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:229"
+    }
+   ]
+  },
+  {
+   "en": "\nLocation:\n%s\nx: %d\ny: %d\nz: %d\n",
+   "zh": "\n位置:\n%s\nx: %d\ny: %d\nz: %d\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:231"
+    }
+   ]
+  },
+  {
+   "en": "\nLocation:\nx:%d\ny:%d\nz:%d\n",
+   "zh": "\n位置:\nx:%d\ny:%d\nz:%d\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:1017"
+    }
+   ]
+  },
+  {
+   "en": "\nMantra: ",
+   "zh": "\n真言:",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "shrine.cpp:154"
+    }
+   ]
+  },
+  {
+   "en": "\nMixing %d...\n",
+   "zh": "\n調配 %d…\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1503"
+    }
+   ]
+  },
+  {
+   "en": "\nMorning!\n",
+   "zh": "\n早安!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "camp.cpp:150"
+    }
+   ]
+  },
+  {
+   "en": "\nNot a Usable Item!\n",
+   "zh": "\n此物不可使用!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp:341"
+    }
+   ]
+  },
+  {
+   "en": "\nOnce mounted, the Wheel glows with a blue light!\n",
+   "zh": "\n裝上後,船舵泛起藍光!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp:207"
+    }
+   ]
+  },
+  {
+   "en": "\nOops, you just got too close to beating the game.\nBAD AVATAR!\n",
+   "zh": "\n糟糕,汝太接近通關了。\n壞聖者!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "codex.cpp:172"
+    }
+   ]
+  },
+  {
+   "en": "\nOpened!\n",
+   "zh": "\n已開啟!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2431"
+    }
+   ]
+  },
+  {
+   "en": "\nPit!\n",
+   "zh": "\n陷坑!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "dungeon.cpp:287"
+    }
+   ]
+  },
+  {
+   "en": "\nSleep!\n",
+   "zh": "\n入眠!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "creature.cpp:387"
+    }
+   ]
+  },
+  {
+   "en": "\nSuccess!\n\n",
+   "zh": "\n成功!\n\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:3561"
+    }
+   ]
+  },
+  {
+   "en": "\nThe Altar Room of %s\n",
+   "zh": "\n%s之祭壇室\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:199"
+    }
+   ]
+  },
+  {
+   "en": "\nThe Bell rings on and on!\n",
+   "zh": "\n鐘聲不絕於耳!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp:175"
+    }
+   ]
+  },
+  {
+   "en": "\nThe Horn sounds an eerie tone!\n",
+   "zh": "\n號角發出詭異之音!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp:198"
+    }
+   ]
+  },
+  {
+   "en": "\nThe words resonate with the ringing!\n",
+   "zh": "\n話語與鳴響共鳴!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp:180"
+    }
+   ]
+  },
+  {
+   "en": "\nThou art granted a vision!\n",
+   "zh": "\n汝獲賜一段異象!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "shrine.cpp:191"
+    }
+   ]
+  },
+  {
+   "en": "\nThou dost not have the Key of Three Parts.\n\n",
+   "zh": "\n汝未持有三部之鑰。\n\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "codex.cpp:142"
+    }
+   ]
+  },
+  {
+   "en": "\nThou dost not know the true nature of the Universe.\n\n",
+   "zh": "\n汝尚不知宇宙之真諦。\n\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "codex.cpp:169"
+    }
+   ]
+  },
+  {
+   "en": "\nThou doth find one third of the Three Part Key!\n",
+   "zh": "\n汝尋得三段之鑰的三分之一!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp:312"
+    }
+   ]
+  },
+  {
+   "en": "\nThou hast achieved partial Avatarhood in the Virtue of %s\n",
+   "zh": "\n汝已在 %s 之美德達成部分聖者之境\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "shrine.cpp:175"
+    }
+   ]
+  },
+  {
+   "en": "\nThy quest is not yet complete.\n\n",
+   "zh": "\n汝之任務尚未完成。\n\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "codex.cpp:166"
+    }
+   ]
+  },
+  {
+   "en": "\nThy ship sinks!\n\n",
+   "zh": "\n汝之船沉沒!\n\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:3201"
+    }
+   ]
+  },
+  {
+   "en": "\nThy thoughts are pure. Thou art granted a vision!\n",
+   "zh": "\n汝之意念純淨。汝獲賜一則異象!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "shrine.cpp:179"
+    }
+   ]
+  },
+  {
+   "en": "\nToggle View!\n",
+   "zh": "\n切換視角!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:253"
+    }
+   ]
+  },
+  {
+   "en": "\nTrapped at sea without thy ship, thou dost drown!\n\n",
+   "zh": "\n失船困於海上,汝溺斃!\n\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:536"
+    }
+   ]
+  },
+  {
+   "en": "\nUnlocked!\n",
+   "zh": "\n已解鎖!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2377"
+    }
+   ]
+  },
+  {
+   "en": "\nUpon which virtue dost thou meditate?\n",
+   "zh": "\n汝欲冥想何種美德?\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "shrine.cpp:65"
+    }
+   ]
+  },
+  {
+   "en": "\nVictory!\n\n",
+   "zh": "\n勝利!\n\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:260"
+    }
+   ]
+  },
+  {
+   "en": "\nWinds!\n",
+   "zh": "\n起風!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "dungeon.cpp:279"
+    }
+   ]
+  },
+  {
+   "en": "\nX-it!\n",
+   "zh": "\n離開!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:335"
+    }
+   ]
+  },
+  {
+   "en": "\nYou mix the Reagents, and...\n",
+   "zh": "\n汝調製材料,而後…\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1512"
+    }
+   ]
+  },
+  {
+   "en": "\ncan't find\n%s!\n",
+   "zh": "\n找不到\n%s!\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:145"
+    }
+   ]
+  },
+  {
+   "en": "\nj: Jimmy lock\nk: Klimb\nl: Locate\nm: Mix reagents\nn: New Order\no: Open door\np: Peer at Gem\nq: Quit & Save\nr: Ready weapon\ns: Search\nt: Talk\n(more)",
+   "zh": "\nj:撬鎖\nk:攀爬\nl:定位\nm:調配材料\nn:重整隊序\no:開門\np:窺視寶珠\nq:離開並存檔\nr:備妥武器\ns:搜尋\nt:交談\n(更多)",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1276"
+    }
+   ]
+  },
+  {
+   "en": "\nk - Show Karma\nl - Location\nm - Mixtures\no - Opacity\np - Peer\nr - Reagents\ns - Summon\nt - Transports\nv - Full Virtues\nw - Change Wind\nx - Exit Map\n(more)",
+   "zh": "\nk - 顯示業力\nl - 位置\nm - 調製\no - 透明度\np - 凝視\nr - 材料\ns - 召喚\nt - 載具\nv - 完整美德\nw - 改變風向\nx - 離開地圖\n(更多)",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:165"
+    }
+   ]
+  },
+  {
+   "en": "\nu: Use Item\nv: Volume On/Off\nw: Wear armour\nx: eXit\ny: Yell\nz: Ztats\nSpace: Pass\n,: - Music Vol\n.: + Music Vol\n<: - Sound Vol\n>: + Sound Vol\n(more)",
+   "zh": "\nu: 使用物品\nv: 音量開關\nw: 穿戴護甲\nx: 退出\ny: 呼喊\nz: 屬性\nSpace: 略過\n,: - 音樂音量\n.: + 音樂音量\n<: - 音效音量\n>: + 音效音量\n(更多)",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1292"
+    }
+   ]
+  },
+  {
+   "en": "\ny - Y-up\nz - Z-down\n",
+   "zh": "\ny - 向上\nz - 向下\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:181"
+    }
+   ]
+  },
+  {
+   "en": "    \n",
+   "zh": "    \n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1478"
+    }
+   ]
+  },
+  {
+   "en": "    with # ",
+   "zh": "    以 # ",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2661"
+    }
+   ]
+  },
+  {
+   "en": "  %.1X%.1X  %.3d %.1X%.1X %.1X%.1X\n",
+   "zh": "  %.1X%.1X  %.3d %.1X%.1X %.1X%.1X\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:1039"
+    }
+   ]
+  },
+  {
+   "en": "\"What is the Word of Passage?\"\n\n",
+   "zh": "「通行之語為何?」\n\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "codex.cpp:222"
+    }
+   ]
+  },
+  {
+   "en": "%.1d)xy tile xy xy\n",
+   "zh": "%.1d)xy tile xy xy\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:1038"
+    }
+   ]
+  },
+  {
+   "en": "%.2d\n",
+   "zh": "%.2d\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:222"
+    }
+   ]
+  },
+  {
+   "en": "%2d",
+   "zh": "%2d",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenTextAt",
+     "at": "game.cpp:3467"
+    }
+   ]
+  },
+  {
+   "en": "%3u",
+   "zh": "%3u",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenTextAt",
+     "at": "game.cpp:3457"
+    }
+   ]
+  },
+  {
+   "en": "%c\n",
+   "zh": "%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "event.cpp:773"
+    }
+   ]
+  },
+  {
+   "en": "%c%s Fleeing!%c\n",
+   "zh": "%c%s 逃跑!%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "creature.cpp:717"
+    }
+   ]
+  },
+  {
+   "en": "%c%s Killed!%c\n",
+   "zh": "%c%s 被擊殺!%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "creature.cpp:702"
+    }
+   ]
+  },
+  {
+   "en": "%c%s Killed!%c\nExp. %d\n",
+   "zh": "%c%s 被擊殺!%c\n經驗 %d\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "creature.cpp:700"
+    }
+   ]
+  },
+  {
+   "en": "%cAcid%c Trap!\n",
+   "zh": "%c酸液%c陷阱!\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2005"
+    }
+   ]
+  },
+  {
+   "en": "%cAlready Landed!%c\n",
+   "zh": "%c已經著陸!%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1073"
+    }
+   ]
+  },
+  {
+   "en": "%cBad command%c\n",
+   "zh": "%c無效指令%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:787"
+    }
+   ]
+  },
+  {
+   "en": "%cBomb%c Trap!\n",
+   "zh": "%c炸彈%c陷阱!\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2011"
+    }
+   ]
+  },
+  {
+   "en": "%cBroadsides Only!%c\n",
+   "zh": "%c只能側舷齊射!%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1836"
+    }
+   ]
+  },
+  {
+   "en": "%cCan't!%c\n",
+   "zh": "%c不可!%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2421"
+    }
+   ]
+  },
+  {
+   "en": "%cDescend what?%c\n",
+   "zh": "%c下降何處?%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1080"
+    }
+   ]
+  },
+  {
+   "en": "%cDisabled!%c\n",
+   "zh": "%c已停用!%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1461"
+    }
+   ]
+  },
+  {
+   "en": "%cDrift Only!%c\n",
+   "zh": "%c僅能漂流!%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2208"
+    }
+   ]
+  },
+  {
+   "en": "%cEnter what?%c\n",
+   "zh": "%c進入何處?%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1087"
+    }
+   ]
+  },
+  {
+   "en": "%cFire What?%c\n",
+   "zh": "%c發射什麼?%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1823"
+    }
+   ]
+  },
+  {
+   "en": "%cJimmy what?%c\n",
+   "zh": "%c撬何處鎖?%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2357"
+    }
+   ]
+  },
+  {
+   "en": "%cKlimb what?%c\n",
+   "zh": "%c攀爬何處?%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1126"
+    }
+   ]
+  },
+  {
+   "en": "%cLocate position with what?%c\n",
+   "zh": "%c用何物定位?%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1138"
+    }
+   ]
+  },
+  {
+   "en": "%cNo keys left!%c\n",
+   "zh": "%c已無鑰匙!%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2379"
+    }
+   ]
+  },
+  {
+   "en": "%cNone Left!%c",
+   "zh": "%c已用盡!%c",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2541"
+    }
+   ]
+  },
+  {
+   "en": "%cNothing there!%c\n",
+   "zh": "%c那裡空無一物!%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1577"
+    }
+   ]
+  },
+  {
+   "en": "%cNothing to Attack!%c\n",
+   "zh": "%c無可攻擊!%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1622"
+    }
+   ]
+  },
+  {
+   "en": "%cOnly on foot!%c\n",
+   "zh": "%c僅限徒步!%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2044"
+    }
+   ]
+  },
+  {
+   "en": "%cPeer at What?%c\n",
+   "zh": "%c凝視何處?%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2711"
+    }
+   ]
+  },
+  {
+   "en": "%cPoison%c Trap!\n",
+   "zh": "%c毒%c陷阱!\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2007"
+    }
+   ]
+  },
+  {
+   "en": "%cSleep%c Trap!\n",
+   "zh": "%c沉睡%c陷阱!\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2009"
+    }
+   ]
+  },
+  {
+   "en": "%cX-it What?%c\n",
+   "zh": "%c退出何處?%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2827"
+    }
+   ]
+  },
+  {
+   "en": "%d\n",
+   "zh": "%d\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:1159"
+    }
+   ]
+  },
+  {
+   "en": "%s\n\n",
+   "zh": "%s\n\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "codex.cpp:311"
+    }
+   ]
+  },
+  {
+   "en": "%s Barely Wounded!\n",
+   "zh": "%s 受輕傷!\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "creature.cpp:733"
+    }
+   ]
+  },
+  {
+   "en": "%s Critical!\n",
+   "zh": "%s 重傷!\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "creature.cpp:721"
+    }
+   ]
+  },
+  {
+   "en": "%s Divides!\n",
+   "zh": "%s 分裂!\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "creature.cpp:519"
+    }
+   ]
+  },
+  {
+   "en": "%s Heavily Wounded!\n",
+   "zh": "%s 受重傷!\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "creature.cpp:725"
+    }
+   ]
+  },
+  {
+   "en": "%s Lightly Wounded!\n",
+   "zh": "%s 輕傷!\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "creature.cpp:729"
+    }
+   ]
+  },
+  {
+   "en": "%s created!\n",
+   "zh": "%s 已創建!\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:310"
+    }
+   ]
+  },
+  {
+   "en": "%s!\n",
+   "zh": "%s!\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1723"
+    }
+   ]
+  },
+  {
+   "en": "%s%d%s",
+   "zh": "%s%d%s",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "codex.cpp:411"
+    }
+   ]
+  },
+  {
+   "en": "%s, Thou shalt live again!\n",
+   "zh": "%s,汝將重獲新生!\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "discourse_castle.cpp:302"
+    }
+   ]
+  },
+  {
+   "en": "%s:",
+   "zh": "%s:",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:218"
+    }
+   ]
+  },
+  {
+   "en": "%sOnly on foot!\n",
+   "zh": "%s僅限徒步!\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "portal.cpp:69"
+    }
+   ]
+  },
+  {
+   "en": "( Paused )",
+   "zh": "( 已暫停 )",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenTextAt",
+     "at": "event.cpp:209"
+    }
+   ]
+  },
+  {
+   "en": "--\n",
+   "zh": "--\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:223"
+    }
+   ]
+  },
+  {
+   "en": ".",
+   "zh": ".",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "shrine.cpp:144"
+    }
+   ]
+  },
+  {
+   "en": "3-D view %s\n",
+   "zh": "3-D 視角 %s\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:990"
+    }
+   ]
+  },
+  {
+   "en": "Advance Moons!\n",
+   "zh": "推進月相!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:79"
+    }
+   ]
+  },
+  {
+   "en": "All must use same exit!\n",
+   "zh": "所有人須由同一出口離開!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:899"
+    }
+   ]
+  },
+  {
+   "en": "Ambushed!\n",
+   "zh": "遭伏擊!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "camp.cpp:61"
+    }
+   ]
+  },
+  {
+   "en": "Armour: ",
+   "zh": "護甲: ",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2788"
+    }
+   ]
+  },
+  {
+   "en": "Attack: ",
+   "zh": "攻擊:",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1603"
+    }
+   ]
+  },
+  {
+   "en": "Battle Speed:\nDown (%d)\n",
+   "zh": "戰鬥速度:\n調降 (%d)\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:965"
+    }
+   ]
+  },
+  {
+   "en": "Battle Speed:\nUp (%d)\n",
+   "zh": "戰鬥速度:\n提升 (%d)\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:964"
+    }
+   ]
+  },
+  {
+   "en": "Begin Meditation\n",
+   "zh": "開始冥想\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "shrine.cpp:85"
+    }
+   ]
+  },
+  {
+   "en": "Board Balloon!\n",
+   "zh": "登上熱氣球!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1697"
+    }
+   ]
+  },
+  {
+   "en": "Board Frigate!\n",
+   "zh": "登上戰艦!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1690"
+    }
+   ]
+  },
+  {
+   "en": "Board: %cCan't!%c\n",
+   "zh": "登乘:%c不可!%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1678"
+    }
+   ]
+  },
+  {
+   "en": "Can't place %s there!\n",
+   "zh": "無法將 %s 置於該處!\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:312"
+    }
+   ]
+  },
+  {
+   "en": "Cast Spell!\n",
+   "zh": "施放法術!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:1005"
+    }
+   ]
+  },
+  {
+   "en": "Cast Spell!\nPlayer: ",
+   "zh": "施放法術!\n玩家:",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1710"
+    }
+   ]
+  },
+  {
+   "en": "Cmd (h = help):",
+   "zh": "指令 (h = 說明):",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:953"
+    }
+   ]
+  },
+  {
+   "en": "Collision detection %s!\n",
+   "zh": "碰撞偵測 %s!\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:87"
+    }
+   ]
+  },
+  {
+   "en": "Create transport!\nWhich? ",
+   "zh": "創建載具!\n何者?",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:273"
+    }
+   ]
+  },
+  {
+   "en": "Destroy Object\nDir: ",
+   "zh": "摧毀物件\n方向:",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1563"
+    }
+   ]
+  },
+  {
+   "en": "Dexterity + 5\n",
+   "zh": "敏捷 + 5\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "dungeon.cpp:252"
+    }
+   ]
+  },
+  {
+   "en": "Dir: %5s",
+   "zh": "方向:%5s",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenTextAt",
+     "at": "screen.cpp:1032"
+    }
+   ]
+  },
+  {
+   "en": "Dir?",
+   "zh": "方向?",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1471"
+    }
+   ]
+  },
+  {
+   "en": "Disabled!\n",
+   "zh": "已停用!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:3223"
+    }
+   ]
+  },
+  {
+   "en": "Dropped some!\n",
+   "zh": "丟下一些!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp:456"
+    }
+   ]
+  },
+  {
+   "en": "Energy type? ",
+   "zh": "能量類型?",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1767"
+    }
+   ]
+  },
+  {
+   "en": "Enter %s!\n\n",
+   "zh": "進入 %s!\n\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "portal.cpp:92"
+    }
+   ]
+  },
+  {
+   "en": "Enter Can't!\n",
+   "zh": "無法進入!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp:545"
+    }
+   ]
+  },
+  {
+   "en": "Enter dungeon!\n\n",
+   "zh": "進入地牢!\n\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "portal.cpp:100"
+    }
+   ]
+  },
+  {
+   "en": "Enter the %s!\n\n",
+   "zh": "進入 %s!\n\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "portal.cpp:97"
+    }
+   ]
+  },
+  {
+   "en": "Equipment!\n",
+   "zh": "裝備!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:91"
+    }
+   ]
+  },
+  {
+   "en": "Error opening %s\n",
+   "zh": "開啟 %s 發生錯誤\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:314"
+    }
+   ]
+  },
+  {
+   "en": "Error writing to %s\n",
+   "zh": "寫入 %s 時發生錯誤\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:378"
+    }
+   ]
+  },
+  {
+   "en": "Evaded!\n",
+   "zh": "閃避!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2026"
+    }
+   ]
+  },
+  {
+   "en": "Failed!\n",
+   "zh": "失敗!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1800"
+    }
+   ]
+  },
+  {
+   "en": "Fire Cannon!\nDir: ",
+   "zh": "發射火砲!\n方向: ",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1827"
+    }
+   ]
+  },
+  {
+   "en": "From Dir: ",
+   "zh": "來向:",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1812"
+    }
+   ]
+  },
+  {
+   "en": "Full Stats!\n",
+   "zh": "屬性已滿!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:104"
+    }
+   ]
+  },
+  {
+   "en": "Gate %d!\n",
+   "zh": "月之門 %d!\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:63"
+    }
+   ]
+  },
+  {
+   "en": "Giddyup!\n",
+   "zh": "駕!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1232"
+    }
+   ]
+  },
+  {
+   "en": "Goto: ",
+   "zh": "前往:",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:119"
+    }
+   ]
+  },
+  {
+   "en": "Help!\n",
+   "zh": "求助!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:971"
+    }
+   ]
+  },
+  {
+   "en": "Help:\n1-8   - Gate\nF1-F8 - +Virtue\na - Adv. Moons\nc - Collision\ne - Equipment\nf - Full Stats\ng - Goto\nh - Help\ni - Items\nj - Join Compan.\n(more)",
+   "zh": "說明:\n1-8   - 月之門\nF1-F8 - +美德\na - 推進月相\nc - 碰撞\ne - 裝備\nf - 完整屬性\ng - 前往\nh - 說明\ni - 物品\nj - 加入夥伴\n(更多)",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:150"
+    }
+   ]
+  },
+  {
+   "en": "Hole up & Camp!\n",
+   "zh": "紮營歇息!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2036"
+    }
+   ]
+  },
+  {
+   "en": "Ignite torch!\n",
+   "zh": "點燃火炬!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1107"
+    }
+   ]
+  },
+  {
+   "en": "Improve %s!\n",
+   "zh": "提升 %s!\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:367"
+    }
+   ]
+  },
+  {
+   "en": "Intelligence + 5\n",
+   "zh": "智力 + 5\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "dungeon.cpp:257"
+    }
+   ]
+  },
+  {
+   "en": "It's Dark!\n",
+   "zh": "一片漆黑!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:602"
+    }
+   ]
+  },
+  {
+   "en": "Items!\n",
+   "zh": "物品!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:189"
+    }
+   ]
+  },
+  {
+   "en": "Jimmy: ",
+   "zh": "撬鎖:",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2344"
+    }
+   ]
+  },
+  {
+   "en": "Joined by companions!\n",
+   "zh": "夥伴加入!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:203"
+    }
+   ]
+  },
+  {
+   "en": "Karma!\n\n",
+   "zh": "業力!\n\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:215"
+    }
+   ]
+  },
+  {
+   "en": "Key Reference:\nArrow Keys: Move\na: Attack\nb: Board\nc: Cast Spell\nd: Descend\ne: Enter\nf: Fire Cannons\ng: Get Chest\nh: Hole up\ni: Ignite torch\n(more)",
+   "zh": "按鍵參考:\n方向鍵:移動\na:攻擊\nb:登乘\nc:施法\nd:下降\ne:進入\nf:發射火砲\ng:取寶箱\nh:紮營\ni:點燃火把\n(更多)",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1261"
+    }
+   ]
+  },
+  {
+   "en": "Klimb altitude\n",
+   "zh": "攀爬高度\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1124"
+    }
+   ]
+  },
+  {
+   "en": "Land Balloon\n",
+   "zh": "降落熱氣球\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1071"
+    }
+   ]
+  },
+  {
+   "en": "Last One!\n",
+   "zh": "最後一個!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:1243"
+    }
+   ]
+  },
+  {
+   "en": "Leave Room!\n",
+   "zh": "離開房間!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:275"
+    }
+   ]
+  },
+  {
+   "en": "Loading...",
+   "zh": "載入中…",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenTextAt",
+     "at": "xu4.cpp:400"
+    }
+   ]
+  },
+  {
+   "en": "Locate position\nwith sextant\n Latitude: %c'%c\"\nLongitude: %c'%c\"\n",
+   "zh": "以六分儀\n定位\n 緯度: %c'%c\"\n經度: %c'%c\"\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1134"
+    }
+   ]
+  },
+  {
+   "en": "Mixtures!\n",
+   "zh": "調製!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:235"
+    }
+   ]
+  },
+  {
+   "en": "Mount Horse!\n",
+   "zh": "騎上馬匹!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1695"
+    }
+   ]
+  },
+  {
+   "en": "New Order!\nExchange # ",
+   "zh": "重整隊序!\n交換編號 ",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2649"
+    }
+   ]
+  },
+  {
+   "en": "None!\n",
+   "zh": "無!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:315"
+    }
+   ]
+  },
+  {
+   "en": "Nothing\n",
+   "zh": "無\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:380"
+    }
+   ]
+  },
+  {
+   "en": "Nothing Here!\n",
+   "zh": "此處空無一物!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "dungeon.cpp:145"
+    }
+   ]
+  },
+  {
+   "en": "Only on foot!\n",
+   "zh": "僅限徒步!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "portal.cpp:114"
+    }
+   ]
+  },
+  {
+   "en": "Opacity %s!\n",
+   "zh": "不透明度 %s!\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:242"
+    }
+   ]
+  },
+  {
+   "en": "Open: ",
+   "zh": "開啟:",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2387"
+    }
+   ]
+  },
+  {
+   "en": "Peer at a Gem!\n",
+   "zh": "凝視寶石!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2716"
+    }
+   ]
+  },
+  {
+   "en": "Press Alt-h for help\n",
+   "zh": "按 Alt-h 取得說明\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:151"
+    }
+   ]
+  },
+  {
+   "en": "Press Alt-x to quit\n",
+   "zh": "按 Alt-x 離開\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1163"
+    }
+   ]
+  },
+  {
+   "en": "Quit & Save...\n%d moves\n",
+   "zh": "退出並存檔…\n%d 步\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1160"
+    }
+   ]
+  },
+  {
+   "en": "Quit to menu?",
+   "zh": "退出至選單?",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1331"
+    }
+   ]
+  },
+  {
+   "en": "Range: ",
+   "zh": "範圍:",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:1155"
+    }
+   ]
+  },
+  {
+   "en": "Ready a weapon for: ",
+   "zh": "為其裝備武器: ",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2444"
+    }
+   ]
+  },
+  {
+   "en": "Reagents!\n",
+   "zh": "材料!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:257"
+    }
+   ]
+  },
+  {
+   "en": "Resting...\n",
+   "zh": "歇息中…\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "camp.cpp:48"
+    }
+   ]
+  },
+  {
+   "en": "Sail %s!\n",
+   "zh": "航行 %s!\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2205"
+    }
+   ]
+  },
+  {
+   "en": "Search...\n\n",
+   "zh": "搜尋…\n\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "dungeon.cpp:127"
+    }
+   ]
+  },
+  {
+   "en": "Searching...\n",
+   "zh": "搜尋中…\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1179"
+    }
+   ]
+  },
+  {
+   "en": "Searching...\n%cDrift only!%c\n",
+   "zh": "搜尋中…\n%c僅能漂流!%c\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1177"
+    }
+   ]
+  },
+  {
+   "en": "Set Active Player: %s!\n",
+   "zh": "設定當前玩家:%s!\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:3220"
+    }
+   ]
+  },
+  {
+   "en": "Set Active Player: None!\n",
+   "zh": "設定當前角色:無!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:3217"
+    }
+   ]
+  },
+  {
+   "en": "Sound FX %s!\n",
+   "zh": "音效 %s!\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1359"
+    }
+   ]
+  },
+  {
+   "en": "Speed Down (%d)\n",
+   "zh": "降速 (%d)\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1021"
+    }
+   ]
+  },
+  {
+   "en": "Speed Up (%d)\n",
+   "zh": "加速 (%d)\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1020"
+    }
+   ]
+  },
+  {
+   "en": "Spell: ",
+   "zh": "法術: ",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1718"
+    }
+   ]
+  },
+  {
+   "en": "Strength + 5\n",
+   "zh": "力量 + 5\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "dungeon.cpp:247"
+    }
+   ]
+  },
+  {
+   "en": "Summon!\n",
+   "zh": "召喚!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:263"
+    }
+   ]
+  },
+  {
+   "en": "Talk: ",
+   "zh": "交談: ",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2492"
+    }
+   ]
+  },
+  {
+   "en": "The Chest Holds: %d Gold\n",
+   "zh": "寶箱內有:%d 金幣\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1966"
+    }
+   ]
+  },
+  {
+   "en": "Thou art not able to focus thy thoughts with that Mantra!\n",
+   "zh": "汝無法以該真言凝聚心神!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "shrine.cpp:161"
+    }
+   ]
+  },
+  {
+   "en": "Thou art unable to focus thy thoughts on this subject!\n",
+   "zh": "汝無法將心神集中於此事!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "shrine.cpp:80"
+    }
+   ]
+  },
+  {
+   "en": "Thou dost not bear the rune of entry!  A strange force keeps you out!\n",
+   "zh": "汝未持有入門之符文!一股奇異之力將汝拒於門外!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "shrine.cpp:25"
+    }
+   ]
+  },
+  {
+   "en": "Thy mind is still weary from thy last Meditation!\n",
+   "zh": "汝之心神仍因上回冥想而疲憊!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "shrine.cpp:89"
+    }
+   ]
+  },
+  {
+   "en": "To Phase: ",
+   "zh": "至月相: ",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1739"
+    }
+   ]
+  },
+  {
+   "en": "Torch: %d\n",
+   "zh": "火把:%d\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:945"
+    }
+   ]
+  },
+  {
+   "en": "Triggers!\n",
+   "zh": "機關!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:1035"
+    }
+   ]
+  },
+  {
+   "en": "Turn %s!\n",
+   "zh": "轉向 %s!\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2201"
+    }
+   ]
+  },
+  {
+   "en": "Weapon: ",
+   "zh": "武器:",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2452"
+    }
+   ]
+  },
+  {
+   "en": "Wear Armour\nfor: ",
+   "zh": "穿戴護甲\n對象:",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2781"
+    }
+   ]
+  },
+  {
+   "en": "What?\n",
+   "zh": "什麼?\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:264"
+    }
+   ]
+  },
+  {
+   "en": "Who opens? ",
+   "zh": "由誰開啟?",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1949"
+    }
+   ]
+  },
+  {
+   "en": "Who: ",
+   "zh": "何人:",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1750"
+    }
+   ]
+  },
+  {
+   "en": "Whoa!\n",
+   "zh": "哇!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1235"
+    }
+   ]
+  },
+  {
+   "en": "Wind %5s",
+   "zh": "風 %5s",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenTextAt",
+     "at": "screen.cpp:1037"
+    }
+   ]
+  },
+  {
+   "en": "Wind %s!\n",
+   "zh": "風向 %s!\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:440"
+    }
+   ]
+  },
+  {
+   "en": "Wind Dir ('l' to lock):\n",
+   "zh": "風向('l' 鎖定):\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:327"
+    }
+   ]
+  },
+  {
+   "en": "Wind direction is %slocked!\n",
+   "zh": "風向%s鎖定!\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:446"
+    }
+   ]
+  },
+  {
+   "en": "X-it\n",
+   "zh": "離開\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2825"
+    }
+   ]
+  },
+  {
+   "en": "Y-up!\n",
+   "zh": "Y 上升!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:342"
+    }
+   ]
+  },
+  {
+   "en": "Yell ",
+   "zh": "呼喊 ",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:1229"
+    }
+   ]
+  },
+  {
+   "en": "Yes or no!\n",
+   "zh": "是或否!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "discourse_tlk.cpp:61"
+    }
+   ]
+  },
+  {
+   "en": "You approach\nthe ancient\nshrine...\n",
+   "zh": "汝走近\n古老的\n聖壇…\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "shrine.cpp:102"
+    }
+   ]
+  },
+  {
+   "en": "You can make %d.\n",
+   "zh": "汝可製作 %d 個。\n",
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:3543"
+    }
+   ]
+  },
+  {
+   "en": "You enter the ancient shrine and sit before the altar...",
+   "zh": "汝步入古老聖壇,於祭壇前端坐…",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "shrine.cpp:63"
+    }
+   ]
+  },
+  {
+   "en": "You find Nothing!\n",
+   "zh": "汝一無所獲!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "dungeon.cpp:152"
+    }
+   ]
+  },
+  {
+   "en": "You find a Fountain.\nWho drinks? ",
+   "zh": "汝發現一座噴泉。\n由誰飲用?",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "dungeon.cpp:163"
+    }
+   ]
+  },
+  {
+   "en": "You find a Magical Ball...\nWho touches? ",
+   "zh": "汝發現一顆魔法球…\n何人觸碰?",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "dungeon.cpp:222"
+    }
+   ]
+  },
+  {
+   "en": "You see a knob\non the telescope\nmarked A-P\nYou Select: ",
+   "zh": "汝見望遠鏡上\n有一旋鈕\n標記 A-P\n汝選擇: ",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp:437"
+    }
+   ]
+  },
+  {
+   "en": "Z-down!\n",
+   "zh": "下降!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "cheat.cpp:353"
+    }
+   ]
+  },
+  {
+   "en": "Ztats\n",
+   "zh": "角色屬性\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "combat.cpp:1080"
+    }
+   ]
+  },
+  {
+   "en": "Ztats for: ",
+   "zh": "屬性查看: ",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:2836"
+    }
+   ]
+  },
+  {
+   "en": "Zzzzzz\n",
+   "zh": "呼嚕嚕\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "game.cpp:594"
+    }
+   ]
+  },
+  {
+   "en": "\n\n\nAll is Dark...\n",
+   "zh": "\n\n\n四下一片黑暗⋯\n",
+   "has_format": false
+  },
+  {
+   "en": "\nBut wait...\n",
+   "zh": "\n且慢⋯\n",
+   "has_format": false
+  },
+  {
+   "en": "Where am I?...\n",
+   "zh": "我身在何方?⋯\n",
+   "has_format": false
+  },
+  {
+   "en": "Am I dead?...\n",
+   "zh": "我已死了嗎?⋯\n",
+   "has_format": false
+  },
+  {
+   "en": "Afterlife?...\n",
+   "zh": "莫非是來世?⋯\n",
+   "has_format": false
+  },
+  {
+   "en": "You hear:\n%s\n",
+   "zh": "汝聽見:\n%s\n",
+   "has_format": true
+  },
+  {
+   "en": "I feel motion...\n",
+   "zh": "我感到一陣牽引⋯\n",
+   "has_format": false
+  },
+  {
+   "en": "\nLord British says: I have pulled thy spirit and some possessions from the void.  Be more careful in the future!\n\u0010",
+   "zh": "\n不列顛王說道:吾已自虛空之中喚回汝之魂魄與部分財物。日後須當謹慎!\n\u0010",
+   "has_format": false
+  }
+ ]
 }
