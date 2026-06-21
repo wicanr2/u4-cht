@@ -49,8 +49,22 @@ index 6736af1..ac16f35 100644
          creature.cpp \
          death.cpp \
          debug.cpp \
+diff --git a/src/config.h b/src/config.h
+index dcb7e30..e3f3db1 100644
+--- a/src/config.h
++++ b/src/config.h
+@@ -91,6 +91,9 @@ protected:
+ };
+ 
+ extern Config* configInit(const char* module, const char* soundtrack);
++/* U4 繁中化:檢查模組(.mod)是否存在;F2 主題循環用來跳過缺失主題,
++   避免 configInit 對缺檔直接 errorFatal("Cannot find module ...") 殺掉程式。 */
++extern bool configModuleExists(const char* name);
+ extern void    configFree(Config*);
+ 
+ #define foreach(it, col)    for(it = col.begin(); it != col.end(); ++it)
 diff --git a/src/config_boron.cpp b/src/config_boron.cpp
-index 5136bdc..2adcfe4 100644
+index 5136bdc..ffbb2d4 100644
 --- a/src/config_boron.cpp
 +++ b/src/config_boron.cpp
 @@ -11,6 +11,7 @@
@@ -88,6 +102,19 @@ index 5136bdc..2adcfe4 100644
  }
  
  static Armor* conf_armor(UThread* ut, int type, Armor* arm, UBlockIt& bi) {
+@@ -1164,6 +1172,12 @@ static int findModule(const char* name, char* path, size_t pathMax) {
+     return u4find_pathc(name, ext, path, pathMax);
+ }
+ 
++// U4 繁中化:供 F2 主題循環檢查模組是否存在(缺失則跳過,不呼叫會 fatal 的 configInit)。
++bool configModuleExists(const char* name) {
++    char path[512];
++    return findModule(name, path, sizeof(path)) != 0;
++}
++
+ // Create Config service.
+ Config* configInit(const char* module, const char* soundtrack) {
+     int renderFound, stFound;
 diff --git a/src/creature.cpp b/src/creature.cpp
 index 0c64297..7ac36ca 100644
 --- a/src/creature.cpp
@@ -324,10 +351,10 @@ index 8f3dce0..5b8bddc 100644
          case ALLEGRO_EVENT_DISPLAY_SWITCH_IN:
              expose();
 diff --git a/src/game.cpp b/src/game.cpp
-index 5c359b0..846c32b 100644
+index 5c359b0..b2d57bd 100644
 --- a/src/game.cpp
 +++ b/src/game.cpp
-@@ -418,6 +418,83 @@ void gameUpdateScreen() {
+@@ -418,6 +418,89 @@ void gameUpdateScreen() {
      }
  }
  
@@ -376,8 +403,14 @@ index 5c359b0..846c32b 100644
 +    int nxt = cur;
 +    for (int tries = 0; tries < N - 1; ++tries) {
 +        nxt = (nxt + 1) % N;
-+        if (! cache[nxt])
++        if (! cache[nxt]) {
++            /* 先確認模組檔存在再 configInit;否則 configInit 對缺檔會直接
++               errorFatal("Cannot find module ...") 殺掉程式(實測:遊戲中/intro
++               F2 循環到未打包的 FM Towns/MSX2/… 主題即崩潰)。 */
++            if (! configModuleExists(themes[nxt].mod))
++                continue;                       /* 缺模組 → 跳過該主題 */
 +            cache[nxt] = configInit(themes[nxt].mod, xu4.settings->soundtrack);
++        }
 +        if (cache[nxt]) break;                  /* 找到可用主題 */
 +    }
 +    if (nxt == cur || ! cache[nxt]) return false;   /* 沒有其他可用主題 */
@@ -411,7 +444,7 @@ index 5c359b0..846c32b 100644
  void GameController::setMap(Map *map, bool saveLocation, const Portal *portal, TurnController *turnCompleter) {
      int viewMode;
      LocationContext context;
-@@ -3452,7 +3529,7 @@ showMixturesSuper(int page = 0) {
+@@ -3452,7 +3535,7 @@ showMixturesSuper(int page = 0) {
  
      const Spell *s = getSpell(i + 13 * page);
      int line = i + 8;
@@ -554,7 +587,7 @@ index fd2d981..a309fe5 100644
      uint8_t fixup;              /**< a routine to do miscellaneous fixes to the image */
      Image *image;               /**< the image we're describing */
 diff --git a/src/intro.cpp b/src/intro.cpp
-index acdf1f7..10c68bb 100644
+index acdf1f7..d445b14 100644
 --- a/src/intro.cpp
 +++ b/src/intro.cpp
 @@ -11,6 +11,8 @@
@@ -589,7 +622,7 @@ index acdf1f7..10c68bb 100644
  
  #define GYP_PLACES_FIRST 0
  #define GYP_PLACES_TWOMORE 1
-@@ -416,6 +422,36 @@ uint8_t *IntroController::getSigData() {
+@@ -416,6 +422,39 @@ uint8_t *IntroController::getSigData() {
  bool IntroController::keyPressed(int key) {
      bool valid = true;
  
@@ -602,6 +635,9 @@ index acdf1f7..10c68bb 100644
 +    // 懸空崩潰(實測:片頭按 F2 後再按任意鍵即 crash)。keyPressed 只在 intro 主迴圈呼叫,
 +    // 角色創建走另一條輸入流,故不影響創角。
 +    if (key == U4_FKEY + 1 || key == U4_FKEY + 2) {
++        if (getenv("U4CHT_DEBUG"))
++            fprintf(stderr, "[DBG] intro F%d pressed, mode=%d\n",
++                    key == U4_FKEY + 1 ? 2 : 3, (int)mode);
 +        // 先設安全 mode + 關 beasties,避免重載期間計時器畫到正在釋放的資源。
 +        // 再釋放 intro 資源(此時舊 imageMgr 仍有效),才做會重建 imageMgr 的切換,
 +        // 最後 init() 用新 imageMgr 重載(init 內含 mapArea.reinit 等)。
@@ -626,7 +662,24 @@ index acdf1f7..10c68bb 100644
      switch (mode) {
  
      case INTRO_TITLES:
-@@ -661,7 +697,7 @@ void IntroController::drawBeastie(int beast, int vertoffset, int frame) {
+@@ -489,11 +528,16 @@ bool IntroController::keyPressed(int key) {
+ bool IntroController::inputEvent(const InputEvent* ev) {
+     if (ev->type == IE_MOUSE_PRESS && ev->n == CMOUSE_LEFT)
+     {
++        if (getenv("U4CHT_DEBUG"))
++            fprintf(stderr, "[DBG] intro mouse L-press, mode=%d, x=%d y=%d, binData=%p\n",
++                    (int)mode, ev->x, ev->y, (void*)binData);
+         if (mode == INTRO_TITLES || mode == INTRO_MAP)
+             keyPressed(U4_SPACE);
+         else if (mode == INTRO_MENU) {
+             int cx, cy;
+             menuArea.mouseTextPos(ev->x, ev->y, cx, cy);
++            if (getenv("U4CHT_DEBUG"))
++                fprintf(stderr, "[DBG]   menu click cell cx=%d cy=%d\n", cx, cy);
+ 
+             // Matches text position in updateScreen().
+             if (cx >= 10 && cx <= 28) {
+@@ -661,7 +705,7 @@ void IntroController::drawBeastie(int beast, int vertoffset, int frame) {
      ASSERT(beast == 0 || beast == 1, "invalid beast: %d", beast);
  
      backgroundArea.draw(beastiesImg, beastieSub[beast] + frame,
@@ -635,7 +688,7 @@ index acdf1f7..10c68bb 100644
                          vertoffset);
  }
  
-@@ -721,7 +757,27 @@ void IntroController::drawCard(int card, int x, int y) {
+@@ -721,7 +765,27 @@ void IntroController::drawCard(int card, int x, int y) {
      };
      ASSERT(card < 8, "invalid card: %d", card);
  
@@ -664,7 +717,7 @@ index acdf1f7..10c68bb 100644
  }
  
  /**
-@@ -753,6 +809,18 @@ void IntroController::updateScreen() {
+@@ -753,6 +817,18 @@ void IntroController::updateScreen() {
          backgroundArea.draw(BKGD_INTRO);
          drawMap();
          drawBeasties();
@@ -683,7 +736,7 @@ index acdf1f7..10c68bb 100644
          // display the profile name if a local profile is being used
          {
          const string& pname = xu4.settings->profile;
-@@ -764,7 +832,7 @@ void IntroController::updateScreen() {
+@@ -764,7 +840,7 @@ void IntroController::updateScreen() {
      case INTRO_MENU:
          // draw the extended background for all option screens
          backgroundArea.draw(BKGD_INTRO);
@@ -692,7 +745,7 @@ index acdf1f7..10c68bb 100644
  
          // if there is an error message to display, show it
          if (xu4.errorMessage)
-@@ -780,7 +848,7 @@ void IntroController::updateScreen() {
+@@ -780,7 +856,7 @@ void IntroController::updateScreen() {
              EventHandler::wait_msecs(3000);
              // clear the screen again
              backgroundArea.draw(BKGD_INTRO);
@@ -701,7 +754,7 @@ index acdf1f7..10c68bb 100644
          }
  
          menuArea.textAt(1,  1, "In another world, in a time to come.");
-@@ -808,7 +876,7 @@ void IntroController::updateScreen() {
+@@ -808,7 +884,7 @@ void IntroController::updateScreen() {
  void IntroController::initiateNewGame() {
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_INTRO);
@@ -710,7 +763,7 @@ index acdf1f7..10c68bb 100644
  
      // display name prompt and read name from keyboard
      menuArea.textAt(3, 3, "By what name shalt thou be known");
-@@ -831,7 +899,7 @@ void IntroController::initiateNewGame() {
+@@ -831,7 +907,7 @@ void IntroController::initiateNewGame() {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_INTRO);
@@ -719,7 +772,7 @@ index acdf1f7..10c68bb 100644
  
      // display sex prompt and read sex from keyboard
      menuArea.textAt(3, 3, "Art thou Male or Female?");
-@@ -1103,7 +1171,7 @@ void IntroController::journeyOnward() {
+@@ -1103,7 +1179,7 @@ void IntroController::journeyOnward() {
  void IntroController::about() {
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_INTRO);
@@ -728,7 +781,7 @@ index acdf1f7..10c68bb 100644
  
      screenHideCursor();
      menuArea.textAtFmt(14, 1, "XU4 %s", VERSION);
-@@ -1125,7 +1193,9 @@ void IntroController::about() {
+@@ -1125,7 +1201,9 @@ void IntroController::about() {
   * Shows text in the question area.
   */
  void IntroController::showText(const string &text) {
@@ -739,7 +792,7 @@ index acdf1f7..10c68bb 100644
      int lineNo = 0;
  
      questionArea.clear();
-@@ -1166,6 +1236,12 @@ void IntroController::runMenu(Menu *menu, TextView *view, bool withBeasties) {
+@@ -1166,6 +1244,12 @@ void IntroController::runMenu(Menu *menu, TextView *view, bool withBeasties) {
   * map, the beasties, etc..
   */
  void IntroController::timerFired() {
@@ -752,7 +805,7 @@ index acdf1f7..10c68bb 100644
      screenCycle();
  
      if (mode == INTRO_TITLES)
-@@ -1270,7 +1346,7 @@ void IntroController::updateConfMenu(MenuEvent &event) {
+@@ -1270,7 +1354,7 @@ void IntroController::updateConfMenu(MenuEvent &event) {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -761,7 +814,7 @@ index acdf1f7..10c68bb 100644
  }
  
  void IntroController::updateVideoMenu(MenuEvent &event) {
-@@ -1307,7 +1383,7 @@ void IntroController::updateVideoMenu(MenuEvent &event) {
+@@ -1307,7 +1391,7 @@ void IntroController::updateVideoMenu(MenuEvent &event) {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -770,7 +823,7 @@ index acdf1f7..10c68bb 100644
  }
  
  void IntroController::updateGfxMenu(MenuEvent &event)
-@@ -1327,7 +1403,7 @@ void IntroController::updateGfxMenu(MenuEvent &event)
+@@ -1327,7 +1411,7 @@ void IntroController::updateGfxMenu(MenuEvent &event)
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -779,7 +832,7 @@ index acdf1f7..10c68bb 100644
  }
  
  void IntroController::updateSoundMenu(MenuEvent &event) {
-@@ -1361,7 +1437,7 @@ void IntroController::updateSoundMenu(MenuEvent &event) {
+@@ -1361,7 +1445,7 @@ void IntroController::updateSoundMenu(MenuEvent &event) {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -788,7 +841,7 @@ index acdf1f7..10c68bb 100644
  }
  
  void IntroController::updateInputMenu(MenuEvent &event) {
-@@ -1389,7 +1465,7 @@ void IntroController::updateInputMenu(MenuEvent &event) {
+@@ -1389,7 +1473,7 @@ void IntroController::updateInputMenu(MenuEvent &event) {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -797,7 +850,7 @@ index acdf1f7..10c68bb 100644
  
      // after drawing the menu, extra menu text can be added here
      extendedMenuArea.textAt(0, 5, "Mouse Options:");
-@@ -1420,7 +1496,7 @@ void IntroController::updateSpeedMenu(MenuEvent &event) {
+@@ -1420,7 +1504,7 @@ void IntroController::updateSpeedMenu(MenuEvent &event) {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -806,7 +859,7 @@ index acdf1f7..10c68bb 100644
  }
  
  void IntroController::updateGameplayMenu(MenuEvent &event) {
-@@ -1444,7 +1520,7 @@ void IntroController::updateGameplayMenu(MenuEvent &event) {
+@@ -1444,7 +1528,7 @@ void IntroController::updateGameplayMenu(MenuEvent &event) {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -815,7 +868,7 @@ index acdf1f7..10c68bb 100644
  }
  
  void IntroController::updateInterfaceMenu(MenuEvent &event) {
-@@ -1468,7 +1544,7 @@ void IntroController::updateInterfaceMenu(MenuEvent &event) {
+@@ -1468,7 +1552,7 @@ void IntroController::updateInterfaceMenu(MenuEvent &event) {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -824,7 +877,7 @@ index acdf1f7..10c68bb 100644
  
      // after drawing the menu, extra menu text can be added here
      extendedMenuArea.textAt(2, 3, "  (Open, Jimmy, etc.)");
-@@ -1703,8 +1779,8 @@ void IntroController::initTitles()
+@@ -1703,8 +1787,8 @@ void IntroController::initTitles()
  void IntroController::addTitle(int x, int y, int w, int h, AnimType method, int delay, int duration)
  {
      AnimElement data = {
@@ -835,7 +888,7 @@ index acdf1f7..10c68bb 100644
          method,             // render method
          0,                  // animStep
          0,                  // animStepMax
-@@ -1777,8 +1853,8 @@ void IntroController::getTitleSourceData()
+@@ -1777,8 +1861,8 @@ void IntroController::getTitleSourceData()
                          color = info->image->setColor(255, (y == 2 ? 250 : 255), blue[y-1]);
                      }
                      AnimPlot plot = {
@@ -846,7 +899,7 @@ index acdf1f7..10c68bb 100644
                          uint8_t(color.r),
                          uint8_t(color.g),
                          uint8_t(color.b),
-@@ -1800,15 +1876,15 @@ void IntroController::getTitleSourceData()
+@@ -1800,15 +1884,15 @@ void IntroController::getTitleSourceData()
              {
                  for (int y=0; y < titles[i].rh; y++)
                  {
@@ -865,7 +918,7 @@ index acdf1f7..10c68bb 100644
                                  uint8_t(r), uint8_t(g), uint8_t(b), uint8_t(a)
                              };
                              titles[i].plotData.push_back(plot);
-@@ -1904,12 +1980,12 @@ bool IntroController::updateTitle()
+@@ -1904,12 +1988,12 @@ bool IntroController::updateTitle()
          {
              while (animStepTarget > title->animStep)
              {

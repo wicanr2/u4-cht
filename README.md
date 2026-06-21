@@ -374,4 +374,11 @@ B. GUI / 選單(.txf SDF 紋理字,uint16 碼位)
 - **譯名體系**:八德沿用台灣《創世紀聖者之書》;名詞採「精訊官方手冊 + 現代直觀」混合策略,**不完全沿用精訊**(見[譯名政策](#naming)與 [`docs/manual/術語對照.md`](docs/manual/術語對照.md))。
 - **官方手冊**:精訊資訊《創世紀IV》1985 繁中手冊(已 OCR 轉錄於 [`docs/manual/`](docs/manual/),供譯名/數值校對)。
 
+### 🙇 社群貢獻者(由衷感謝)
+
+這份專案能在 macOS / Windows 真機上跑得更穩,要特別感謝這些在自己機器上實測、找出 bug 並送出修正的朋友 —— 沒有你們的真機回饋,這些只在特定平台才現形的問題不會被抓到。感恩 🙏
+
+- **[@catsmice](https://github.com/catsmice)** —— macOS 真機(M1 Pro / macOS 26.5)三項修正([PR #2](https://github.com/wicanr2/u4-cht/pull/2)):CoreAudio 後端改 callback 拉取式(解開頭即靜音 / 城鎮移動卡死)、主選單選項框 2x→3x 偏移、新增本機 Mac 建置腳本 `dist/build-mac-local.sh`。
+- **[@laneser](https://github.com/laneser)** —— Windows 音樂 bass 頓頓修正([PR #1](https://github.com/wicanr2/u4-cht/pull/1)):定位為 WASAPI 緩衝在 Windows 預設 15.6ms 計時器精度下週期性 underrun,以 `timeBeginPeriod(1)` 拉高精度根治,附 [`docs/audio-windows.md`](docs/audio-windows.md)。
+
 > repo 納管:中文化工具 / 雙語表 / Docker / 文件 / tileset 展示圖。完整可玩遊戲請依 [`SETUP.md`](SETUP.md) 用 `make download` 自行取得 freeware 資料重建。
