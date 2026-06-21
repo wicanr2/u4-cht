@@ -1,0 +1,146 @@
+{
+  "source": "module/Ultima-IV/maps.b(portal message + city/dungeon name)+ portal.cpp screenMessageCenter",
+  "count": 35,
+  "strings": [
+    {
+      "en": "Klimb to second floor!\n",
+      "zh": "登上二樓!\n"
+    },
+    {
+      "en": "Descend to first floor!\n",
+      "zh": "下至一樓!\n"
+    },
+    {
+      "en": "Descend into the depths!\n",
+      "zh": "深入地底!\n"
+    },
+    {
+      "en": "Enter the Great Stygian Abyss!\n\n",
+      "zh": "進入冥河大深淵!\n\n"
+    },
+    {
+      "en": "into Dungeon Deceit\n",
+      "zh": "進入欺瞞地牢\n"
+    },
+    {
+      "en": "into Dungeon Despise\n",
+      "zh": "進入鄙夷地牢\n"
+    },
+    {
+      "en": "into Dungeon Destard\n",
+      "zh": "進入德斯塔德地牢\n"
+    },
+    {
+      "en": "into Dungeon Wrong\n",
+      "zh": "進入謬誤地牢\n"
+    },
+    {
+      "en": "into Dungeon Covetous\n",
+      "zh": "進入貪婪地牢\n"
+    },
+    {
+      "en": "into Dungeon Shame\n",
+      "zh": "進入羞恥地牢\n"
+    },
+    {
+      "en": "into Dungeon Hythloth\n",
+      "zh": "進入海瑟洛斯地牢\n"
+    },
+    {
+      "en": "Britain",
+      "zh": "不列顛城(Britain)"
+    },
+    {
+      "en": "Britannia",
+      "zh": "不列顛尼亞(Britannia)"
+    },
+    {
+      "en": "Buccaneers Den",
+      "zh": "海盜窩(Buccaneers Den)"
+    },
+    {
+      "en": "Cove",
+      "zh": "寇夫(Cove)"
+    },
+    {
+      "en": "Empath Abbey",
+      "zh": "共感修道院(Empath Abbey)"
+    },
+    {
+      "en": "Jhelom",
+      "zh": "哲倫(Jhelom)"
+    },
+    {
+      "en": "Lycaeum",
+      "zh": "學院(Lycaeum)"
+    },
+    {
+      "en": "Magincia",
+      "zh": "馬精西亞(Magincia)"
+    },
+    {
+      "en": "Minoc",
+      "zh": "米諾克(Minoc)"
+    },
+    {
+      "en": "Moonglow",
+      "zh": "月光城(Moonglow)"
+    },
+    {
+      "en": "Paws",
+      "zh": "帕斯(Paws)"
+    },
+    {
+      "en": "Serpents Hold",
+      "zh": "巨蛇堡(Serpents Hold)"
+    },
+    {
+      "en": "Skara Brae",
+      "zh": "史卡拉布雷(Skara Brae)"
+    },
+    {
+      "en": "Trinsic",
+      "zh": "特林希克(Trinsic)"
+    },
+    {
+      "en": "Vesper",
+      "zh": "維斯帕(Vesper)"
+    },
+    {
+      "en": "Yew",
+      "zh": "紫衫城(Yew)"
+    },
+    {
+      "en": "Deceit",
+      "zh": "欺瞞"
+    },
+    {
+      "en": "Despise",
+      "zh": "鄙夷"
+    },
+    {
+      "en": "Destard",
+      "zh": "德斯塔德"
+    },
+    {
+      "en": "Wrong",
+      "zh": "謬誤"
+    },
+    {
+      "en": "Covetous",
+      "zh": "貪婪"
+    },
+    {
+      "en": "Shame",
+      "zh": "羞恥"
+    },
+    {
+      "en": "Hythloth",
+      "zh": "海瑟洛斯"
+    },
+    {
+      "en": "The Great Stygian Abyss",
+      "zh": "冥河大深淵"
+    }
+  ]
+}

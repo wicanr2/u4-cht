@@ -1,6 +1,6 @@
 {
   "source": "discourse_castle.cpp / avatar.exe@87581",
-  "count": 24,
+  "count": 47,
   "strings": [
     {
       "en": "\n\n\nHe says:\nMy name is\nLord British,\nSovereign of\nall Britannia!\n",
@@ -153,6 +153,42 @@
     {
       "en": "\nWhat else?\n",
       "zh": "\n還有何事?\n"
+    },
+    {
+      "en": "To survive in this hostile land thou must first know thyself! Seek ye to master thy weapons and thy magical ability!\n\nTake great care in these thy first travels in Britannia.\n\nUntil thou dost well know thyself, travel not far from the safety of the townes!\n",
+      "zh": "欲在此險惡之地存活，汝須先知己！當精研汝之武藝與法力！\n\n汝初履不列顛尼亞，諸事務須謹慎。\n\n汝若未深知自身，切莫遠離城鎮之庇護！\n"
+    },
+    {
+      "en": "Travel not the open lands alone. There are many worthy people in the diverse townes whom it would be wise to ask to Join thee!\n\nBuild thy party unto eight travellers, for only a true leader can win the Quest!\n",
+      "zh": "切莫獨闖荒野。各城鎮多有賢者，汝當明智，邀其加入！\n\n當集汝之隊伍至八人，唯真正的領袖方能成此使命！\n"
+    },
+    {
+      "en": "Learn ye the paths of virtue. Seek to gain entry unto the eight shrines!\n\nFind ye the Runes, needed for entry into each shrine, and learn each chant or \"Mantra\" used to focus thy meditations.\n\nWithin the Shrines thou shalt learn of the deeds which show thy inner virtue or vice!\n\nChoose thy path wisely for all thy deeds of good and evil are remembered and can return to hinder thee!\n",
+      "zh": "當習美德之道。尋覓進入八座聖壇之途！\n\n尋得各聖壇所需之符文，並習得用以凝神冥想之真言。\n\n於聖壇之中，汝將領悟彰顯內在美德或惡行之作為！\n\n慎擇汝之道路，汝一切善惡之舉皆被銘記，亦可能回頭阻汝！\n"
+    },
+    {
+      "en": "Visit the Seer Hawkwind often and use his wisdom to help thee prove thy virtue.\n\nWhen thou art ready, Hawkwind will advise thee to seek the Elevation unto partial Avatarhood in a virtue.\n\nSeek ye to become a partial Avatar in all eight virtues, for only then shalt thou be ready to seek the codex!\n",
+      "zh": "當常拜訪先知霍克溫德，借其智慧助汝證明美德。\n\n待汝準備就緒，霍克溫德將勸汝於某一美德求得晉升，成為部分聖者。\n\n當求於八項美德皆成部分聖者，唯有如此，汝方能尋求寶典！\n"
+    },
+    {
+      "en": "Go ye now into the depths of the dungeons. Therein recover the 8 colored stones from the altar pedestals in the halls of the dungeons.\n\nFind the uses of these stones for they can help thee in the Abyss!\n",
+      "zh": "今當深入地城。於地城殿堂的祭壇基座上，取回八顆彩色寶石。\n\n探明此等寶石之用途，於深淵之中必能助汝！\n"
+    },
+    {
+      "en": "Thou art doing very well indeed on the path to Avatarhood! Strive ye to achieve the Elevation in all eight virtues!\n",
+      "zh": "汝於聖者之道上實已大有所成！當奮力使八項美德皆得晉升！\n"
+    },
+    {
+      "en": "Find ye the Bell, Book and Candle!  With these three things, one may enter the Great Stygian Abyss!\n",
+      "zh": "尋得鐘、書與燭！持此三物，方可進入冥河大深淵！\n"
+    },
+    {
+      "en": "Before thou dost enter the Abyss thou shalt need the Key of Three Parts, and the Word of Passage.\n\nThen might thou enter the Chamber of the Codex of Ultimate Wisdom!\n",
+      "zh": "汝入深淵之前，須備三部之鑰，以及通行密語。\n\n屆時汝方能進入知識寶典之殿！\n"
+    },
+    {
+      "en": "Thou dost now seem ready to make the final journey into the dark Abyss! Go only with a party of eight!\n\nGood Luck, and may the powers of good watch over thee on this thy most perilous endeavor!\n\nThe hearts and souls of all Britannia go with thee now. Take care, my friend.\n",
+      "zh": "汝今似已準備踏上深入黑暗深淵之最終旅程！務必以八人之隊同行！\n\n祝汝好運，願良善之力於此汝最凶險之征途庇佑汝！\n\n全不列顛尼亞之心與魂今與汝同在。多加保重，吾友。\n\n"
     }
   ]
 }

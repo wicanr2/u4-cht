@@ -75,7 +75,8 @@ def collect():
     # names(職業/試劑/美德/物品/方向)、creature(怪物名)、system(系統/戰鬥/面板訊息)
     for src in ("config_bilingual", "names_bilingual",
                 "creature_bilingual", "system_bilingual",
-                "location_types"):     # 進城型別字 castle/towne/village/ruins
+                "location_types",      # 進城型別字 castle/towne/village/ruins
+                "maps_bilingual"):     # maps.b 樓層/地城訊息 + 城市/地城名(置中顯示)
         try:
             d = json.load(open(f"dumps/{src}.json", encoding="utf-8"))
             for e in d["strings"]:
