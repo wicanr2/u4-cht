@@ -712,7 +712,7 @@ index fd2d9817..a309fe59 100644
      uint8_t fixup;              /**< a routine to do miscellaneous fixes to the image */
      Image *image;               /**< the image we're describing */
 diff --git a/src/intro.cpp b/src/intro.cpp
-index acdf1f74..249ed1c4 100644
+index acdf1f74..919792da 100644
 --- a/src/intro.cpp
 +++ b/src/intro.cpp
 @@ -11,6 +11,8 @@
@@ -747,7 +747,17 @@ index acdf1f74..249ed1c4 100644
  
  #define GYP_PLACES_FIRST 0
  #define GYP_PLACES_TWOMORE 1
-@@ -388,6 +394,16 @@ bool IntroController::hasInitiatedNewGame()
+@@ -174,7 +180,8 @@ IntroController::IntroController() :
+     binData(NULL),
+     titles(),                   // element list
+     title(titles.begin()),      // element iterator
+-    bSkipTitles(false)
++    bSkipTitles(false),
++    reloadingTheme(false)
+ {
+     // initialize menus
+     confMenu.setTitle("XU4 Configuration:", 0, 0);
+@@ -388,6 +395,16 @@ bool IntroController::hasInitiatedNewGame()
   * Frees up data not needed after introduction.
   */
  void IntroController::deleteIntro() {
@@ -764,7 +774,7 @@ index acdf1f74..249ed1c4 100644
      delete binData;
      binData = NULL;
  
-@@ -416,6 +432,39 @@ uint8_t *IntroController::getSigData() {
+@@ -416,6 +433,53 @@ uint8_t *IntroController::getSigData() {
  bool IntroController::keyPressed(int key) {
      bool valid = true;
  
@@ -780,6 +790,11 @@ index acdf1f74..249ed1c4 100644
 +        if (getenv("U4CHT_DEBUG"))
 +            fprintf(stderr, "[DBG] intro F%d pressed, mode=%d\n",
 +                    key == U4_FKEY + 1 ? 2 : 3, (int)mode);
++        // U4 繁中化:整個重載期間設 reloadingTheme,擋掉 re-entrant 的 timerFired 與
++        // inputEvent。關鍵 —— init() 會早早把 binData 設非 NULL,故 binData guard 不足以
++        // 涵蓋重載中段;init 內 musicPlay/updateScreen 會 pump 事件,re-entrant 的繪製/
++        // 滑鼠會踩到半重建狀態(charset/beasties/tile 快取指標懸空)→ segfault。
++        reloadingTheme = true;
 +        // 先設安全 mode + 關 beasties,避免重載期間計時器畫到正在釋放的資源。
 +        // 再釋放 intro 資源(此時舊 imageMgr 仍有效),才做會重建 imageMgr 的切換,
 +        // 最後 init() 用新 imageMgr 重載(init 內含 mapArea.reinit 等)。
@@ -795,8 +810,17 @@ index acdf1f74..249ed1c4 100644
 +            xu4.settings->scale = s;
 +            screenReInit();
 +        }
++        if (getenv("U4CHT_DEBUG"))
++            fprintf(stderr, "[DBG] F2 after switch: mgr=%p (pre-init)\n",
++                    (void*)xu4.imageMgr);
 +        bSkipTitles = true;
 +        init();
++        if (getenv("U4CHT_DEBUG"))
++            fprintf(stderr, "[DBG] F2 after init: mgr=%p beastiesImg=%p img=%p mode=%d vis=%d\n",
++                    (void*)xu4.imageMgr, (void*)beastiesImg,
++                    beastiesImg ? (void*)beastiesImg->image : NULL,
++                    (int)mode, (int)beastiesVisible);
++        reloadingTheme = false;             // 重載完成,恢復正常繪製/輸入
 +        updateScreen();
 +        return true;
 +    }
@@ -804,8 +828,12 @@ index acdf1f74..249ed1c4 100644
      switch (mode) {
  
      case INTRO_TITLES:
-@@ -489,11 +538,16 @@ bool IntroController::keyPressed(int key) {
+@@ -487,13 +551,20 @@ bool IntroController::keyPressed(int key) {
+ }
+ 
  bool IntroController::inputEvent(const InputEvent* ev) {
++    if (reloadingTheme)         // 重載中:忽略 re-entrant 滑鼠輸入(會觸發 updateScreen 踩懸空 charset)
++        return true;
      if (ev->type == IE_MOUSE_PRESS && ev->n == CMOUSE_LEFT)
      {
 +        if (getenv("U4CHT_DEBUG"))
@@ -821,7 +849,26 @@ index acdf1f74..249ed1c4 100644
  
              // Matches text position in updateScreen().
              if (cx >= 10 && cx <= 28) {
-@@ -661,7 +715,7 @@ void IntroController::drawBeastie(int beast, int vertoffset, int frame) {
+@@ -644,6 +715,18 @@ void IntroController::drawMapAnimated() {
+  * Draws the animated beasts in the upper corners of the screen.
+  */
+ void IntroController::drawBeasties() {
++    /* U4 繁中化:每幀從『目前』imageMgr 重抓 beastiesImg。主題切換(F2)的 screenReInit
++       會 new ImageMgr,使 init() 當時快取的 beastiesImg 懸空 → ImageView::draw 在
++       info->image deref 崩潰(實測 backtrace)。重抓的指標必屬現用 imageMgr,絕不懸空;
++       拿不到(NULL)或 image 未就緒就跳過這幀,不畫。 */
++    ImageInfo* cur = xu4.imageMgr->get(BKGD_ANIMATE);
++    if (getenv("U4CHT_DEBUG"))
++        fprintf(stderr, "[DBG] drawBeasties: cached=%p refetch=%p img=%p mgr=%p mode=%d vis=%d\n",
++                (void*)beastiesImg, (void*)cur, cur ? (void*)cur->image : NULL,
++                (void*)xu4.imageMgr, (int)mode, (int)beastiesVisible);
++    beastiesImg = cur;
++    if (! beastiesImg || ! beastiesImg->image)
++        return;                 // 主題缺 beasties 或切換懸空 → 不畫,避免崩潰
+     drawBeastie(0, beastieOffset, binData->beastie1FrameTable[beastie1Cycle]);
+     drawBeastie(1, beastieOffset, binData->beastie2FrameTable[beastie2Cycle]);
+     if (beastieOffset < 0)
+@@ -661,7 +744,7 @@ void IntroController::drawBeastie(int beast, int vertoffset, int frame) {
      ASSERT(beast == 0 || beast == 1, "invalid beast: %d", beast);
  
      backgroundArea.draw(beastiesImg, beastieSub[beast] + frame,
@@ -830,7 +877,7 @@ index acdf1f74..249ed1c4 100644
                          vertoffset);
  }
  
-@@ -721,7 +775,27 @@ void IntroController::drawCard(int card, int x, int y) {
+@@ -721,7 +804,27 @@ void IntroController::drawCard(int card, int x, int y) {
      };
      ASSERT(card < 8, "invalid card: %d", card);
  
@@ -859,7 +906,7 @@ index acdf1f74..249ed1c4 100644
  }
  
  /**
-@@ -753,6 +827,18 @@ void IntroController::updateScreen() {
+@@ -753,6 +856,18 @@ void IntroController::updateScreen() {
          backgroundArea.draw(BKGD_INTRO);
          drawMap();
          drawBeasties();
@@ -878,7 +925,7 @@ index acdf1f74..249ed1c4 100644
          // display the profile name if a local profile is being used
          {
          const string& pname = xu4.settings->profile;
-@@ -764,7 +850,7 @@ void IntroController::updateScreen() {
+@@ -764,7 +879,7 @@ void IntroController::updateScreen() {
      case INTRO_MENU:
          // draw the extended background for all option screens
          backgroundArea.draw(BKGD_INTRO);
@@ -887,7 +934,7 @@ index acdf1f74..249ed1c4 100644
  
          // if there is an error message to display, show it
          if (xu4.errorMessage)
-@@ -780,7 +866,7 @@ void IntroController::updateScreen() {
+@@ -780,7 +895,7 @@ void IntroController::updateScreen() {
              EventHandler::wait_msecs(3000);
              // clear the screen again
              backgroundArea.draw(BKGD_INTRO);
@@ -896,7 +943,7 @@ index acdf1f74..249ed1c4 100644
          }
  
          menuArea.textAt(1,  1, "In another world, in a time to come.");
-@@ -808,7 +894,7 @@ void IntroController::updateScreen() {
+@@ -808,7 +923,7 @@ void IntroController::updateScreen() {
  void IntroController::initiateNewGame() {
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_INTRO);
@@ -905,7 +952,7 @@ index acdf1f74..249ed1c4 100644
  
      // display name prompt and read name from keyboard
      menuArea.textAt(3, 3, "By what name shalt thou be known");
-@@ -831,7 +917,7 @@ void IntroController::initiateNewGame() {
+@@ -831,7 +946,7 @@ void IntroController::initiateNewGame() {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_INTRO);
@@ -914,7 +961,7 @@ index acdf1f74..249ed1c4 100644
  
      // display sex prompt and read sex from keyboard
      menuArea.textAt(3, 3, "Art thou Male or Female?");
-@@ -1035,14 +1121,21 @@ void IntroController::startQuestions() {
+@@ -1035,14 +1150,21 @@ void IntroController::startQuestions() {
          questionArea.textAt(0, 1, gypsyText[GYP_UPON_TABLE].c_str());
          EventHandler::wait_msecs(1000);
  
@@ -940,7 +987,7 @@ index acdf1f74..249ed1c4 100644
          drawCard(questionTree[i2], cardPos->x + cardPos->width, cardPos->y);
          questionArea.textAt(0, 3, "\"Consider this:\"");
          questionArea.showCursor();
-@@ -1103,7 +1196,7 @@ void IntroController::journeyOnward() {
+@@ -1103,7 +1225,7 @@ void IntroController::journeyOnward() {
  void IntroController::about() {
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_INTRO);
@@ -949,7 +996,7 @@ index acdf1f74..249ed1c4 100644
  
      screenHideCursor();
      menuArea.textAtFmt(14, 1, "XU4 %s", VERSION);
-@@ -1125,7 +1218,9 @@ void IntroController::about() {
+@@ -1125,7 +1247,9 @@ void IntroController::about() {
   * Shows text in the question area.
   */
  void IntroController::showText(const string &text) {
@@ -960,7 +1007,7 @@ index acdf1f74..249ed1c4 100644
      int lineNo = 0;
  
      questionArea.clear();
-@@ -1166,6 +1261,12 @@ void IntroController::runMenu(Menu *menu, TextView *view, bool withBeasties) {
+@@ -1166,6 +1290,12 @@ void IntroController::runMenu(Menu *menu, TextView *view, bool withBeasties) {
   * map, the beasties, etc..
   */
  void IntroController::timerFired() {
@@ -968,12 +1015,12 @@ index acdf1f74..249ed1c4 100644
 +    // updateScreen 可能 pump event 使本計時器 re-entrant 觸發。此時 binData 已釋放/
 +    // 正在重建,updateTitle/drawMap 會 deref 懸空 tile 影像而 segfault。binData 為 NULL
 +    // 即跳過這一拍。
-+    if (! binData)
++    if (! binData || reloadingTheme)        // 重載中:擋掉 re-entrant 繪製(快取指標半懸空)
 +        return;
      screenCycle();
  
      if (mode == INTRO_TITLES)
-@@ -1270,7 +1371,7 @@ void IntroController::updateConfMenu(MenuEvent &event) {
+@@ -1270,7 +1400,7 @@ void IntroController::updateConfMenu(MenuEvent &event) {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -982,7 +1029,7 @@ index acdf1f74..249ed1c4 100644
  }
  
  void IntroController::updateVideoMenu(MenuEvent &event) {
-@@ -1307,7 +1408,7 @@ void IntroController::updateVideoMenu(MenuEvent &event) {
+@@ -1307,7 +1437,7 @@ void IntroController::updateVideoMenu(MenuEvent &event) {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -991,7 +1038,7 @@ index acdf1f74..249ed1c4 100644
  }
  
  void IntroController::updateGfxMenu(MenuEvent &event)
-@@ -1327,7 +1428,7 @@ void IntroController::updateGfxMenu(MenuEvent &event)
+@@ -1327,7 +1457,7 @@ void IntroController::updateGfxMenu(MenuEvent &event)
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -1000,7 +1047,7 @@ index acdf1f74..249ed1c4 100644
  }
  
  void IntroController::updateSoundMenu(MenuEvent &event) {
-@@ -1361,7 +1462,7 @@ void IntroController::updateSoundMenu(MenuEvent &event) {
+@@ -1361,7 +1491,7 @@ void IntroController::updateSoundMenu(MenuEvent &event) {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -1009,7 +1056,7 @@ index acdf1f74..249ed1c4 100644
  }
  
  void IntroController::updateInputMenu(MenuEvent &event) {
-@@ -1389,7 +1490,7 @@ void IntroController::updateInputMenu(MenuEvent &event) {
+@@ -1389,7 +1519,7 @@ void IntroController::updateInputMenu(MenuEvent &event) {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -1018,7 +1065,7 @@ index acdf1f74..249ed1c4 100644
  
      // after drawing the menu, extra menu text can be added here
      extendedMenuArea.textAt(0, 5, "Mouse Options:");
-@@ -1420,7 +1521,7 @@ void IntroController::updateSpeedMenu(MenuEvent &event) {
+@@ -1420,7 +1550,7 @@ void IntroController::updateSpeedMenu(MenuEvent &event) {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -1027,7 +1074,7 @@ index acdf1f74..249ed1c4 100644
  }
  
  void IntroController::updateGameplayMenu(MenuEvent &event) {
-@@ -1444,7 +1545,7 @@ void IntroController::updateGameplayMenu(MenuEvent &event) {
+@@ -1444,7 +1574,7 @@ void IntroController::updateGameplayMenu(MenuEvent &event) {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -1036,7 +1083,7 @@ index acdf1f74..249ed1c4 100644
  }
  
  void IntroController::updateInterfaceMenu(MenuEvent &event) {
-@@ -1468,7 +1569,7 @@ void IntroController::updateInterfaceMenu(MenuEvent &event) {
+@@ -1468,7 +1598,7 @@ void IntroController::updateInterfaceMenu(MenuEvent &event) {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -1045,7 +1092,7 @@ index acdf1f74..249ed1c4 100644
  
      // after drawing the menu, extra menu text can be added here
      extendedMenuArea.textAt(2, 3, "  (Open, Jimmy, etc.)");
-@@ -1703,8 +1804,8 @@ void IntroController::initTitles()
+@@ -1703,8 +1833,8 @@ void IntroController::initTitles()
  void IntroController::addTitle(int x, int y, int w, int h, AnimType method, int delay, int duration)
  {
      AnimElement data = {
@@ -1056,7 +1103,7 @@ index acdf1f74..249ed1c4 100644
          method,             // render method
          0,                  // animStep
          0,                  // animStepMax
-@@ -1777,8 +1878,8 @@ void IntroController::getTitleSourceData()
+@@ -1777,8 +1907,8 @@ void IntroController::getTitleSourceData()
                          color = info->image->setColor(255, (y == 2 ? 250 : 255), blue[y-1]);
                      }
                      AnimPlot plot = {
@@ -1067,7 +1114,7 @@ index acdf1f74..249ed1c4 100644
                          uint8_t(color.r),
                          uint8_t(color.g),
                          uint8_t(color.b),
-@@ -1800,15 +1901,15 @@ void IntroController::getTitleSourceData()
+@@ -1800,15 +1930,15 @@ void IntroController::getTitleSourceData()
              {
                  for (int y=0; y < titles[i].rh; y++)
                  {
@@ -1086,7 +1133,7 @@ index acdf1f74..249ed1c4 100644
                                  uint8_t(r), uint8_t(g), uint8_t(b), uint8_t(a)
                              };
                              titles[i].plotData.push_back(plot);
-@@ -1904,12 +2005,12 @@ bool IntroController::updateTitle()
+@@ -1904,12 +2034,12 @@ bool IntroController::updateTitle()
          {
              while (animStepTarget > title->animStep)
              {
@@ -1103,10 +1150,18 @@ index acdf1f74..249ed1c4 100644
                      title->plotData[title->animStep].g,
                      title->plotData[title->animStep].b);
 diff --git a/src/intro.h b/src/intro.h
-index c21ef937..f0c1c6a6 100644
+index c21ef937..f197de59 100644
 --- a/src/intro.h
 +++ b/src/intro.h
-@@ -257,7 +257,7 @@ private:
+@@ -230,6 +230,7 @@ private:
+     int beastieOffset;
+     int beastieSub[2];
+     bool beastiesVisible;
++    bool reloadingTheme;        // U4 繁中化:F2 主題重載期間,擋掉 re-entrant 繪製/輸入
+     int sleepCycles;
+     int scrPos;  /* current position in the script table */
+ #ifdef GPU_RENDER
+@@ -257,7 +258,7 @@ private:
      };
  
      struct AnimPlot {
@@ -1329,7 +1384,7 @@ index 119aca38..8c22e700 100644
                  }
                  break;
 diff --git a/src/screen.cpp b/src/screen.cpp
-index 46d51bdb..a33439a9 100644
+index 46d51bdb..76393a65 100644
 --- a/src/screen.cpp
 +++ b/src/screen.cpp
 @@ -25,6 +25,7 @@
@@ -1391,7 +1446,18 @@ index 46d51bdb..a33439a9 100644
  #ifdef GPU_RENDER
      {
      ImageInfo* tinfo;
-@@ -265,7 +276,7 @@ void screenInit(int layerCount) {
+@@ -217,6 +228,10 @@ static void screenInit_data(Screen* scr, Settings& settings) {
+     if (! scr->state.tileanims)
+         errorFatal("Unable to find tile animations");
+ 
++    // U4 繁中化:imageMgr 已就緒,刷新 TextView 的 static charset(主題切換重建 imageMgr
++    // 後,殘留的 static charset 指標會懸空 → drawChar 崩潰)。choke point 統一刷新。
++    TextView::reloadCharset();
++
+     scr->gemTilesInfo = NULL;
+     screenLoadLayoutsFromConf(scr);
+ 
+@@ -265,7 +280,7 @@ void screenInit(int layerCount) {
      xu4.screen = screen;
  
      // Create a special purpose image that represents the whole screen.
@@ -1400,7 +1466,7 @@ index 46d51bdb..a33439a9 100644
      xu4.screenImage->fill(Image::black);
  
      screenInit_sys(xu4.settings, &screen->state, SYS_CLEAN);
-@@ -302,6 +313,41 @@ void screenReInit() {
+@@ -302,6 +317,41 @@ void screenReInit() {
      //gs_emitMessage(SENDER_DISPLAY, &screen->state);
  }
  
@@ -1442,7 +1508,7 @@ index 46d51bdb..a33439a9 100644
  // Private to screenInit_sys().
  int screenInitState(ScreenState* state, const Settings* settings, int dw, int dh)
  {
-@@ -350,15 +396,30 @@ bool screenLayerUsed(int layer) {
+@@ -350,15 +400,30 @@ bool screenLayerUsed(int layer) {
      return XU4_SCREEN->layers[layer].func ? true : false;
  }
  
@@ -1473,7 +1539,7 @@ index 46d51bdb..a33439a9 100644
      for (i = 0; i < buflen; i++)
          screenShowChar(buffer[i], x + i, y);
  }
-@@ -403,6 +464,13 @@ void screenMessage(const char *fmt, ...) {
+@@ -403,6 +468,13 @@ void screenMessage(const char *fmt, ...) {
      if (! c)
          return; // Some cases (like the intro) don't have the context initiated.
  
@@ -1487,7 +1553,7 @@ index 46d51bdb..a33439a9 100644
      va_list args;
      va_start(args, fmt);
      buflen = vsnprintf(buffer, MsgBufferSize, fmt, args);
-@@ -417,36 +485,157 @@ void screenMessage(const char *fmt, ...) {
+@@ -417,36 +489,157 @@ void screenMessage(const char *fmt, ...) {
   * Center first line of text in message area.
   */
  void screenMessageCenter(const char* text, int newlines) {
@@ -1592,9 +1658,10 @@ index 46d51bdb..a33439a9 100644
 +        p += n;
 +        if (cp < 0x80) { screenShowChar((int) cp, cellX + col, cellY); col += 1; }
 +        else { cjkBlitPx(cp, (cellX + col) * CHAR_WIDTH, cellY * CHAR_HEIGHT); col += 1; }
-+    }
+     }
 +}
-+
+ 
+-    screenMessageN(start, cp - start);
 +/* U4 繁中化:把 UTF-8 中文字串畫在絕對像素 (px,py)(每字寬 CHAR_WIDTH)。
 + * 供 intro 吉普賽卡牌疊德目名等需精確落點處使用(公開)。 */
 +void screenDrawCJKPixel(const char* s, int px, int py) {
@@ -1614,10 +1681,9 @@ index 46d51bdb..a33439a9 100644
 +        }
 +        p += n;
 +        if (cp >= 0x80) { cjkBlitPx(cp, px + adv, py); adv += CHAR_WIDTH; }
-     }
++    }
 +}
- 
--    screenMessageN(start, cp - start);
++
 +/* U4 繁中化:把已翻譯的 UTF-8 中文字串渲染到文字區(CJK-aware,行距 2)。 */
 +static void screenMessageCJK(const char* s) {
 +    const int colCount = TEXT_AREA_W;
@@ -1666,7 +1732,7 @@ index 46d51bdb..a33439a9 100644
      bool colorize = xu4.settings->enhancements &&
                      xu4.settings->enhancementsOptions.textColorization;
      const int colCount = TEXT_AREA_W;
-@@ -850,11 +1039,76 @@ static void screenUploadCursor(Screen* sp, uint32_t stex) {
+@@ -850,11 +1043,76 @@ static void screenUploadCursor(Screen* sp, uint32_t stex) {
                      &cimg);
  }
  
@@ -1744,7 +1810,7 @@ index 46d51bdb..a33439a9 100644
  
      if (sp->uploadScreen) {
          sp->uploadScreen = 0;
-@@ -867,7 +1121,7 @@ void screenRender() {
+@@ -867,7 +1125,7 @@ void screenRender() {
      }
  
      if (ss->vertOffset) {
@@ -1753,7 +1819,7 @@ index 46d51bdb..a33439a9 100644
          if (! sp->clearCount)
              sp->clearCount = 1;     // Clear the top rows of pixels.
      }
-@@ -875,7 +1129,7 @@ void screenRender() {
+@@ -875,7 +1133,7 @@ void screenRender() {
          sp->clearCount -= 1;
          gpu_clear(gpu, colorBlack);
      }
@@ -1762,7 +1828,7 @@ index 46d51bdb..a33439a9 100644
      gpu_drawTextureScaled(gpu, gpu_screenTexture(gpu));
  
  #ifdef GPU_RENDER
-@@ -903,7 +1157,7 @@ void screenRender() {
+@@ -903,7 +1161,7 @@ void screenRender() {
          if (view->scissor)
              gpu_setScissor(NULL);
  
@@ -1771,7 +1837,7 @@ index 46d51bdb..a33439a9 100644
      }
  #endif
  
-@@ -1490,9 +1744,16 @@ static int pointInTriangle(int x, int y, int tx1, int ty1, int tx2, int ty2, int
+@@ -1490,9 +1748,16 @@ static int pointInTriangle(int x, int y, int tx1, int ty1, int tx2, int ty2, int
   */
  void screenPointToMouseArea(int* x, int* y) {
      const Screen* sp = XU4_SCREEN;
@@ -2224,7 +2290,7 @@ index dce16b5b..42e5504b 100644
                   const uint8_t* it, unsigned int len);
  float txf_emWidth(const TxfHeader*, const uint8_t* it, unsigned int len);
 diff --git a/src/textview.cpp b/src/textview.cpp
-index eb6fcc03..fa60a2ab 100644
+index eb6fcc03..15b1c829 100644
 --- a/src/textview.cpp
 +++ b/src/textview.cpp
 @@ -3,6 +3,7 @@
@@ -2244,7 +2310,28 @@ index eb6fcc03..fa60a2ab 100644
  
  using std::string;
  
-@@ -161,6 +164,61 @@ string TextView::highlightKey(const string& input, unsigned int keyIndex) {
+@@ -33,7 +36,19 @@ TextView::TextView(int x, int y, int columns, int rows)
+ 
+ void TextView::reinit() {
+     View::reinit();
+-    charset = xu4.imageMgr->get(BKGD_CHARSET)->image;
++    reloadCharset();
++}
++
++/*
++ * U4 繁中化:重新指向『目前』imageMgr 的 charset 字型圖。charset 是 static(所有
++ * TextView 共用),主題切換(F2)的 screenReInit 重建 imageMgr 後舊 charset Image 被
++ * 釋放 → 殘留的 static 指標懸空 → drawChar/drawLetter 崩潰。於 screenReInit 的
++ * choke point(screenInit_data)呼叫本函式,確保任何重建後 charset 立即有效。NULL-safe。
++ */
++void TextView::reloadCharset() {
++    ImageInfo* info = xu4.imageMgr->get(BKGD_CHARSET);
++    if (info && info->image)
++        charset = info->image;
+ }
+ 
+ const RGBA fontColor[25] = {
+@@ -161,6 +176,61 @@ string TextView::highlightKey(const string& input, unsigned int keyIndex) {
  }
  
  void TextView::textAt(int x, int y, const char *text) {
@@ -2306,7 +2393,7 @@ index eb6fcc03..fa60a2ab 100644
      int ch;
      while ((ch = *text++)) {
          switch (ch) {
-@@ -192,6 +250,11 @@ void TextView::textAtFmt(int x, int y, const char *fmt, ...) {
+@@ -192,6 +262,11 @@ void TextView::textAtFmt(int x, int y, const char *fmt, ...) {
      char buffer[512];
      va_list args;
  
@@ -2318,7 +2405,7 @@ index eb6fcc03..fa60a2ab 100644
      va_start(args, fmt);
      vsnprintf(buffer, sizeof(buffer), fmt, args);
      va_end(args);
-@@ -203,6 +266,9 @@ void TextView::textAtFmt(int x, int y, const char *fmt, ...) {
+@@ -203,6 +278,9 @@ void TextView::textAtFmt(int x, int y, const char *fmt, ...) {
   * Draw text with a single character highlighted.
   */
  void TextView::textAtKey(int x, int y, const char *text, int keyIndex) {
@@ -2329,7 +2416,7 @@ index eb6fcc03..fa60a2ab 100644
      textAt(x, y, ctext.c_str());
  }
 diff --git a/src/textview.h b/src/textview.h
-index 8bfa3de0..095db109 100644
+index 8bfa3de0..9c78eaaf 100644
 --- a/src/textview.h
 +++ b/src/textview.h
 @@ -11,8 +11,8 @@
@@ -2343,8 +2430,54 @@ index 8bfa3de0..095db109 100644
  
  #include <string>
  #include "view.h"
+@@ -41,6 +41,7 @@ public:
+     TextView(int x, int y, int columns, int rows);
+ 
+     void reinit();
++    static void reloadCharset();    // U4 繁中化:主題切換後刷新 static charset(防懸空)
+ 
+     int cursorX() const { return _cursorX; }
+     int cursorY() const { return _cursorY; }
+diff --git a/src/tileanim.cpp b/src/tileanim.cpp
+index bafea6b3..e8f3f9a3 100644
+--- a/src/tileanim.cpp
++++ b/src/tileanim.cpp
+@@ -189,3 +189,21 @@ TileAnim* TileAnimSet::getByName(Symbol name) const
+         return NULL;
+     return i->second;
+ }
++
++/*
++ * U4 繁中化:檢查 anim 指標是否為本集合的成員。
++ * 主題切換(F2)會 delete 舊 tileanims 再建新;若某 tile 的 anim 仍指向舊集合已釋放的
++ * TileAnim,其指標值不會出現在新集合 → 回傳 false,呼叫端據此退回靜態繪製,避免
++ * 在 TileAnim::draw deref 懸空指標而 segfault。只比對指標『值』、不 deref 傳入指標,
++ * 故對懸空指標安全。集合很小(~20),線性掃描即可。
++ */
++bool TileAnimSet::contains(const TileAnim* a) const
++{
++    if (! a)
++        return false;
++    for (TileAnimMap::const_iterator i = tileanims.begin();
++         i != tileanims.end(); ++i)
++        if (i->second == a)
++            return true;
++    return false;
++}
+diff --git a/src/tileanim.h b/src/tileanim.h
+index 914bb895..c72fb03e 100644
+--- a/src/tileanim.h
++++ b/src/tileanim.h
+@@ -109,6 +109,7 @@ public:
+ 
+     ~TileAnimSet();
+     TileAnim* getByName(Symbol name) const;
++    bool contains(const TileAnim* a) const;     // U4 繁中化:驗證 anim 指標是否屬本集合
+ 
+     TileAnimMap tileanims;
+ };
 diff --git a/src/tileview.cpp b/src/tileview.cpp
-index f13c0c5d..3c5e55a4 100644
+index f13c0c5d..5a431495 100644
 --- a/src/tileview.cpp
 +++ b/src/tileview.cpp
 @@ -46,6 +46,11 @@ TileView::~TileView() {
@@ -2359,7 +2492,7 @@ index f13c0c5d..3c5e55a4 100644
      //Scratchpad needs to be re-inited if we rescale...
      if (animated)
      {
-@@ -75,6 +80,11 @@ void TileView::drawTile(const MapTile &mapTile, int x, int y) {
+@@ -75,8 +80,19 @@ void TileView::drawTile(const MapTile &mapTile, int x, int y) {
      ASSERT(x < columns, "x value of %d out of range", x);
      ASSERT(y < rows, "y value of %d out of range", y);
  
@@ -2368,9 +2501,18 @@ index f13c0c5d..3c5e55a4 100644
 +    if (!tile || !tile->getImage())
 +        return;
 +
++    /* U4 繁中化:只有當 tile 的 anim 確實屬於『目前』tileanims 才動畫繪製。
++       主題切換(F2)delete 舊 tileanims 後,殘留 tile 的 anim 會懸空,直接 deref 會在
++       TileAnim::draw 崩潰(intro F2 切換後的 segfault)。anim 不在現用集合 → 退回靜態繪製。 */
++    const TileAnimSet* curAnims = screenState()->tileanims;
++    bool animOK = tile->getAnim() && curAnims && curAnims->contains(tile->getAnim());
++
      // draw the tile to the screen
-     if (tile->getAnim()) {
+-    if (tile->getAnim()) {
++    if (animOK) {
          // First, create our animated version of the tile
+         tile->getAnim()->draw(animated, tile, mapTile, DIR_NONE);
+ 
 diff --git a/src/u4.h b/src/u4.h
 index 767f30a8..3f6abe41 100644
 --- a/src/u4.h
