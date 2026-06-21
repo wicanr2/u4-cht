@@ -2313,3 +2313,40 @@ index 6a01ed5..f7483e0 100644
  #if defined(MACOSX)
      osxInit(argv[0]);
  #endif
+diff --git a/src/script_boron.cpp b/src/script_boron.cpp
+index 20691ed2..9eb162f2 100644
+--- a/src/script_boron.cpp
++++ b/src/script_boron.cpp
+@@ -286,8 +286,30 @@ CFUNC(cf_screenMessage)
+     if (ur_is(a1, UT_STRING)) {
+         USeriesIter si;
+         ur_seriesSlice(ut, &si, a1);
+-        ur_strTermNull((UBuffer*) si.buf);
+-        screenMessage(si.buf->ptr.c + si.it);
++        // U4 繁中化:Boron 對含 CJK(碼位 >255)的字串字面以 UCS-2 儲存。原碼把
++        // ptr.c 當位元組字串直送 screenMessage → UCS-2 被誤讀成亂碼(vendor 全花)。
++        // 偵測 UCS-2 即逐碼位轉 UTF-8 再輸出;Latin1/UTF-8 維持原路徑。
++        if (ur_strIsUcs2(si.buf)) {
++            std::string utf8;
++            const uint16_t* u = si.buf->ptr.u16;
++            for (UIndex i = si.it; i < si.end; ++i) {
++                unsigned cp = u[i];
++                if (cp < 0x80)
++                    utf8 += (char) cp;
++                else if (cp < 0x800) {
++                    utf8 += (char) (0xC0 | (cp >> 6));
++                    utf8 += (char) (0x80 | (cp & 0x3F));
++                } else {
++                    utf8 += (char) (0xE0 | (cp >> 12));
++                    utf8 += (char) (0x80 | ((cp >> 6) & 0x3F));
++                    utf8 += (char) (0x80 | (cp & 0x3F));
++                }
++            }
++            screenMessage("%s", utf8.c_str());
++        } else {
++            ur_strTermNull((UBuffer*) si.buf);
++            screenMessage("%s", si.buf->ptr.c + si.it);
++        }
+     }
+     else if (ur_is(a1, UT_CHAR)) {
+         screenMessage("%c", (int) ur_char(a1));
