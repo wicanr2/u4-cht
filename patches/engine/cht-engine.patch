@@ -445,7 +445,7 @@ index 8f3dce0..5b8bddc 100644
          case ALLEGRO_EVENT_DISPLAY_SWITCH_IN:
              expose();
 diff --git a/src/game.cpp b/src/game.cpp
-index 5c359b0..d2ec3af 100644
+index 5c359b0..c1c6b48 100644
 --- a/src/game.cpp
 +++ b/src/game.cpp
 @@ -4,8 +4,10 @@
@@ -459,7 +459,7 @@ index 5c359b0..d2ec3af 100644
  #include "city.h"
  #include "config.h"
  #include "debug.h"
-@@ -418,6 +420,99 @@ void gameUpdateScreen() {
+@@ -418,6 +420,92 @@ void gameUpdateScreen() {
      }
  }
  
@@ -522,14 +522,7 @@ index 5c359b0..d2ec3af 100644
 +
 +    cur = nxt;
 +    xu4.config = cache[cur];
-+    screenReInit();
-+
-+    {   /* 視窗標題列顯示目前主題(intro 預覽 / 遊戲中皆更新)*/
-+        char wtitle[160];
-+        snprintf(wtitle, sizeof(wtitle), "Ultima IV 繁中化 — %s",
-+                 themes[cur].label);
-+        screenSetWindowTitle(wtitle);
-+    }
++    screenReInit();     // → screenInit_data → screenSetThemeTitle:視窗標題自動更新為新主題
 +
 +    /* 遊戲中(有 location)才更新地圖堆疊 / 音樂 / 訊息;intro 預覽時 c 為 NULL,
 +       由呼叫端(IntroController)負責重載 intro 美術並重畫。 */
@@ -559,7 +552,7 @@ index 5c359b0..d2ec3af 100644
  void GameController::setMap(Map *map, bool saveLocation, const Portal *portal, TurnController *turnCompleter) {
      int viewMode;
      LocationContext context;
-@@ -1183,8 +1278,10 @@ bool GameController::keyPressed(int key) {
+@@ -1183,8 +1271,10 @@ bool GameController::keyPressed(int key) {
                      if (*item->isItemInInventory != NULL && (*item->isItemInInventory)(item->data))
                          screenMessage("%cNothing Here!%c\n", FG_GREY, FG_WHITE);
                      else {
@@ -572,7 +565,7 @@ index 5c359b0..d2ec3af 100644
                          (*item->putItemInInventory)(item->data);
                      }
                  } else
-@@ -3452,7 +3549,7 @@ showMixturesSuper(int page = 0) {
+@@ -3452,7 +3542,7 @@ showMixturesSuper(int page = 0) {
  
      const Spell *s = getSpell(i + 13 * page);
      int line = i + 8;
@@ -1429,7 +1422,7 @@ index 119aca3..8c22e70 100644
                  }
                  break;
 diff --git a/src/screen.cpp b/src/screen.cpp
-index 46d51bd..70057bb 100644
+index 46d51bd..0c319e7 100644
 --- a/src/screen.cpp
 +++ b/src/screen.cpp
 @@ -25,6 +25,7 @@
@@ -1482,7 +1475,34 @@ index 46d51bd..70057bb 100644
          }
          delete dungeonView;
          delete[] msgBuffer;
-@@ -189,6 +198,8 @@ static void screenInit_data(Screen* scr, Settings& settings) {
+@@ -176,6 +185,26 @@ static void initDungeonTileChars(std::map<string, int>& dungeonTileChars) {
+     dungeonTileChars["sleep_field"] = '^';
+ }
+ 
++/*
++ * U4 繁中化:視窗標題列標明目前主題(版本)。在 screenInit_data 呼叫 → 啟動與每次
++ * screenReInit(含 F2 切主題)都會更新,故開場就標明「圖形:EGA/VGA/FM Towns…」,
++ * 不必等按 F2。主題由模組名(gameTitle)判別,EGA/VGA 再以 imageMgr.usingVGA() 細分。
++ */
++static void screenSetThemeTitle() {
++    char mod[64];
++    xu4.config->gameTitle(mod);
++    const char* label;
++    if      (strstr(mod, "FMTowns")) label = "FM Towns";
++    else if (strstr(mod, "Amiga"))   label = "Amiga";
++    else if (strstr(mod, "MSX"))     label = "MSX2";
++    else if (strstr(mod, "X68"))     label = "X68000";
++    else if (strstr(mod, "SMS"))     label = "Sega MS";
++    else label = (xu4.imageMgr && xu4.imageMgr->usingVGA()) ? "VGA" : "EGA";
++    char title[160];
++    snprintf(title, sizeof(title), "Ultima IV 繁中化 — 圖形:%s", label);
++    screenSetWindowTitle(title);
++}
++
+ static void screenInit_data(Screen* scr, Settings& settings) {
+ #ifdef GPU_RENDER
+     scr->mapId = -1;
+@@ -189,6 +218,8 @@ static void screenInit_data(Screen* scr, Settings& settings) {
      if (! scr->charsetInfo)
          errorLoadImage(BKGD_CHARSET);
  
@@ -1491,18 +1511,19 @@ index 46d51bd..70057bb 100644
  #ifdef GPU_RENDER
      {
      ImageInfo* tinfo;
-@@ -217,6 +228,10 @@ static void screenInit_data(Screen* scr, Settings& settings) {
+@@ -217,6 +248,11 @@ static void screenInit_data(Screen* scr, Settings& settings) {
      if (! scr->state.tileanims)
          errorFatal("Unable to find tile animations");
  
 +    // U4 繁中化:imageMgr 已就緒,刷新 TextView 的 static charset(主題切換重建 imageMgr
 +    // 後,殘留的 static charset 指標會懸空 → drawChar 崩潰)。choke point 統一刷新。
 +    TextView::reloadCharset();
++    screenSetThemeTitle();      // 視窗標題標明目前主題(啟動即顯示,不必等 F2)
 +
      scr->gemTilesInfo = NULL;
      screenLoadLayoutsFromConf(scr);
  
-@@ -265,7 +280,7 @@ void screenInit(int layerCount) {
+@@ -265,7 +301,7 @@ void screenInit(int layerCount) {
      xu4.screen = screen;
  
      // Create a special purpose image that represents the whole screen.
@@ -1511,7 +1532,7 @@ index 46d51bd..70057bb 100644
      xu4.screenImage->fill(Image::black);
  
      screenInit_sys(xu4.settings, &screen->state, SYS_CLEAN);
-@@ -302,6 +317,41 @@ void screenReInit() {
+@@ -302,6 +338,41 @@ void screenReInit() {
      //gs_emitMessage(SENDER_DISPLAY, &screen->state);
  }
  
@@ -1553,7 +1574,7 @@ index 46d51bd..70057bb 100644
  // Private to screenInit_sys().
  int screenInitState(ScreenState* state, const Settings* settings, int dw, int dh)
  {
-@@ -350,15 +400,30 @@ bool screenLayerUsed(int layer) {
+@@ -350,15 +421,30 @@ bool screenLayerUsed(int layer) {
      return XU4_SCREEN->layers[layer].func ? true : false;
  }
  
@@ -1584,7 +1605,7 @@ index 46d51bd..70057bb 100644
      for (i = 0; i < buflen; i++)
          screenShowChar(buffer[i], x + i, y);
  }
-@@ -403,6 +468,13 @@ void screenMessage(const char *fmt, ...) {
+@@ -403,6 +489,13 @@ void screenMessage(const char *fmt, ...) {
      if (! c)
          return; // Some cases (like the intro) don't have the context initiated.
  
@@ -1598,7 +1619,7 @@ index 46d51bd..70057bb 100644
      va_list args;
      va_start(args, fmt);
      buflen = vsnprintf(buffer, MsgBufferSize, fmt, args);
-@@ -417,36 +489,157 @@ void screenMessage(const char *fmt, ...) {
+@@ -417,36 +510,157 @@ void screenMessage(const char *fmt, ...) {
   * Center first line of text in message area.
   */
  void screenMessageCenter(const char* text, int newlines) {
@@ -1668,11 +1689,6 @@ index 46d51bd..70057bb 100644
 +            screen->putPixel(px + x, py + y, a, a, a, 255);
 +        }
 +}
-+
-+/* 文字區 cell(col,line)→ 絕對像素 blit。 */
-+static void cjkBlit(uint32_t cp, int col, int line) {
-+    cjkBlitPx(cp, (TEXT_AREA_X + col) * CHAR_WIDTH, (TEXT_AREA_Y + line) * CHAR_HEIGHT);
-+}
  
 -    if (! endOfLine)
 -        endOfLine = cp;
@@ -1680,6 +1696,14 @@ index 46d51bd..70057bb 100644
 -    if (lineLen > TEXT_AREA_W)
 -        lineLen = TEXT_AREA_W;
 -    start -= half - (lineLen+1) / 2;    // Indent
++/* 文字區 cell(col,line)→ 絕對像素 blit。 */
++static void cjkBlit(uint32_t cp, int col, int line) {
++    cjkBlitPx(cp, (TEXT_AREA_X + col) * CHAR_WIDTH, (TEXT_AREA_Y + line) * CHAR_HEIGHT);
++}
+ 
+-    while (newlines) {
+-        --newlines;
+-        *cp++ = '\n';
 +/* U4 繁中化:把已翻譯 UTF-8 字串渲染到絕對 cell(cellX,cellY)起(單行,夾雜 ASCII)。
 + * 供 screenTextAt(HUD)使用。 */
 +static void screenDrawCJKAt(const char* s, int cellX, int cellY) {
@@ -1700,12 +1724,10 @@ index 46d51bd..70057bb 100644
 +        p += n;
 +        if (cp < 0x80) { screenShowChar((int) cp, cellX + col, cellY); col += 1; }
 +        else { cjkBlitPx(cp, (cellX + col) * CHAR_WIDTH, cellY * CHAR_HEIGHT); col += 1; }
-+    }
+     }
 +}
  
--    while (newlines) {
--        --newlines;
--        *cp++ = '\n';
+-    screenMessageN(start, cp - start);
 +/* U4 繁中化:把 UTF-8 中文字串畫在絕對像素 (px,py)(每字寬 CHAR_WIDTH)。
 + * 供 intro 吉普賽卡牌疊德目名等需精確落點處使用(公開)。 */
 +void screenDrawCJKPixel(const char* s, int px, int py) {
@@ -1725,10 +1747,9 @@ index 46d51bd..70057bb 100644
 +        }
 +        p += n;
 +        if (cp >= 0x80) { cjkBlitPx(cp, px + adv, py); adv += CHAR_WIDTH; }
-     }
++    }
 +}
- 
--    screenMessageN(start, cp - start);
++
 +/* U4 繁中化:把已翻譯的 UTF-8 中文字串渲染到文字區(CJK-aware,行距 2)。 */
 +static void screenMessageCJK(const char* s) {
 +    const int colCount = TEXT_AREA_W;
@@ -1777,7 +1798,7 @@ index 46d51bd..70057bb 100644
      bool colorize = xu4.settings->enhancements &&
                      xu4.settings->enhancementsOptions.textColorization;
      const int colCount = TEXT_AREA_W;
-@@ -850,11 +1043,76 @@ static void screenUploadCursor(Screen* sp, uint32_t stex) {
+@@ -850,11 +1064,76 @@ static void screenUploadCursor(Screen* sp, uint32_t stex) {
                      &cimg);
  }
  
@@ -1855,7 +1876,7 @@ index 46d51bd..70057bb 100644
  
      if (sp->uploadScreen) {
          sp->uploadScreen = 0;
-@@ -867,7 +1125,7 @@ void screenRender() {
+@@ -867,7 +1146,7 @@ void screenRender() {
      }
  
      if (ss->vertOffset) {
@@ -1864,7 +1885,7 @@ index 46d51bd..70057bb 100644
          if (! sp->clearCount)
              sp->clearCount = 1;     // Clear the top rows of pixels.
      }
-@@ -875,7 +1133,7 @@ void screenRender() {
+@@ -875,7 +1154,7 @@ void screenRender() {
          sp->clearCount -= 1;
          gpu_clear(gpu, colorBlack);
      }
@@ -1873,7 +1894,7 @@ index 46d51bd..70057bb 100644
      gpu_drawTextureScaled(gpu, gpu_screenTexture(gpu));
  
  #ifdef GPU_RENDER
-@@ -903,7 +1161,7 @@ void screenRender() {
+@@ -903,7 +1182,7 @@ void screenRender() {
          if (view->scissor)
              gpu_setScissor(NULL);
  
@@ -1882,7 +1903,7 @@ index 46d51bd..70057bb 100644
      }
  #endif
  
-@@ -1488,11 +1746,25 @@ static int pointInTriangle(int x, int y, int tx1, int ty1, int tx2, int ty2, int
+@@ -1488,11 +1767,25 @@ static int pointInTriangle(int x, int y, int tx1, int ty1, int tx2, int ty2, int
  /*
   * Transform window x,y to MouseArea coordinate system.
   */
