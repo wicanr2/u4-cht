@@ -1,0 +1,8 @@
+# 除錯用:FROM xu4-allegro,裝 gdb + xdotool + twm(WM 讓 xdotool 送鍵可靠)+ xvfb,
+# 並以 -g -O0 重編 xu4(完整符號 + 變數可檢視)。配 docker/dbg-repro.sh 自動重現 F2 crash。
+FROM u4cht/xu4-test
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      gdb xdotool twm x11-utils && rm -rf /var/lib/apt/lists/*
+# 以除錯旗標重編(去掉 -O3 -DNDEBUG → -g -O0;NDEBUG 拿掉讓 assert 也會觸發)
+RUN sed -i 's/CXXFLAGS+=-O3 -DNDEBUG/CXXFLAGS+=-g -O0/' /build/xu4/src/Makefile && \
+    make -C /build/xu4/src clean >/dev/null && make -C /build/xu4/src xu4 2>&1 | tail -3
