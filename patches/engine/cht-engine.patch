@@ -324,10 +324,10 @@ index 8f3dce0..5b8bddc 100644
          case ALLEGRO_EVENT_DISPLAY_SWITCH_IN:
              expose();
 diff --git a/src/game.cpp b/src/game.cpp
-index 5c359b0..3434275 100644
+index 5c359b0..846c32b 100644
 --- a/src/game.cpp
 +++ b/src/game.cpp
-@@ -418,6 +418,77 @@ void gameUpdateScreen() {
+@@ -418,6 +418,83 @@ void gameUpdateScreen() {
      }
  }
  
@@ -346,7 +346,9 @@ index 5c359b0..3434275 100644
 + * 雙 config 並存(不 free,避免懸空):啟動 config 歸入對應槽,另一套首次 configInit。
 + */
 +bool gameToggleGraphics() {
-+    if (xu4.stage != StagePlay || !xu4.imageMgr || !c || !c->location)
++    // U4 繁中化:intro 標題/選單也可預覽切換主題,故只要求 imageMgr 存在;
++    // location 相關更新(map/音樂/訊息)再個別 gate 在 c->location。
++    if (! xu4.imageMgr)
 +        return false;
 +
 +    /* U4 繁中化:F2 主題循環(可擴)。EGA → VGA → FM Towns → 循環。
@@ -384,28 +386,32 @@ index 5c359b0..3434275 100644
 +    xu4.config = cache[cur];
 +    screenReInit();
 +
-+    /* 把 location 堆疊每張 map 重新指向新 config 同 ID 的 map(不用 setMap)*/
-+    for (Location* loc = c->location; loc; loc = loc->prev) {
-+        Map* nm = xu4.config->map(loc->map->id);
-+        if (nm) loc->map = nm;
++    /* 遊戲中(有 location)才更新地圖堆疊 / 音樂 / 訊息;intro 預覽時 c 為 NULL,
++       由呼叫端(IntroController)負責重載 intro 美術並重畫。 */
++    if (c && c->location) {
++        /* 把 location 堆疊每張 map 重新指向新 config 同 ID 的 map(不用 setMap)*/
++        for (Location* loc = c->location; loc; loc = loc->prev) {
++            Map* nm = xu4.config->map(loc->map->id);
++            if (nm) loc->map = nm;
++        }
++        xu4.game->mapArea.reinit(); /* mapArea.tileset 重新指向新 config 的 tileset */
++
++        /* U4 繁中化:音樂跟主題切換 —— 各主題用自己 config 的音樂(EGA/VGA=DOS、
++           FM Towns=CD 音軌;無自訂音樂的主題沿用父模組 DOS 音樂)。musicStop 重置
++           currentTrack,musicPlayLocale 才會從新 config 重載當前 map 的音樂。 */
++        musicStop();
++        musicPlayLocale();
++
++        screenMessage("\n%s\n", themes[cur].label);
++        gameUpdateScreen();
 +    }
-+    xu4.game->mapArea.reinit();     /* mapArea.tileset 重新指向新 config 的 tileset */
-+
-+    /* U4 繁中化:音樂跟主題切換 —— 各主題用自己 config 的音樂(EGA/VGA=DOS、
-+       FM Towns=CD 音軌;無自訂音樂的主題沿用父模組 DOS 音樂)。musicStop 重置
-+       currentTrack,musicPlayLocale 才會從新 config 重載當前 map 的音樂。 */
-+    musicStop();
-+    musicPlayLocale();
-+
-+    screenMessage("\n%s\n", themes[cur].label);
-+    gameUpdateScreen();
 +    return true;
 +}
 +
  void GameController::setMap(Map *map, bool saveLocation, const Portal *portal, TurnController *turnCompleter) {
      int viewMode;
      LocationContext context;
-@@ -3452,7 +3523,7 @@ showMixturesSuper(int page = 0) {
+@@ -3452,7 +3529,7 @@ showMixturesSuper(int page = 0) {
  
      const Spell *s = getSpell(i + 13 * page);
      int line = i + 8;
@@ -548,10 +554,19 @@ index fd2d981..a309fe5 100644
      uint8_t fixup;              /**< a routine to do miscellaneous fixes to the image */
      Image *image;               /**< the image we're describing */
 diff --git a/src/intro.cpp b/src/intro.cpp
-index acdf1f7..2dcccc6 100644
+index acdf1f7..9d0a541 100644
 --- a/src/intro.cpp
 +++ b/src/intro.cpp
-@@ -20,6 +20,7 @@
+@@ -11,6 +11,8 @@
+ 
+ #include "debug.h"
+ #include "error.h"
++#include "event.h"     // U4_FKEY(F2/F3)
++#include "game.h"      // gameToggleGraphics(intro 預覽切主題)
+ #include "imagemgr.h"
+ #include "sound.h"
+ #include "party.h"
+@@ -20,6 +22,7 @@
  #include "u4file.h"
  #include "utils.h"
  #include "xu4.h"
@@ -559,7 +574,7 @@ index acdf1f7..2dcccc6 100644
  
  #ifdef GPU_RENDER
  extern bool loadMapData(Map *map, U4FILE *uf, Symbol borderTile);
-@@ -33,9 +34,12 @@ using namespace std;
+@@ -33,9 +36,12 @@ using namespace std;
  #define INTRO_MAP_HEIGHT 5
  #define INTRO_MAP_WIDTH 19
  #define INTRO_TEXT_X 0
@@ -574,7 +589,36 @@ index acdf1f7..2dcccc6 100644
  
  #define GYP_PLACES_FIRST 0
  #define GYP_PLACES_TWOMORE 1
-@@ -661,7 +665,7 @@ void IntroController::drawBeastie(int beast, int vertoffset, int frame) {
+@@ -416,6 +422,28 @@ uint8_t *IntroController::getSigData() {
+ bool IntroController::keyPressed(int key) {
+     bool valid = true;
+ 
++    /* U4 繁中化:在標題場景 / 主選單可預覽切換主題(F2)與縮放(F3)。切換會 screenReInit /
++       換模組 → imageMgr 重建使 intro 快取的美術懸空,故須 deleteIntro()+init() 重載;
++       設 bSkipTitles 讓重載後停在主選單(不重播片頭)。角色創建走另一條阻塞輸入流,
++       不會進到這裡,故不影響創角。 */
++    if ((key == U4_FKEY + 1 || key == U4_FKEY + 2) &&
++        (mode == INTRO_MAP || mode == INTRO_MENU)) {
++        if (key == U4_FKEY + 1) {
++            if (! gameToggleGraphics())     // 切下一個可用主題(含 screenReInit)
++                return true;
++        } else {
++            int s = xu4.settings->scale + 1;
++            if (s > 4) s = 1;
++            xu4.settings->scale = s;
++            screenReInit();
++        }
++        bSkipTitles = true;
++        deleteIntro();
++        init();
++        updateScreen();
++        return true;
++    }
++
+     switch (mode) {
+ 
+     case INTRO_TITLES:
+@@ -661,7 +689,7 @@ void IntroController::drawBeastie(int beast, int vertoffset, int frame) {
      ASSERT(beast == 0 || beast == 1, "invalid beast: %d", beast);
  
      backgroundArea.draw(beastiesImg, beastieSub[beast] + frame,
@@ -583,7 +627,7 @@ index acdf1f7..2dcccc6 100644
                          vertoffset);
  }
  
-@@ -721,7 +725,27 @@ void IntroController::drawCard(int card, int x, int y) {
+@@ -721,7 +749,27 @@ void IntroController::drawCard(int card, int x, int y) {
      };
      ASSERT(card < 8, "invalid card: %d", card);
  
@@ -612,7 +656,7 @@ index acdf1f7..2dcccc6 100644
  }
  
  /**
-@@ -753,6 +777,18 @@ void IntroController::updateScreen() {
+@@ -753,6 +801,18 @@ void IntroController::updateScreen() {
          backgroundArea.draw(BKGD_INTRO);
          drawMap();
          drawBeasties();
@@ -631,7 +675,7 @@ index acdf1f7..2dcccc6 100644
          // display the profile name if a local profile is being used
          {
          const string& pname = xu4.settings->profile;
-@@ -764,7 +800,7 @@ void IntroController::updateScreen() {
+@@ -764,7 +824,7 @@ void IntroController::updateScreen() {
      case INTRO_MENU:
          // draw the extended background for all option screens
          backgroundArea.draw(BKGD_INTRO);
@@ -640,7 +684,7 @@ index acdf1f7..2dcccc6 100644
  
          // if there is an error message to display, show it
          if (xu4.errorMessage)
-@@ -780,7 +816,7 @@ void IntroController::updateScreen() {
+@@ -780,7 +840,7 @@ void IntroController::updateScreen() {
              EventHandler::wait_msecs(3000);
              // clear the screen again
              backgroundArea.draw(BKGD_INTRO);
@@ -649,7 +693,7 @@ index acdf1f7..2dcccc6 100644
          }
  
          menuArea.textAt(1,  1, "In another world, in a time to come.");
-@@ -808,7 +844,7 @@ void IntroController::updateScreen() {
+@@ -808,7 +868,7 @@ void IntroController::updateScreen() {
  void IntroController::initiateNewGame() {
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_INTRO);
@@ -658,7 +702,7 @@ index acdf1f7..2dcccc6 100644
  
      // display name prompt and read name from keyboard
      menuArea.textAt(3, 3, "By what name shalt thou be known");
-@@ -831,7 +867,7 @@ void IntroController::initiateNewGame() {
+@@ -831,7 +891,7 @@ void IntroController::initiateNewGame() {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_INTRO);
@@ -667,7 +711,7 @@ index acdf1f7..2dcccc6 100644
  
      // display sex prompt and read sex from keyboard
      menuArea.textAt(3, 3, "Art thou Male or Female?");
-@@ -1103,7 +1139,7 @@ void IntroController::journeyOnward() {
+@@ -1103,7 +1163,7 @@ void IntroController::journeyOnward() {
  void IntroController::about() {
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_INTRO);
@@ -676,7 +720,7 @@ index acdf1f7..2dcccc6 100644
  
      screenHideCursor();
      menuArea.textAtFmt(14, 1, "XU4 %s", VERSION);
-@@ -1125,7 +1161,9 @@ void IntroController::about() {
+@@ -1125,7 +1185,9 @@ void IntroController::about() {
   * Shows text in the question area.
   */
  void IntroController::showText(const string &text) {
@@ -687,7 +731,7 @@ index acdf1f7..2dcccc6 100644
      int lineNo = 0;
  
      questionArea.clear();
-@@ -1270,7 +1308,7 @@ void IntroController::updateConfMenu(MenuEvent &event) {
+@@ -1270,7 +1332,7 @@ void IntroController::updateConfMenu(MenuEvent &event) {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -696,7 +740,7 @@ index acdf1f7..2dcccc6 100644
  }
  
  void IntroController::updateVideoMenu(MenuEvent &event) {
-@@ -1307,7 +1345,7 @@ void IntroController::updateVideoMenu(MenuEvent &event) {
+@@ -1307,7 +1369,7 @@ void IntroController::updateVideoMenu(MenuEvent &event) {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -705,7 +749,7 @@ index acdf1f7..2dcccc6 100644
  }
  
  void IntroController::updateGfxMenu(MenuEvent &event)
-@@ -1327,7 +1365,7 @@ void IntroController::updateGfxMenu(MenuEvent &event)
+@@ -1327,7 +1389,7 @@ void IntroController::updateGfxMenu(MenuEvent &event)
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -714,7 +758,7 @@ index acdf1f7..2dcccc6 100644
  }
  
  void IntroController::updateSoundMenu(MenuEvent &event) {
-@@ -1361,7 +1399,7 @@ void IntroController::updateSoundMenu(MenuEvent &event) {
+@@ -1361,7 +1423,7 @@ void IntroController::updateSoundMenu(MenuEvent &event) {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -723,7 +767,7 @@ index acdf1f7..2dcccc6 100644
  }
  
  void IntroController::updateInputMenu(MenuEvent &event) {
-@@ -1389,7 +1427,7 @@ void IntroController::updateInputMenu(MenuEvent &event) {
+@@ -1389,7 +1451,7 @@ void IntroController::updateInputMenu(MenuEvent &event) {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -732,7 +776,7 @@ index acdf1f7..2dcccc6 100644
  
      // after drawing the menu, extra menu text can be added here
      extendedMenuArea.textAt(0, 5, "Mouse Options:");
-@@ -1420,7 +1458,7 @@ void IntroController::updateSpeedMenu(MenuEvent &event) {
+@@ -1420,7 +1482,7 @@ void IntroController::updateSpeedMenu(MenuEvent &event) {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -741,7 +785,7 @@ index acdf1f7..2dcccc6 100644
  }
  
  void IntroController::updateGameplayMenu(MenuEvent &event) {
-@@ -1444,7 +1482,7 @@ void IntroController::updateGameplayMenu(MenuEvent &event) {
+@@ -1444,7 +1506,7 @@ void IntroController::updateGameplayMenu(MenuEvent &event) {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -750,7 +794,7 @@ index acdf1f7..2dcccc6 100644
  }
  
  void IntroController::updateInterfaceMenu(MenuEvent &event) {
-@@ -1468,7 +1506,7 @@ void IntroController::updateInterfaceMenu(MenuEvent &event) {
+@@ -1468,7 +1530,7 @@ void IntroController::updateInterfaceMenu(MenuEvent &event) {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -759,7 +803,7 @@ index acdf1f7..2dcccc6 100644
  
      // after drawing the menu, extra menu text can be added here
      extendedMenuArea.textAt(2, 3, "  (Open, Jimmy, etc.)");
-@@ -1703,8 +1741,8 @@ void IntroController::initTitles()
+@@ -1703,8 +1765,8 @@ void IntroController::initTitles()
  void IntroController::addTitle(int x, int y, int w, int h, AnimType method, int delay, int duration)
  {
      AnimElement data = {
@@ -770,7 +814,7 @@ index acdf1f7..2dcccc6 100644
          method,             // render method
          0,                  // animStep
          0,                  // animStepMax
-@@ -1777,8 +1815,8 @@ void IntroController::getTitleSourceData()
+@@ -1777,8 +1839,8 @@ void IntroController::getTitleSourceData()
                          color = info->image->setColor(255, (y == 2 ? 250 : 255), blue[y-1]);
                      }
                      AnimPlot plot = {
@@ -781,7 +825,7 @@ index acdf1f7..2dcccc6 100644
                          uint8_t(color.r),
                          uint8_t(color.g),
                          uint8_t(color.b),
-@@ -1800,15 +1838,15 @@ void IntroController::getTitleSourceData()
+@@ -1800,15 +1862,15 @@ void IntroController::getTitleSourceData()
              {
                  for (int y=0; y < titles[i].rh; y++)
                  {
@@ -800,7 +844,7 @@ index acdf1f7..2dcccc6 100644
                                  uint8_t(r), uint8_t(g), uint8_t(b), uint8_t(a)
                              };
                              titles[i].plotData.push_back(plot);
-@@ -1904,12 +1942,12 @@ bool IntroController::updateTitle()
+@@ -1904,12 +1966,12 @@ bool IntroController::updateTitle()
          {
              while (animStepTarget > title->animStep)
              {
