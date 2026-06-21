@@ -20,7 +20,7 @@ echo "[3/3] 產生並安裝資產"
 # 三套 CJK atlas:Noto(預設)+ AR PL 宋(firefly)/ 楷(kai)。字集涵蓋 6 份雙語表
 # (含 castle/ui),新增字後須刪 .bin 重建。重建環境見 docker/Dockerfile.font。
 # 字型路徑可由環境變數覆寫(Mac / Android CI 的 Noto 不在 Linux 預設路徑)。
-NOTO="${NOTO:-/usr/share/fonts/opentype/noto/NotoSansCJK-Medium.ttc}"
+NOTO="${NOTO:-/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc}"
 BSMI="${BSMI:-/usr/share/fonts/truetype/arphic-bsmi00lp/bsmi00lp.ttf}"
 BKAI="${BKAI:-/usr/share/fonts/truetype/arphic-bkai00mp/bkai00mp.ttf}"
 NOTO_INDEX="${NOTO_INDEX:-3}"

@@ -47,7 +47,10 @@ def collect_codepoints():
                     walk(v)
             elif isinstance(o, str):
                 for ch in o:
-                    if ord(ch) >= 0x3000:   # CJK + 全形標點
+                    # 引擎把所有 >= 0x80 的字送 CJK atlas 查找(< 0x80 走原 charset)。
+                    # 故凡 >= 0x80 都要收,否則灰框。常見漏網:破折號 —(U+2014)、
+                    # 刪節號 …(U+2026)、間隔號 ·(U+00B7)等 < 0x3000 的標點。
+                    if ord(ch) >= 0x80:
                         cps.add(ch)
         walk(d)
     return sorted(cps, key=ord)
