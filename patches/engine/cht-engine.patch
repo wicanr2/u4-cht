@@ -351,10 +351,10 @@ index 8f3dce0..5b8bddc 100644
          case ALLEGRO_EVENT_DISPLAY_SWITCH_IN:
              expose();
 diff --git a/src/game.cpp b/src/game.cpp
-index 5c359b0..b2d57bd 100644
+index 5c359b0..c3d19d6 100644
 --- a/src/game.cpp
 +++ b/src/game.cpp
-@@ -418,6 +418,89 @@ void gameUpdateScreen() {
+@@ -418,6 +418,96 @@ void gameUpdateScreen() {
      }
  }
  
@@ -419,6 +419,13 @@ index 5c359b0..b2d57bd 100644
 +    xu4.config = cache[cur];
 +    screenReInit();
 +
++    {   /* 視窗標題列顯示目前主題(intro 預覽 / 遊戲中皆更新)*/
++        char wtitle[160];
++        snprintf(wtitle, sizeof(wtitle), "Ultima IV 繁中化 — %s",
++                 themes[cur].label);
++        screenSetWindowTitle(wtitle);
++    }
++
 +    /* 遊戲中(有 location)才更新地圖堆疊 / 音樂 / 訊息;intro 預覽時 c 為 NULL,
 +       由呼叫端(IntroController)負責重載 intro 美術並重畫。 */
 +    if (c && c->location) {
@@ -444,7 +451,7 @@ index 5c359b0..b2d57bd 100644
  void GameController::setMap(Map *map, bool saveLocation, const Portal *portal, TurnController *turnCompleter) {
      int viewMode;
      LocationContext context;
-@@ -3452,7 +3535,7 @@ showMixturesSuper(int page = 0) {
+@@ -3452,7 +3542,7 @@ showMixturesSuper(int page = 0) {
  
      const Spell *s = getSpell(i + 13 * page);
      int line = i + 8;
@@ -587,7 +594,7 @@ index fd2d981..a309fe5 100644
      uint8_t fixup;              /**< a routine to do miscellaneous fixes to the image */
      Image *image;               /**< the image we're describing */
 diff --git a/src/intro.cpp b/src/intro.cpp
-index acdf1f7..d445b14 100644
+index acdf1f7..f7eb6a0 100644
 --- a/src/intro.cpp
 +++ b/src/intro.cpp
 @@ -11,6 +11,8 @@
@@ -772,7 +779,33 @@ index acdf1f7..d445b14 100644
  
      // display sex prompt and read sex from keyboard
      menuArea.textAt(3, 3, "Art thou Male or Female?");
-@@ -1103,7 +1179,7 @@ void IntroController::journeyOnward() {
+@@ -1035,14 +1111,21 @@ void IntroController::startQuestions() {
+         questionArea.textAt(0, 1, gypsyText[GYP_UPON_TABLE].c_str());
+         EventHandler::wait_msecs(1000);
+ 
+-        const string& virtue1 = gypsyText[questionTree[i1] + 4];
+-        questionArea.textAtFmt(0, 2, "%s and", virtue1.c_str());
++        /* U4 繁中化:吉普賽報牌句改用中文德目名 + 中文連接(原本用 gypsyText 的英文
++           德目名 + " and "/" She says" 英文字面,且 virtue1.size()+4 是 byte 數,CJK
++           定位也錯)。德目名對齊 drawCard 的 virtueZh。 */
++        static const char* const virtueZh[] = {
++            "誠實", "慈悲", "勇氣", "正義", "犧牲", "榮譽", "靈性", "謙卑"
++        };
++        const char* v1 = virtueZh[questionTree[i1] & 7];
++        const char* v2 = virtueZh[questionTree[i2] & 7];
++        questionArea.textAtFmt(0, 2, "%s 與", v1);
+         drawCard(questionTree[i1], cardPos->x, cardPos->y);
+         EventHandler::wait_msecs(1000);
+ 
+         soundSpeakLine(VOICE_GYPSY, 3);
+-        questionArea.textAtFmt(virtue1.size() + 4, 2, " %s.  She says",
+-                               gypsyText[questionTree[i2] + 4].c_str());
++        // 重畫整行(中文不便逐段定位):「誠實 與 正義。她說道:」
++        questionArea.textAtFmt(0, 2, "%s 與 %s。她說道:", v1, v2);
+         drawCard(questionTree[i2], cardPos->x + cardPos->width, cardPos->y);
+         questionArea.textAt(0, 3, "\"Consider this:\"");
+         questionArea.showCursor();
+@@ -1103,7 +1186,7 @@ void IntroController::journeyOnward() {
  void IntroController::about() {
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_INTRO);
@@ -781,7 +814,7 @@ index acdf1f7..d445b14 100644
  
      screenHideCursor();
      menuArea.textAtFmt(14, 1, "XU4 %s", VERSION);
-@@ -1125,7 +1201,9 @@ void IntroController::about() {
+@@ -1125,7 +1208,9 @@ void IntroController::about() {
   * Shows text in the question area.
   */
  void IntroController::showText(const string &text) {
@@ -792,7 +825,7 @@ index acdf1f7..d445b14 100644
      int lineNo = 0;
  
      questionArea.clear();
-@@ -1166,6 +1244,12 @@ void IntroController::runMenu(Menu *menu, TextView *view, bool withBeasties) {
+@@ -1166,6 +1251,12 @@ void IntroController::runMenu(Menu *menu, TextView *view, bool withBeasties) {
   * map, the beasties, etc..
   */
  void IntroController::timerFired() {
@@ -805,7 +838,7 @@ index acdf1f7..d445b14 100644
      screenCycle();
  
      if (mode == INTRO_TITLES)
-@@ -1270,7 +1354,7 @@ void IntroController::updateConfMenu(MenuEvent &event) {
+@@ -1270,7 +1361,7 @@ void IntroController::updateConfMenu(MenuEvent &event) {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -814,7 +847,7 @@ index acdf1f7..d445b14 100644
  }
  
  void IntroController::updateVideoMenu(MenuEvent &event) {
-@@ -1307,7 +1391,7 @@ void IntroController::updateVideoMenu(MenuEvent &event) {
+@@ -1307,7 +1398,7 @@ void IntroController::updateVideoMenu(MenuEvent &event) {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -823,7 +856,7 @@ index acdf1f7..d445b14 100644
  }
  
  void IntroController::updateGfxMenu(MenuEvent &event)
-@@ -1327,7 +1411,7 @@ void IntroController::updateGfxMenu(MenuEvent &event)
+@@ -1327,7 +1418,7 @@ void IntroController::updateGfxMenu(MenuEvent &event)
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -832,7 +865,7 @@ index acdf1f7..d445b14 100644
  }
  
  void IntroController::updateSoundMenu(MenuEvent &event) {
-@@ -1361,7 +1445,7 @@ void IntroController::updateSoundMenu(MenuEvent &event) {
+@@ -1361,7 +1452,7 @@ void IntroController::updateSoundMenu(MenuEvent &event) {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -841,7 +874,7 @@ index acdf1f7..d445b14 100644
  }
  
  void IntroController::updateInputMenu(MenuEvent &event) {
-@@ -1389,7 +1473,7 @@ void IntroController::updateInputMenu(MenuEvent &event) {
+@@ -1389,7 +1480,7 @@ void IntroController::updateInputMenu(MenuEvent &event) {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -850,7 +883,7 @@ index acdf1f7..d445b14 100644
  
      // after drawing the menu, extra menu text can be added here
      extendedMenuArea.textAt(0, 5, "Mouse Options:");
-@@ -1420,7 +1504,7 @@ void IntroController::updateSpeedMenu(MenuEvent &event) {
+@@ -1420,7 +1511,7 @@ void IntroController::updateSpeedMenu(MenuEvent &event) {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -859,7 +892,7 @@ index acdf1f7..d445b14 100644
  }
  
  void IntroController::updateGameplayMenu(MenuEvent &event) {
-@@ -1444,7 +1528,7 @@ void IntroController::updateGameplayMenu(MenuEvent &event) {
+@@ -1444,7 +1535,7 @@ void IntroController::updateGameplayMenu(MenuEvent &event) {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -868,7 +901,7 @@ index acdf1f7..d445b14 100644
  }
  
  void IntroController::updateInterfaceMenu(MenuEvent &event) {
-@@ -1468,7 +1552,7 @@ void IntroController::updateInterfaceMenu(MenuEvent &event) {
+@@ -1468,7 +1559,7 @@ void IntroController::updateInterfaceMenu(MenuEvent &event) {
  
      // draw the extended background for all option screens
      backgroundArea.draw(BKGD_OPTIONS_TOP, 0, 0);
@@ -877,7 +910,7 @@ index acdf1f7..d445b14 100644
  
      // after drawing the menu, extra menu text can be added here
      extendedMenuArea.textAt(2, 3, "  (Open, Jimmy, etc.)");
-@@ -1703,8 +1787,8 @@ void IntroController::initTitles()
+@@ -1703,8 +1794,8 @@ void IntroController::initTitles()
  void IntroController::addTitle(int x, int y, int w, int h, AnimType method, int delay, int duration)
  {
      AnimElement data = {
@@ -888,7 +921,7 @@ index acdf1f7..d445b14 100644
          method,             // render method
          0,                  // animStep
          0,                  // animStepMax
-@@ -1777,8 +1861,8 @@ void IntroController::getTitleSourceData()
+@@ -1777,8 +1868,8 @@ void IntroController::getTitleSourceData()
                          color = info->image->setColor(255, (y == 2 ? 250 : 255), blue[y-1]);
                      }
                      AnimPlot plot = {
@@ -899,7 +932,7 @@ index acdf1f7..d445b14 100644
                          uint8_t(color.r),
                          uint8_t(color.g),
                          uint8_t(color.b),
-@@ -1800,15 +1884,15 @@ void IntroController::getTitleSourceData()
+@@ -1800,15 +1891,15 @@ void IntroController::getTitleSourceData()
              {
                  for (int y=0; y < titles[i].rh; y++)
                  {
@@ -918,7 +951,7 @@ index acdf1f7..d445b14 100644
                                  uint8_t(r), uint8_t(g), uint8_t(b), uint8_t(a)
                              };
                              titles[i].plotData.push_back(plot);
-@@ -1904,12 +1988,12 @@ bool IntroController::updateTitle()
+@@ -1904,12 +1995,12 @@ bool IntroController::updateTitle()
          {
              while (animStepTarget > title->animStep)
              {
@@ -1119,7 +1152,7 @@ index 119aca3..8c22e70 100644
                  }
                  break;
 diff --git a/src/screen.cpp b/src/screen.cpp
-index 46d51bd..900fd73 100644
+index 46d51bd..47ae6c0 100644
 --- a/src/screen.cpp
 +++ b/src/screen.cpp
 @@ -25,6 +25,7 @@
@@ -1402,7 +1435,7 @@ index 46d51bd..900fd73 100644
      bool colorize = xu4.settings->enhancements &&
                      xu4.settings->enhancementsOptions.textColorization;
      const int colCount = TEXT_AREA_W;
-@@ -850,7 +1035,44 @@ static void screenUploadCursor(Screen* sp, uint32_t stex) {
+@@ -850,11 +1035,76 @@ static void screenUploadCursor(Screen* sp, uint32_t stex) {
                      &cimg);
  }
  
@@ -1442,13 +1475,93 @@ index 46d51bd..900fd73 100644
 +    XU4_SCREEN->uploadScreen = 1;
 +}
 +
++/*
++ * U4 繁中化 scale-to-fill:算出「保持 aspectW:aspectH 比例、放得進整個視窗、置中」的
++ * 最大矩形。視窗放大時遊戲跟著等比放大填滿(letterbox 兩側留邊);視窗等於原生渲染尺寸
++ * (未 resize)時退化為原本的 aspectX/Y + aspectW/H,行為與 letterbox 完全相同。
++ * 注意:aspectW/H 是整數渲染倍率,被版面/游標/震動到處使用,不能改 → 只在「最終 present
++ * 的 viewport」與「滑鼠座標反算」這兩處用本 fill rect 拉伸,framebuffer 渲染尺寸不變。
++ */
++static void screenFillRect(const ScreenState* ss, int* fx, int* fy,
++                           int* fw, int* fh) {
++    int dw = ss->displayW, dh = ss->displayH;
++    int aw = ss->aspectW,  ah = ss->aspectH;
++    if (aw < 1 || ah < 1 || dw < 1 || dh < 1) {
++        *fx = ss->aspectX; *fy = ss->aspectY; *fw = aw; *fh = ah;
++        return;
++    }
++    if ((long) dw * ah <= (long) dh * aw) {     // 視窗較矮 → 以寬度填滿
++        *fw = dw;
++        *fh = (int) ((long) dw * ah / aw);
++    } else {                                    // 視窗較高 → 以高度填滿
++        *fh = dh;
++        *fw = (int) ((long) dh * aw / ah);
++    }
++    *fx = (dw - *fw) / 2;
++    *fy = (dh - *fh) / 2;
++}
++
  void screenRender() {
 +    chtSelfTest();
      Screen* sp = XU4_SCREEN;
      void* gpu = xu4.gpu;
      ScreenState* ss = &sp->state;
+-    int offsetY = ss->aspectY;
++    int fillX, fillY, fillW, fillH;
++    screenFillRect(ss, &fillX, &fillY, &fillW, &fillH);
++    int offsetY = fillY;
+ 
+     if (sp->uploadScreen) {
+         sp->uploadScreen = 0;
+@@ -867,7 +1117,7 @@ void screenRender() {
+     }
+ 
+     if (ss->vertOffset) {
+-        offsetY -= ss->vertOffset;
++        offsetY -= ss->vertOffset * fillH / ss->aspectH;    // 震動量隨拉伸等比縮放
+         if (! sp->clearCount)
+             sp->clearCount = 1;     // Clear the top rows of pixels.
+     }
+@@ -875,7 +1125,7 @@ void screenRender() {
+         sp->clearCount -= 1;
+         gpu_clear(gpu, colorBlack);
+     }
+-    gpu_viewport(ss->aspectX, offsetY, ss->aspectW, ss->aspectH);
++    gpu_viewport(fillX, offsetY, fillW, fillH);
+     gpu_drawTextureScaled(gpu, gpu_screenTexture(gpu));
+ 
+ #ifdef GPU_RENDER
+@@ -903,7 +1153,7 @@ void screenRender() {
+         if (view->scissor)
+             gpu_setScissor(NULL);
+ 
+-        gpu_viewport(ss->aspectX, offsetY, ss->aspectW, ss->aspectH);
++        gpu_viewport(fillX, offsetY, fillW, fillH);
+     }
+ #endif
+ 
+@@ -1490,9 +1740,16 @@ static int pointInTriangle(int x, int y, int tx1, int ty1, int tx2, int ty2, int
+  */
+ void screenPointToMouseArea(int* x, int* y) {
+     const Screen* sp = XU4_SCREEN;
+-    unsigned int scale = sp->state.aspectH / U4_SCREEN_H;
+-    *x = (*x - sp->state.aspectX) / scale;
+-    *y = (*y - sp->state.aspectY) / scale;
++    const ScreenState* ss = &sp->state;
++    int fx, fy, fw, fh;
++    screenFillRect(ss, &fx, &fy, &fw, &fh);
++    unsigned int scale = ss->aspectH / U4_SCREEN_H;
++    // 視窗座標 →(經 fill rect 反算)render framebuffer 座標 → MouseArea(/scale)。
++    // 未 resize 時 fill==aspect,退化為原本的 (x-aspectX)/scale。
++    int rx = (fw > 0) ? (int)((long)(*x - fx) * ss->aspectW / fw) : (*x - fx);
++    int ry = (fh > 0) ? (int)((long)(*y - fy) * ss->aspectH / fh) : (*y - fy);
++    *x = rx / (int) scale;
++    *y = ry / (int) scale;
+ }
+ 
+ /**
 diff --git a/src/screen.h b/src/screen.h
-index 396af65..7bb48c7 100644
+index 396af65..6418601 100644
 --- a/src/screen.h
 +++ b/src/screen.h
 @@ -109,6 +109,9 @@ void screenInit(int layerCount);
@@ -1461,8 +1574,16 @@ index 396af65..7bb48c7 100644
  void screenSetLayer(int layer, void (*renderFunc)(ScreenState*, void*),
                      void* data);
  bool screenLayerUsed(int layer);
+@@ -160,6 +163,7 @@ void screenDetectDungeonTraps();
+ void screenSetMouseCursor(MouseCursor cursor);
+ void screenShowMouseCursor(bool visible);
+ void screenPointToMouseArea(int* x, int* y);
++void screenSetWindowTitle(const char* title);   // U4 繁中化:F2 切主題更新標題列
+ int  pointInMouseArea(int x, int y, const MouseArea *area);
+ 
+ const ScreenState* screenState();
 diff --git a/src/screen_allegro.cpp b/src/screen_allegro.cpp
-index 2901aa8..090381c 100644
+index 2901aa8..148f3e6 100644
 --- a/src/screen_allegro.cpp
 +++ b/src/screen_allegro.cpp
 @@ -107,11 +107,11 @@ void screenInit_sys(const Settings* settings, ScreenState* state, int reset) {
@@ -1502,8 +1623,19 @@ index 2901aa8..090381c 100644
      if (settings->fullscreen)
          dflags |= ALLEGRO_FULLSCREEN_WINDOW;
      al_set_new_display_flags(dflags);
+@@ -343,3 +359,10 @@ void screenShowMouseCursor(bool visible) {
+     else
+         al_hide_mouse_cursor(SA->disp);
+ }
++
++// U4 繁中化:F2 切換主題後更新視窗標題列顯示目前主題。
++void screenSetWindowTitle(const char* title) {
++    ScreenAllegro* sa = (ScreenAllegro*) xu4.screenSys;
++    if (sa && sa->disp)
++        al_set_window_title(sa->disp, title);
++}
 diff --git a/src/screen_glfw.cpp b/src/screen_glfw.cpp
-index a8d7a6a..9eca7fe 100644
+index a8d7a6a..acd74d2 100644
 --- a/src/screen_glfw.cpp
 +++ b/src/screen_glfw.cpp
 @@ -266,6 +266,13 @@ static void mouseMotionHandler(GLFWwindow* win, double x, double y)
@@ -1537,6 +1669,32 @@ index a8d7a6a..9eca7fe 100644
  
  #if defined(__linux__)
          _setWindowIcon(ss->view, "/usr/share/icons/hicolor/48x48/apps/xu4.png");
+@@ -611,3 +619,10 @@ void EventHandler::handleInputEvents(Controller* waitCon,
+ int EventHandler::setKeyRepeat(int delay, int interval) {
+     return 0;
+ }
++
++// U4 繁中化:F2 切換主題後更新視窗標題列顯示目前主題。
++void screenSetWindowTitle(const char* title) {
++    ScreenGLView* ss = SGL;
++    if (ss && ss->view)
++        glfwSetWindowTitle(ss->view, title);
++}
+diff --git a/src/screen_glv.cpp b/src/screen_glv.cpp
+index f0b4c18..4bc20f0 100644
+--- a/src/screen_glv.cpp
++++ b/src/screen_glv.cpp
+@@ -432,3 +432,10 @@ int EventHandler::setKeyRepeat(int delay, int interval) {
+     //return SDL_EnableKeyRepeat(delay, interval);
+     return 0;
+ }
++
++// U4 繁中化:F2 切換主題後更新視窗標題列顯示目前主題。
++void screenSetWindowTitle(const char* title) {
++    ScreenGLView* sa = SA;
++    if (sa && sa->view)
++        glv_setTitle(sa->view, title);
++}
 diff --git a/src/spell.cpp b/src/spell.cpp
 index 977cedf..0bc6f6c 100644
 --- a/src/spell.cpp

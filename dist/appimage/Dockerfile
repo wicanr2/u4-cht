@@ -33,7 +33,7 @@ RUN curl -sSL -o /usr/local/bin/appimagetool \
 RUN set -e; \
     AD=/build/AppDir; mkdir -p $AD/usr/bin $AD/usr/lib $AD/usr/share/u4-cht; \
     cp src/xu4 $AD/usr/bin/; \
-    cp Ultima-IV.mod U4-Upgrade.mod render.pak cjk_font*.bin u4_cht.tab $AD/usr/share/u4-cht/; \
+    cp Ultima-IV.mod U4-*.mod render.pak cjk_font*.bin u4_cht.tab $AD/usr/share/u4-cht/; \
     cp ultima4.zip u4upgrad.zip $AD/usr/share/u4-cht/ 2>/dev/null || true; \
     cp appimage/AppRun $AD/AppRun; chmod +x $AD/AppRun; \
     cp appimage/u4-cht.desktop $AD/u4-cht.desktop; \
