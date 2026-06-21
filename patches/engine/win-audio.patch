@@ -1,0 +1,34 @@
+--- a/src/xu4.cpp
++++ b/src/xu4.cpp
+@@ -34,6 +34,7 @@
+ 
+ #ifdef _WIN32
+ #include "win32console.c"
++#include <timeapi.h>   // timeBeginPeriod:見 main() 內音訊抖動修正(連 winmm)
+ #endif
+ 
+ #ifdef DEBUG
+@@ -384,6 +385,12 @@
+ #endif
+ #ifdef _WIN32
+     redirectIOToConsole();
++    // 音訊修正:Windows 預設計時器精度約 15.6ms,但 Faun 的 WASAPI 後端補緩衝用
++    // Sleep(2)。想睡 2ms 卻睡了 ~15ms → 把 ~30-40ms 的串流緩衝吃光 → 週期性 underrun
++    // → 背景 bass/長音「頓頓」。timeBeginPeriod(1) 把計時器精度拉到 1ms,Sleep(2) 才
++    // 準,預設緩衝即足夠,毋須放大緩衝(放大會增加 SFX 延遲)。整個 process 期間有效,
++    // 結束時 OS 自動還原。需連結 winmm(見 project.b win32 libs)。
++    timeBeginPeriod(1);
+ #endif
+     //printf("sizeof(Tile) %ld\n", sizeof(Tile));
+ 
+--- a/project.b
++++ b/project.b
+@@ -57,7 +57,7 @@
+ 			]
+ 		]
+ 		glfw [
+-			win32 [libs [%glfw3 %faun %vorbisfile %ole32]]
++			win32 [libs [%glfw3 %faun %vorbisfile %ole32 %winmm]]
+ 			unix  [libs [%glfw %faun]]
+ 			sources_from %src [
+ 				%screen_glfw.cpp

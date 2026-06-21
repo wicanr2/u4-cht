@@ -16,6 +16,12 @@ git -C "$XU4" apply --check "$ROOT/patches/engine/cht-engine.patch" 2>/dev/null 
   && git -C "$XU4" apply "$ROOT/patches/engine/cht-engine.patch" \
   || patch -d "$XU4" -p1 < "$ROOT/patches/engine/cht-engine.patch"
 
+# Windows 音訊修正(timeBeginPeriod + 連 winmm);套在 cht-engine.patch 之上。
+# 非 Windows build 無害:timeBeginPeriod 在 #ifdef _WIN32 內、winmm 僅 win32 libs。
+git -C "$XU4" apply --check "$ROOT/patches/engine/win-audio.patch" 2>/dev/null \
+  && git -C "$XU4" apply "$ROOT/patches/engine/win-audio.patch" \
+  || patch -d "$XU4" -p1 < "$ROOT/patches/engine/win-audio.patch"
+
 echo "[3/3] 產生並安裝資產"
 # 三套 CJK atlas:Noto(預設)+ AR PL 宋(firefly)/ 楷(kai)。字集涵蓋 6 份雙語表
 # (含 castle/ui),新增字後須刪 .bin 重建。重建環境見 docker/Dockerfile.font。
