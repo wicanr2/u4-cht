@@ -3922,42 +3922,392 @@
   },
   {
    "en": "\n\n\nAll is Dark...\n",
-   "zh": "\n\n\n四下一片黑暗⋯\n",
-   "has_format": false
+   "zh": "\n\n\n一片黑暗...\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "death.cpp"
+    }
+   ]
   },
   {
    "en": "\nBut wait...\n",
-   "zh": "\n且慢⋯\n",
-   "has_format": false
+   "zh": "\n但是且慢...\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "death.cpp"
+    }
+   ]
   },
   {
    "en": "Where am I?...\n",
-   "zh": "我身在何方?⋯\n",
-   "has_format": false
+   "zh": "我身在何處?...\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "death.cpp"
+    }
+   ]
   },
   {
    "en": "Am I dead?...\n",
-   "zh": "我已死了嗎?⋯\n",
-   "has_format": false
-  },
-  {
-   "en": "Afterlife?...\n",
-   "zh": "莫非是來世?⋯\n",
-   "has_format": false
+   "zh": "吾已死乎?...\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "death.cpp"
+    }
+   ]
   },
   {
    "en": "You hear:\n%s\n",
    "zh": "汝聽見:\n%s\n",
-   "has_format": true
+   "has_format": true,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "death.cpp"
+    }
+   ]
   },
   {
    "en": "I feel motion...\n",
-   "zh": "我感到一陣牽引⋯\n",
-   "has_format": false
+   "zh": "吾感到一陣移動...\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "death.cpp"
+    }
+   ]
   },
   {
    "en": "\nLord British says: I have pulled thy spirit and some possessions from the void.  Be more careful in the future!\n\u0010",
-   "zh": "\n不列顛王說道:吾已自虛空之中喚回汝之魂魄與部分財物。日後須當謹慎!\n\u0010",
+   "zh": "\n不列顛王說道:吾已將汝之靈魂與些許物品自虛空中拉回。日後務必更加小心!\n\u0010",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "death.cpp"
+    }
+   ]
+  },
+  {
+   "en": "Thou art granted a vision!\n",
+   "zh": "汝獲賜一道靈視!\n",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "shrine.cpp"
+    }
+   ]
+  },
+  {
+   "en": "Mandrake Root",
+   "zh": "曼陀羅根",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp"
+    }
+   ]
+  },
+  {
+   "en": "Nightshade",
+   "zh": "龍葵",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp"
+    }
+   ]
+  },
+  {
+   "en": "the Bell of Courage",
+   "zh": "勇氣之鐘",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp"
+    }
+   ]
+  },
+  {
+   "en": "the Book of Truth",
+   "zh": "真理之書",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp"
+    }
+   ]
+  },
+  {
+   "en": "the Candle of Love",
+   "zh": "愛之燭",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp"
+    }
+   ]
+  },
+  {
+   "en": "A Silver Horn",
+   "zh": "銀號角",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp"
+    }
+   ]
+  },
+  {
+   "en": "the Wheel from the H.M.S. Cape",
+   "zh": "海角號之舵輪",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp"
+    }
+   ]
+  },
+  {
+   "en": "the Skull of Modain the Wizard",
+   "zh": "巫師蒙丹之頭骨",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp"
+    }
+   ]
+  },
+  {
+   "en": "the Red Stone",
+   "zh": "紅石",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp"
+    }
+   ]
+  },
+  {
+   "en": "the Orange Stone",
+   "zh": "橙石",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp"
+    }
+   ]
+  },
+  {
+   "en": "the Yellow Stone",
+   "zh": "黃石",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp"
+    }
+   ]
+  },
+  {
+   "en": "the Green Stone",
+   "zh": "綠石",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp"
+    }
+   ]
+  },
+  {
+   "en": "the Blue Stone",
+   "zh": "藍石",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp"
+    }
+   ]
+  },
+  {
+   "en": "the Purple Stone",
+   "zh": "紫石",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp"
+    }
+   ]
+  },
+  {
+   "en": "the Black Stone",
+   "zh": "黑石",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp"
+    }
+   ]
+  },
+  {
+   "en": "the White Stone",
+   "zh": "白石",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp"
+    }
+   ]
+  },
+  {
+   "en": "Mystic Armor",
+   "zh": "神秘護甲",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp"
+    }
+   ]
+  },
+  {
+   "en": "Mystic Swords",
+   "zh": "神秘之劍",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp"
+    }
+   ]
+  },
+  {
+   "en": "the sulfury remains of an ancient Sosarian Laser Gun. It turns to ash in your fingers",
+   "zh": "一把古索薩利亞鐳射槍的硫磺殘骸，在汝指間化為灰燼",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp"
+    }
+   ]
+  },
+  {
+   "en": "the rune of Honesty",
+   "zh": "誠實符文",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp"
+    }
+   ]
+  },
+  {
+   "en": "the rune of Compassion",
+   "zh": "慈悲符文",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp"
+    }
+   ]
+  },
+  {
+   "en": "the rune of Valor",
+   "zh": "勇敢符文",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp"
+    }
+   ]
+  },
+  {
+   "en": "the rune of Justice",
+   "zh": "正義符文",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp"
+    }
+   ]
+  },
+  {
+   "en": "the rune of Sacrifice",
+   "zh": "犧牲符文",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp"
+    }
+   ]
+  },
+  {
+   "en": "the rune of Honor",
+   "zh": "榮譽符文",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp"
+    }
+   ]
+  },
+  {
+   "en": "the rune of Spirituality",
+   "zh": "靈性符文",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp"
+    }
+   ]
+  },
+  {
+   "en": "the rune of Humility",
+   "zh": "謙卑符文",
+   "has_format": false,
+   "occurrences": [
+    {
+     "func": "screenMessage",
+     "at": "item.cpp"
+    }
+   ]
+  },
+  {
+   "en": "Afterlife?...\n",
+   "zh": "莫非是來世?⋯\n",
    "has_format": false
   }
  ]

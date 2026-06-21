@@ -26,9 +26,18 @@ index edeeec2..aa16285 100644
                          errorFatal("Cannot extract module %s", fn);
                          break;
 diff --git a/project.b b/project.b
-index f83a553..b3f2c0c 100644
+index f83a553..65655d0 100644
 --- a/project.b
 +++ b/project.b
+@@ -57,7 +57,7 @@ exe %xu4 [
+ 			]
+ 		]
+ 		glfw [
+-			win32 [libs [%glfw3 %faun %vorbisfile %ole32]]
++			win32 [libs [%glfw3 %faun %vorbisfile %ole32 %winmm]]
+ 			unix  [libs [%glfw %faun]]
+ 			sources_from %src [
+ 				%screen_glfw.cpp
 @@ -144,6 +144,7 @@ exe %xu4 [
  		%combat.cpp
  		%controller.cpp
@@ -128,7 +137,7 @@ index 5136bdc..ffbb2d4 100644
  Config* configInit(const char* module, const char* soundtrack) {
      int renderFound, stFound;
 diff --git a/src/creature.cpp b/src/creature.cpp
-index 0c64297..7ac36ca 100644
+index 0c64297..8618a4b 100644
 --- a/src/creature.cpp
 +++ b/src/creature.cpp
 @@ -6,6 +6,7 @@
@@ -152,6 +161,33 @@ index 0c64297..7ac36ca 100644
  }
  
  bool Creature::isAttackable() const  {
+@@ -448,7 +453,7 @@ void Creature::act(CombatController *controller) {
+     case CA_ADVANCE: {
+         if (moveCombatObject(action, map, this, target->coords)) {
+             if (MAP_IS_OOB(map, coords)) {
+-                screenMessage("\n%c%s Flees!%c\n", FG_YELLOW, CSTR(name), FG_WHITE);
++                screenMessage("\n%c%s Flees!%c\n", FG_YELLOW, getName(), FG_WHITE);
+ 
+                 /* Congrats, you have a heart! */
+                 if (isGood())
+@@ -516,7 +521,7 @@ bool Creature::divide(Map* map) {
+     if (d != DIR_NONE) {
+         Coords new_c(coords);
+ 
+-        screenMessage("%s Divides!\n", CSTR(name));
++        screenMessage("%s Divides!\n", getName());
+ 
+         /* find a spot to put our new creature */
+         map_move(new_c, d, map);
+@@ -691,7 +696,7 @@ bool Creature::applyDamage(Map* map, int damage, bool byplayer) {
+     if (id != LORDBRITISH_ID)
+         AdjustValueMin(hp, -damage, 0);
+ 
+-    const char* nameStr = CSTR(name);
++    const char* nameStr = getName();    /* U4 繁中化:走 chtLookup,顯示中文怪名 */
+ 
+     switch (getState()) {
+ 
 diff --git a/src/discourse_castle.cpp b/src/discourse_castle.cpp
 index cdd6837..56c0966 100644
 --- a/src/discourse_castle.cpp
@@ -204,7 +240,7 @@ index cdd6837..56c0966 100644
                  break;
          }
 diff --git a/src/discourse_tlk.cpp b/src/discourse_tlk.cpp
-index 01f961c..1f852f2 100644
+index 01f961c..874c171 100644
 --- a/src/discourse_tlk.cpp
 +++ b/src/discourse_tlk.cpp
 @@ -1,5 +1,6 @@
@@ -271,14 +307,26 @@ index 01f961c..1f852f2 100644
      if (value == DS_KEYWORD) {
          const char* topic;
  
-@@ -377,10 +412,23 @@ static const char* U4Talk_dialogue(TalkState* ts, int value, const char* input)
+@@ -375,14 +410,39 @@ static const char* U4Talk_dialogue(TalkState* ts, int value, const char* input)
+         }
+     } else {
          switch(value) {
-             case DS_NAME:
-                 return USTR(name);
+-            case DS_NAME:
+-                return USTR(name);
 -            case DS_PRONOUN:
 -                return USTR(pronoun);
 -            case DS_LOOK:
 -                return USTR(look);
+-            case DS_QUESTION:
+-                return USTR(question);
++            case DS_NAME: {
++                /* U4 繁中化:NPC 名稱(含 a guard/a child 等角色化名稱)查表。
++                 * 否則「我是 %s」會印出英文名(如「我是 a guard」)。譯名已在
++                 * talk_bilingual.json 的 name 欄 → u4_cht.tab。 */
++                const char* nm = USTR(name);
++                const char* zh = nm ? chtLookup(nm, (int) strlen(nm)) : 0;
++                return zh ? zh : nm;
++            }
 +            case DS_PRONOUN: {
 +                /* U4 繁中化:NPC 代名詞 He/She/It → 他/她/它(其餘稱謂原樣)。 */
 +                const char* pn = USTR(pronoun);
@@ -296,9 +344,43 @@ index 01f961c..1f852f2 100644
 +                const char* zh = lk ? chtLookup(lk, (int) strlen(lk)) : 0;
 +                return zh ? zh : lk;
 +            }
-             case DS_QUESTION:
-                 return USTR(question);
++            case DS_QUESTION: {
++                /* U4 繁中化:NPC 的 yes/no 提問。它在 talk 流程中是以 %s 引數
++                 * 嵌入「\n%s\n\nYou say: 」,引數不會被 screenMessageN 查表,故須在此
++                 * 自行 chtLookup(譯文已在 talk_bilingual 的 question 欄 → u4_cht.tab)。 */
++                const char* q = USTR(question);
++                const char* zh = q ? chtLookup(q, (int) strlen(q)) : 0;
++                return zh ? zh : q;
++            }
              case DS_ANSWER_Y:
+                 if (tlk->questionHumility)
+                     c->party->adjustKarma(KA_BRAGGED);
+diff --git a/src/dungeon.cpp b/src/dungeon.cpp
+index 897ba2c..9b3e1bc 100644
+--- a/src/dungeon.cpp
++++ b/src/dungeon.cpp
+@@ -4,6 +4,8 @@
+ 
+ #include "dungeon.h"
+ 
++#include <cstring>      // U4 繁中化:strlen(物品名查表)
++#include "cht.h"        // U4 繁中化:物品名查表
+ #include "config.h"
+ #include "context.h"
+ #include "debug.h"
+@@ -144,8 +146,10 @@ void dungeonSearch(void) {
+                 if (*item->isItemInInventory != NULL && (*item->isItemInInventory)(item->data))
+                     screenMessage("Nothing Here!\n");
+                 else {
+-                    if (item->name)
+-                        screenMessage("You find...\n%s!\n", item->name);
++                    if (item->name) {
++                        const char* inm = chtLookup(item->name, (int) strlen(item->name));
++                        screenMessage("You find...\n%s!\n", inm ? inm : item->name);
++                    }
+                     (*item->putItemInInventory)(item->data);
+                 }
+             } else
 diff --git a/src/event.cpp b/src/event.cpp
 index 0bef0c9..f919e16 100644
 --- a/src/event.cpp
@@ -363,10 +445,21 @@ index 8f3dce0..5b8bddc 100644
          case ALLEGRO_EVENT_DISPLAY_SWITCH_IN:
              expose();
 diff --git a/src/game.cpp b/src/game.cpp
-index 5c359b0..389fd01 100644
+index 5c359b0..d2ec3af 100644
 --- a/src/game.cpp
 +++ b/src/game.cpp
-@@ -418,6 +418,99 @@ void gameUpdateScreen() {
+@@ -4,8 +4,10 @@
+ 
+ #include "game.h"
+ 
++#include <cstring>      // U4 繁中化:strlen(物品名查表)
+ #include "camp.h"
+ #include "cheat.h"
++#include "cht.h"        // U4 繁中化:物品名查表
+ #include "city.h"
+ #include "config.h"
+ #include "debug.h"
+@@ -418,6 +420,99 @@ void gameUpdateScreen() {
      }
  }
  
@@ -466,7 +559,20 @@ index 5c359b0..389fd01 100644
  void GameController::setMap(Map *map, bool saveLocation, const Portal *portal, TurnController *turnCompleter) {
      int viewMode;
      LocationContext context;
-@@ -3452,7 +3545,7 @@ showMixturesSuper(int page = 0) {
+@@ -1183,8 +1278,10 @@ bool GameController::keyPressed(int key) {
+                     if (*item->isItemInInventory != NULL && (*item->isItemInInventory)(item->data))
+                         screenMessage("%cNothing Here!%c\n", FG_GREY, FG_WHITE);
+                     else {
+-                        if (item->name)
+-                            screenMessage("You find...\n%s!\n", item->name);
++                        if (item->name) {
++                            const char* inm = chtLookup(item->name, (int) strlen(item->name));
++                            screenMessage("You find...\n%s!\n", inm ? inm : item->name);
++                        }
+                         (*item->putItemInInventory)(item->data);
+                     }
+                 } else
+@@ -3452,7 +3549,7 @@ showMixturesSuper(int page = 0) {
  
      const Spell *s = getSpell(i + 13 * page);
      int line = i + 8;
@@ -1110,14 +1216,15 @@ index c21ef93..ae81e3f 100644
      };
  
 diff --git a/src/names.cpp b/src/names.cpp
-index 8807b88..9ea809d 100644
+index 8807b88..a0a1dbb 100644
 --- a/src/names.cpp
 +++ b/src/names.cpp
-@@ -2,26 +2,34 @@
+@@ -2,26 +2,35 @@
   * $Id$
   */
  
 +#include <cstring>
++#include <string>
  #include "names.h"
 +#include "cht.h"      // U4 繁中化:職業/試劑/美德/物品/方向名查表
 +
@@ -1156,7 +1263,7 @@ index 8807b88..9ea809d 100644
      default:
          return "???";
      }
-@@ -35,7 +43,7 @@ const char *getReagentName(Reagent reagent) {
+@@ -35,11 +44,15 @@ const char *getReagentName(Reagent reagent) {
      };
  
      if (reagent < REAG_MAX)
@@ -1165,7 +1272,15 @@ index 8807b88..9ea809d 100644
      else
          return "???";
  }
-@@ -48,19 +56,19 @@ const char *getVirtueName(Virtue virtue) {
+ 
++/* U4 繁中化:美德名 *不* 翻譯,回傳英文 canonical。
++ * 因為它同時用於「玩家輸入比對」(聖壇冥想 / codex / 城堡 / item)與「縮寫首字母」
++ * (stats `[0]`)—— 玩家無法於遊戲中輸入中文,且中文 UTF-8 的 [0] 是半個位元組會壞。
++ * 顯示請改用 getDisplayVirtueName()(中文(英文))。詳見 docs/cht-boron-cjk.md「輸入比對」。 */
+ const char *getVirtueName(Virtue virtue) {
+     static const char * const virtueNames[] = {
+         "Honesty", "Compassion", "Valor",
+@@ -48,19 +61,38 @@ const char *getVirtueName(Virtue virtue) {
      };
  
      if (virtue < 8)
@@ -1175,6 +1290,25 @@ index 8807b88..9ea809d 100644
          return "???";
  }
  
++/* U4 繁中化:顯示用美德名「中文(英文)」,如「正義(Justice)」。用於需要玩家
++ * 知道對應英文以利輸入的情境(聖壇名等)。無譯時退回純英文。 */
++const char *getDisplayVirtueName(Virtue virtue) {
++    /* 每個 virtue 一個穩定 buffer:避免同一 full-expression 內呼叫兩次(如一個
++     * printf 放兩個 getDisplayVirtueName)時,後者覆寫前者的 static 暫存。 */
++    static std::string bufs[8];
++    const char* en = getVirtueName(virtue);
++    if (virtue >= 8)
++        return en;                          // "???"(無對應 buffer)
++    std::string& buf = bufs[virtue - VIRT_HONESTY];
++    const char* zh = chtLookup(en, (int) strlen(en));
++    if (! zh || zh == en) {
++        buf = en;
++    } else {
++        buf = zh; buf += "("; buf += en; buf += ")";
++    }
++    return buf.c_str();
++}
++
  const char *getBaseVirtueName(int virtueMask) {
 -    if (virtueMask == VIRT_TRUTH)           return "Truth";
 -    else if (virtueMask == VIRT_LOVE)       return "Love";
@@ -1193,7 +1327,7 @@ index 8807b88..9ea809d 100644
      else return "???";
  }
  
-@@ -91,7 +99,7 @@ const char *getVirtueAdjective(Virtue virtue) {
+@@ -91,7 +123,7 @@ const char *getVirtueAdjective(Virtue virtue) {
      };
  
      if (virtue < 8)
@@ -1202,7 +1336,7 @@ index 8807b88..9ea809d 100644
      else
          return "???";
  }
-@@ -104,7 +112,7 @@ const char *getStoneName(Virtue virtue) {
+@@ -104,7 +136,7 @@ const char *getStoneName(Virtue virtue) {
      };
  
      if (virtue < VIRT_MAX)
@@ -1211,7 +1345,7 @@ index 8807b88..9ea809d 100644
      else
          return "???";
  }
-@@ -112,23 +120,23 @@ const char *getStoneName(Virtue virtue) {
+@@ -112,23 +144,23 @@ const char *getStoneName(Virtue virtue) {
  const char *getItemName(Item item) {
      switch (item) {
      case ITEM_SKULL:
@@ -1244,7 +1378,7 @@ index 8807b88..9ea809d 100644
      default:
          return "???";
      }
-@@ -140,8 +148,7 @@ const char *getDirectionName(Direction dir) {
+@@ -140,8 +172,7 @@ const char *getDirectionName(Direction dir) {
      };
  
      if (dir >= DIR_WEST && dir <= DIR_SOUTH)
@@ -1254,6 +1388,20 @@ index 8807b88..9ea809d 100644
          return "???";
  }
 -
+diff --git a/src/names.h b/src/names.h
+index eb9718a..68e5338 100644
+--- a/src/names.h
++++ b/src/names.h
+@@ -14,7 +14,8 @@
+  */
+ const char *getClassName(ClassType klass);
+ const char *getReagentName(Reagent reagent);
+-const char *getVirtueName(Virtue virtue);
++const char *getVirtueName(Virtue virtue);          /* 英文 canonical(輸入比對/縮寫首字母) */
++const char *getDisplayVirtueName(Virtue virtue);   /* 顯示用「中文(英文)」如 正義(Justice) */
+ const char *getBaseVirtueName(int virtueMask);
+ int getBaseVirtues(Virtue virtue);
+ const char *getVirtueAdjective(Virtue virtue);
 diff --git a/src/portal.cpp b/src/portal.cpp
 index 119aca3..8c22e70 100644
 --- a/src/portal.cpp
@@ -1281,7 +1429,7 @@ index 119aca3..8c22e70 100644
                  }
                  break;
 diff --git a/src/screen.cpp b/src/screen.cpp
-index 46d51bd..7b3c455 100644
+index 46d51bd..70057bb 100644
 --- a/src/screen.cpp
 +++ b/src/screen.cpp
 @@ -25,6 +25,7 @@
@@ -1450,10 +1598,54 @@ index 46d51bd..7b3c455 100644
      va_list args;
      va_start(args, fmt);
      buflen = vsnprintf(buffer, MsgBufferSize, fmt, args);
-@@ -446,7 +518,124 @@ void screenMessageCenter(const char* text, int newlines) {
-     screenMessageN(start, cp - start);
- }
- 
+@@ -417,36 +489,157 @@ void screenMessage(const char *fmt, ...) {
+  * Center first line of text in message area.
+  */
+ void screenMessageCenter(const char* text, int newlines) {
+-    const int half = TEXT_AREA_W / 2;
++    /* U4 繁中化:地名等經此置中顯示。原版以 byte 長度置中且不查表 → CJK 地名
++     * (如「共感修道院」)既未翻譯又會偏移。改為:先 chtLookup,再依「顯示格數」
++     * (CJK 全形與 ASCII 皆算 1 格,對齊 screenMessageCJK 的進格)置中。 */
++    const char* zh = chtLookup(text, (int) strlen(text));
++    if (zh)
++        text = zh;
++
++    /* 第一行顯示格數 = 第一行 codepoint 數(到 \n 為止) */
++    int width = 0;
++    for (const unsigned char* p = (const unsigned char*) text; *p && *p != '\n'; ) {
++        unsigned char b = *p;
++        int n = (b < 0x80) ? 1 : ((b >> 5) == 0x6) ? 2 :
++                ((b >> 4) == 0xE) ? 3 : ((b >> 3) == 0x1E) ? 4 : 1;
++        p += n;
++        ++width;
++    }
++    int indent = (TEXT_AREA_W - width) / 2;
++    if (indent < 0)
++        indent = 0;
++
+     char* buffer = XU4_SCREEN->msgBuffer;
+-    char* start = buffer + half;
+-    char* cp = start;
+-    char* endOfLine = NULL;
+-    int ch, lineLen;
+-
+-    memset(buffer, ' ', half);
+-    while ((ch = *text++)) {
+-        if (ch == '\n' && ! endOfLine)
+-            endOfLine = cp;
+-        *cp++ = ch;
++    char* cp = buffer;
++    char* lim = buffer + MsgBufferSize;     // 界限:勿寫爆 msgBuffer
++    for (int i = 0; i < indent && cp < lim; ++i)
++        *cp++ = ' ';
++    for (const char* s = text; *s && cp < lim; )
++        *cp++ = *s++;
++    while (newlines-- > 0 && cp < lim)
++        *cp++ = '\n';
++
++    screenMessageN(buffer, (int) (cp - buffer));
++}
++
 +/* U4 繁中化:buffer 是否含 UTF-8 多位元組(CJK)。 */
 +static bool chtHasCJK(const char* s, int len) {
 +    for (int i = 0; i < len; ++i)
@@ -1469,7 +1661,7 @@ index 46d51bd..7b3c455 100644
 +    if (! g) {
 +        screen->fillRect(px, py, dim, dim, 60, 60, 60);   // 缺字:灰框
 +        return;
-+    }
+     }
 +    for (int y = 0; y < dim; ++y)
 +        for (int x = 0; x < dim; ++x) {
 +            int a = g[y * dim + x];   // 灰階 alpha:白字混黑底(二值 atlas 亦相容)
@@ -1481,7 +1673,13 @@ index 46d51bd..7b3c455 100644
 +static void cjkBlit(uint32_t cp, int col, int line) {
 +    cjkBlitPx(cp, (TEXT_AREA_X + col) * CHAR_WIDTH, (TEXT_AREA_Y + line) * CHAR_HEIGHT);
 +}
-+
+ 
+-    if (! endOfLine)
+-        endOfLine = cp;
+-    lineLen = endOfLine - start;
+-    if (lineLen > TEXT_AREA_W)
+-        lineLen = TEXT_AREA_W;
+-    start -= half - (lineLen+1) / 2;    // Indent
 +/* U4 繁中化:把已翻譯 UTF-8 字串渲染到絕對 cell(cellX,cellY)起(單行,夾雜 ASCII)。
 + * 供 screenTextAt(HUD)使用。 */
 +static void screenDrawCJKAt(const char* s, int cellX, int cellY) {
@@ -1504,7 +1702,10 @@ index 46d51bd..7b3c455 100644
 +        else { cjkBlitPx(cp, (cellX + col) * CHAR_WIDTH, cellY * CHAR_HEIGHT); col += 1; }
 +    }
 +}
-+
+ 
+-    while (newlines) {
+-        --newlines;
+-        *cp++ = '\n';
 +/* U4 繁中化:把 UTF-8 中文字串畫在絕對像素 (px,py)(每字寬 CHAR_WIDTH)。
 + * 供 intro 吉普賽卡牌疊德目名等需精確落點處使用(公開)。 */
 +void screenDrawCJKPixel(const char* s, int px, int py) {
@@ -1524,9 +1725,10 @@ index 46d51bd..7b3c455 100644
 +        }
 +        p += n;
 +        if (cp >= 0x80) { cjkBlitPx(cp, px + adv, py); adv += CHAR_WIDTH; }
-+    }
+     }
 +}
-+
+ 
+-    screenMessageN(start, cp - start);
 +/* U4 繁中化:把已翻譯的 UTF-8 中文字串渲染到文字區(CJK-aware,行距 2)。 */
 +static void screenMessageCJK(const char* s) {
 +    const int colCount = TEXT_AREA_W;
@@ -1563,8 +1765,8 @@ index 46d51bd..7b3c455 100644
 +        }
 +    }
 +    screenSetCursorPos(TEXT_AREA_X + c->col, TEXT_AREA_Y + c->line);
-+}
-+
+ }
+ 
  void screenMessageN(const char* buffer, int buflen) {
 +    /* U4 繁中化:load-time 查表命中,或 buffer 已含 CJK(來自 #3 format-aware
 +     * 在 screenMessage 端翻好的 format 字串)→ 走 CJK 渲染 */
@@ -1575,7 +1777,7 @@ index 46d51bd..7b3c455 100644
      bool colorize = xu4.settings->enhancements &&
                      xu4.settings->enhancementsOptions.textColorization;
      const int colCount = TEXT_AREA_W;
-@@ -850,11 +1039,76 @@ static void screenUploadCursor(Screen* sp, uint32_t stex) {
+@@ -850,11 +1043,76 @@ static void screenUploadCursor(Screen* sp, uint32_t stex) {
                      &cimg);
  }
  
@@ -1653,7 +1855,7 @@ index 46d51bd..7b3c455 100644
  
      if (sp->uploadScreen) {
          sp->uploadScreen = 0;
-@@ -867,7 +1121,7 @@ void screenRender() {
+@@ -867,7 +1125,7 @@ void screenRender() {
      }
  
      if (ss->vertOffset) {
@@ -1662,7 +1864,7 @@ index 46d51bd..7b3c455 100644
          if (! sp->clearCount)
              sp->clearCount = 1;     // Clear the top rows of pixels.
      }
-@@ -875,7 +1129,7 @@ void screenRender() {
+@@ -875,7 +1133,7 @@ void screenRender() {
          sp->clearCount -= 1;
          gpu_clear(gpu, colorBlack);
      }
@@ -1671,7 +1873,7 @@ index 46d51bd..7b3c455 100644
      gpu_drawTextureScaled(gpu, gpu_screenTexture(gpu));
  
  #ifdef GPU_RENDER
-@@ -903,7 +1157,7 @@ void screenRender() {
+@@ -903,7 +1161,7 @@ void screenRender() {
          if (view->scissor)
              gpu_setScissor(NULL);
  
@@ -1680,16 +1882,15 @@ index 46d51bd..7b3c455 100644
      }
  #endif
  
-@@ -1485,14 +1739,29 @@ static int pointInTriangle(int x, int y, int tx1, int ty1, int tx2, int ty2, int
-     return 1;
- }
- 
+@@ -1488,11 +1746,25 @@ static int pointInTriangle(int x, int y, int tx1, int ty1, int tx2, int ty2, int
+ /*
+  * Transform window x,y to MouseArea coordinate system.
+  */
 +/*
-+ * U4 繁中化:把視窗(滑鼠)座標反算回 render framebuffer 座標。
-+ * scale-to-fill 會把固定解析度的 framebuffer 拉伸到 fill rect 填滿視窗;滑鼠事件拿到的
-+ * 是視窗座標,必須先依 fill rect 反算回 framebuffer 空間,後續的 /scale、版面換算才正確。
-+ * 未 resize 時 fill==aspect → 退化為 (winX - aspectX),與原行為相同。所有滑鼠命中測試
-+ * (MouseArea / 選單 mouseTextPos / gamebrowser)都應先經本函式,否則放大視窗後點擊錯位。
++ * U4 繁中化:把視窗(滑鼠)座標反算回 render framebuffer 座標。scale-to-fill 會把固定
++ * 解析度 framebuffer 拉伸到 fill rect 填滿視窗;滑鼠拿到視窗座標,須先依 fill rect 反算
++ * 回 framebuffer 空間,後續 /scale、版面換算才正確。未 resize 時退化為 (winX - aspectX)。
++ * 所有滑鼠命中(MouseArea / 選單 mouseTextPos)都應先經本函式,否則放大視窗後點擊錯位。
 + */
 +void screenWindowToRender(int* x, int* y) {
 +    const ScreenState* ss = &XU4_SCREEN->state;
@@ -1699,9 +1900,6 @@ index 46d51bd..7b3c455 100644
 +    *y = (fh > 0) ? (int)((long)(*y - fy) * ss->aspectH / fh) : (*y - fy);
 +}
 +
- /*
-  * Transform window x,y to MouseArea coordinate system.
-  */
  void screenPointToMouseArea(int* x, int* y) {
 -    const Screen* sp = XU4_SCREEN;
 -    unsigned int scale = sp->state.aspectH / U4_SCREEN_H;
@@ -1850,6 +2048,116 @@ index f0b4c18..4bc20f0 100644
 +    if (sa && sa->view)
 +        glv_setTitle(sa->view, title);
 +}
+diff --git a/src/script_boron.cpp b/src/script_boron.cpp
+index 20691ed..2dd2518 100644
+--- a/src/script_boron.cpp
++++ b/src/script_boron.cpp
+@@ -281,13 +281,52 @@ CFUNC(cf_viewStats)
+ 
+     Print to the screen message area.
+ */
++/* U4 繁中化:把一個 Unicode codepoint 以 UTF-8 附加到 out。 */
++static void chtAppendUtf8(std::string& out, uint32_t cp) {
++    if (cp < 0x80) {
++        out += (char) cp;
++    } else if (cp < 0x800) {
++        out += (char) (0xC0 | (cp >> 6));
++        out += (char) (0x80 | (cp & 0x3F));
++    } else if (cp < 0x10000) {
++        out += (char) (0xE0 | (cp >> 12));
++        out += (char) (0x80 | ((cp >> 6) & 0x3F));
++        out += (char) (0x80 | (cp & 0x3F));
++    } else {
++        out += (char) (0xF0 | (cp >> 18));
++        out += (char) (0x80 | ((cp >> 12) & 0x3F));
++        out += (char) (0x80 | ((cp >> 6) & 0x3F));
++        out += (char) (0x80 | (cp & 0x3F));
++    }
++}
++
+ CFUNC(cf_screenMessage)
+ {
+     if (ur_is(a1, UT_STRING)) {
++        /* U4 繁中化:Boron 把含 CJK(codepoint 256–65535)的字串字面存成
++         * UR_ENC_UCS2(每字 16-bit);construct(vendor `=>` / input-shop)沿用
++         * 該編碼。若直接把 buffer 的 ptr.c 當 UTF-8 byte 輸出,UCS2 會被誤讀
++         * (ASCII 高位 0x00 → NUL 截斷成空白、CJK 低位 byte → 亂碼)—— 即商店
++         * 對白「怪怪的字 + 一堆空白」之根因。(vendor 是唯一把 module 內 CJK
++         * 經此路徑輸出者;其餘文字走 C 端 chtLookup。)
++         *
++         * 不用 ur_toText 轉:它寫進 UR_ENC_UTF8 buffer 時按「字數」而非 byte 數
++         * 配置容量,CJK(3 byte/字)會 heap 溢位。改自行逐 codepoint 編 UTF-8。 */
+         USeriesIter si;
+         ur_seriesSlice(ut, &si, a1);
+-        ur_strTermNull((UBuffer*) si.buf);
+-        screenMessage(si.buf->ptr.c + si.it);
++        std::string utf;
++        if (si.buf->form == UR_ENC_UCS2) {
++            const uint16_t* s = si.buf->ptr.u16;
++            for (UIndex i = si.it; i < si.end; ++i)
++                chtAppendUtf8(utf, s[i]);
++        } else if (si.buf->form == UR_ENC_UTF8) {
++            utf.assign(si.buf->ptr.c + si.it, si.end - si.it);   // 已是 UTF-8 byte
++        } else {    // UR_ENC_LATIN1:每 byte 即 codepoint(0–255)
++            const uint8_t* s = si.buf->ptr.b;
++            for (UIndex i = si.it; i < si.end; ++i)
++                chtAppendUtf8(utf, s[i]);
++        }
++        screenMessage("%s", utf.c_str());   // "%s":避免文字內 % 被當 printf 格式
+     }
+     else if (ur_is(a1, UT_CHAR)) {
+         screenMessage("%c", (int) ur_char(a1));
+diff --git a/src/shrine.cpp b/src/shrine.cpp
+index d963c8b..6fa61bd 100644
+--- a/src/shrine.cpp
++++ b/src/shrine.cpp
+@@ -3,7 +3,9 @@
+  */
+ 
+ #include <string>
++#include <cstring>
+ 
++#include "cht.h"        // U4 繁中化:聖壇箴言查表(%s 引數需自行查)
+ #include "shrine.h"
+ 
+ #include "game.h"
+@@ -30,8 +32,10 @@ bool shrineCanEnter(const Portal *p) {
+ 
+ const char* Shrine::getName() const {
+     std::string& str = c->shrineState.shrineName;
+-    str = "Shrine of ";
+-    str += getVirtueName(virtue);
++    /* U4 繁中化:雙語「正義(Justice)聖壇」—— 玩家冥想時須輸入英文美德名,故附英文。
++     * (輸入比對見 enter():getVirtueName 回英文 canonical) */
++    str = getDisplayVirtueName(virtue);
++    str += "聖壇";
+     return str.c_str();
+ }
+ 
+@@ -173,7 +177,7 @@ void Shrine::askMantra() {
+         bool elevated = ss->completedCycles == 3 && c->party->attemptElevation(virtue);
+         if (elevated) {
+             screenMessage("\nThou hast achieved partial Avatarhood in the Virtue of %s\n",
+-                          getVirtueName(virtue));
++                          getDisplayVirtueName(virtue));
+             gameSpellEffect(-1, -1, SOUND_ELEVATE);
+         } else
+             screenMessage("\nThy thoughts are pure. "
+@@ -194,7 +198,13 @@ void Shrine::showVision(bool elevated) {
+         screenDrawImageInMapArea(visionImageNames[virtue & 7]);
+     } else {
+         ShrineState* ss = &c->shrineState;
+-        screenMessage("\n%s", ss->advice[virtue * 3 + ss->completedCycles - 1].c_str());
++        {
++            /* U4 繁中化:箴言是 %s 引數(且前綴 \n),screenMessageN 查表會因 \n 不命中,
++             * 故在此自行 chtLookup(譯文在 stringtable shrine_advice → u4_cht.tab)。 */
++            const std::string& adv = ss->advice[virtue * 3 + ss->completedCycles - 1];
++            const char* zh = chtLookup(adv.c_str(), (int) adv.size());
++            screenMessage("\n%s", zh ? zh : adv.c_str());
++        }
+     }
+ }
+ 
 diff --git a/src/spell.cpp b/src/spell.cpp
 index 977cedf..0bc6f6c 100644
 --- a/src/spell.cpp
@@ -2314,10 +2622,18 @@ index 767f30a..3f6abe4 100644
  /* text area (in character units) */
  #define TEXT_AREA_X 24
 diff --git a/src/xu4.cpp b/src/xu4.cpp
-index 6a01ed5..f7483e0 100644
+index 6a01ed5..9088254 100644
 --- a/src/xu4.cpp
 +++ b/src/xu4.cpp
-@@ -349,8 +349,69 @@ static void servicesReset(XU4GameServices* gs) {
+@@ -34,6 +34,7 @@ extern "C" const char* androidInternalData();
+ 
+ #ifdef _WIN32
+ #include "win32console.c"
++#include <timeapi.h>   // timeBeginPeriod:見 main() 內音訊抖動修正(連 winmm)
+ #endif
+ 
+ #ifdef DEBUG
+@@ -349,13 +350,80 @@ static void servicesReset(XU4GameServices* gs) {
  
  XU4GameServices xu4;
  
@@ -2387,3 +2703,14 @@ index 6a01ed5..f7483e0 100644
  #if defined(MACOSX)
      osxInit(argv[0]);
  #endif
+ #ifdef _WIN32
+     redirectIOToConsole();
++    // 音訊修正:Windows 預設計時器精度約 15.6ms,但 Faun 的 WASAPI 後端補緩衝用
++    // Sleep(2)。想睡 2ms 卻睡了 ~15ms → 把 ~30-40ms 的串流緩衝吃光 → 週期性 underrun
++    // → 背景 bass/長音「頓頓」。timeBeginPeriod(1) 把計時器精度拉到 1ms,Sleep(2) 才
++    // 準,預設緩衝即足夠,毋須放大緩衝(放大會增加 SFX 延遲)。整個 process 期間有效,
++    // 結束時 OS 自動還原。需連結 winmm(見 project.b win32 libs)。
++    timeBeginPeriod(1);
+ #endif
+     //printf("sizeof(Tile) %ld\n", sizeof(Tile));
+ 
