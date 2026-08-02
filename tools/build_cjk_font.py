@@ -24,10 +24,14 @@ import os
 import struct
 from PIL import Image, ImageFont, ImageDraw
 
+# 必須與 tools/build_lookup.py 的來源清單一致 —— 那邊收了、這邊漏收,字就翻得出來卻
+# 畫不出來(引擎對 codepoint >= 0x80 一律查 atlas,查無即畫灰框)。曾漏 maps_bilingual
+# (「登上二樓」的「樓」)與 location_types(「拼」)。新增 dumps/*.json 時兩邊都要加。
 JSON_FILES = ["talk_bilingual", "stringtable_bilingual",
               "hardcoded_strings", "vendor_bilingual",
               "castle_bilingual", "ui_bilingual", "config_bilingual",
-              "names_bilingual", "creature_bilingual", "system_bilingual"]
+              "names_bilingual", "creature_bilingual", "system_bilingual",
+              "location_types", "maps_bilingual"]
 
 
 def collect_codepoints():
