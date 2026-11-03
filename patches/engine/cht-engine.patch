@@ -70,6 +70,19 @@ index 6736af1..ac16f35 100644
          creature.cpp \
          death.cpp \
          debug.cpp \
+diff --git a/src/combat.cpp b/src/combat.cpp
+index 8827cc9..4068e03 100644
+--- a/src/combat.cpp
++++ b/src/combat.cpp
+@@ -196,7 +196,7 @@ void CombatController::beginCombat() {
+ 
+     /* if we entered an altar room, show the name */
+     if (map->isAltarRoom()) {
+-        screenMessage("\nThe Altar Room of %s\n", getBaseVirtueName(map->getAltarRoom()));
++        screenMessage("\nThe Altar Room of %s\n", getDisplayBaseVirtueName(map->getAltarRoom()));
+         c->location->context = static_cast<LocationContext>(c->location->context | CTX_ALTAR_ROOM);
+     }
+ 
 diff --git a/src/config.h b/src/config.h
 index dcb7e30..e3f3db1 100644
 --- a/src/config.h
@@ -240,7 +253,7 @@ index cdd6837..56c0966 100644
                  break;
          }
 diff --git a/src/discourse_tlk.cpp b/src/discourse_tlk.cpp
-index 01f961c..874c171 100644
+index 01f961c..001e085 100644
 --- a/src/discourse_tlk.cpp
 +++ b/src/discourse_tlk.cpp
 @@ -1,5 +1,6 @@
@@ -274,7 +287,17 @@ index 01f961c..874c171 100644
          input = gameGetInput(16);
          screenCrLf();
          screenCrLf();
-@@ -346,6 +355,32 @@ static const char* U4Talk_dialogue(TalkState* ts, int value, const char* input)
+@@ -156,7 +165,8 @@ tell_name:
+                 }
+             } else if (inputEq("join")) {
+                 Virtue virt;
+-                const char* name = DSTRING(DS_NAME);
++                // U4 繁中化:DS_NAME 回譯名,存檔的隊員名是英文原名,比對要用原名。
++                const char* name = ts->person->getName();
+                 if (c->party->canPersonJoin(name, &virt)) {
+                     CannotJoinError join = c->party->join(name);
+                     if (join == JOIN_SUCCEEDED) {
+@@ -346,6 +356,32 @@ static const char* U4Talk_dialogue(TalkState* ts, int value, const char* input)
      if (tlk->askAfter == TRIGGER) \
          ts->nextOp = OP_PAUSE_ASK;
  
@@ -307,7 +330,7 @@ index 01f961c..874c171 100644
      if (value == DS_KEYWORD) {
          const char* topic;
  
-@@ -375,14 +410,39 @@ static const char* U4Talk_dialogue(TalkState* ts, int value, const char* input)
+@@ -375,14 +411,39 @@ static const char* U4Talk_dialogue(TalkState* ts, int value, const char* input)
          }
      } else {
          switch(value) {
@@ -1246,8 +1269,21 @@ index c21ef93..ae81e3f 100644
          uint8_t r, g, b, a;
      };
  
+diff --git a/src/item.cpp b/src/item.cpp
+index 2c99cab..f65b797 100644
+--- a/src/item.cpp
++++ b/src/item.cpp
+@@ -352,7 +352,7 @@ void useStone(int item) {
+ 
+         int virtueMask = getBaseVirtues((Virtue)c->location->coords.z);
+         if (virtueMask > 0)
+-            screenMessage("\n\nAs thou doth approach, a voice rings out: What virtue dost stem from %s?\n\n", getBaseVirtueName(virtueMask));
++            screenMessage("\n\nAs thou doth approach, a voice rings out: What virtue dost stem from %s?\n\n", getDisplayBaseVirtueName(virtueMask));
+         else screenMessage("\n\nA voice rings out:  What virtue exists independently of Truth, Love, and Courage?\n\n");
+         const char* virtue = gameGetInput();
+ 
 diff --git a/src/names.cpp b/src/names.cpp
-index 8807b88..a0a1dbb 100644
+index 8807b88..5e77f56 100644
 --- a/src/names.cpp
 +++ b/src/names.cpp
 @@ -2,26 +2,35 @@
@@ -1311,13 +1347,7 @@ index 8807b88..a0a1dbb 100644
  const char *getVirtueName(Virtue virtue) {
      static const char * const virtueNames[] = {
          "Honesty", "Compassion", "Valor",
-@@ -48,19 +61,38 @@ const char *getVirtueName(Virtue virtue) {
-     };
- 
-     if (virtue < 8)
--        return virtueNames[virtue - VIRT_HONESTY];
-+        return CHT(virtueNames[virtue - VIRT_HONESTY]);
-     else
+@@ -53,6 +66,27 @@ const char *getVirtueName(Virtue virtue) {
          return "???";
  }
  
@@ -1340,25 +1370,23 @@ index 8807b88..a0a1dbb 100644
 +    return buf.c_str();
 +}
 +
++/* U4 繁中化:回傳英文 canonical,因為法典問答拿它比對玩家輸入(codex.cpp)。
++ * 顯示請改用 getDisplayBaseVirtueName()。 */
  const char *getBaseVirtueName(int virtueMask) {
--    if (virtueMask == VIRT_TRUTH)           return "Truth";
--    else if (virtueMask == VIRT_LOVE)       return "Love";
--    else if (virtueMask == VIRT_COURAGE)    return "Courage";
--    else if (virtueMask == (VIRT_TRUTH | VIRT_LOVE)) return "Truth and Love";
--    else if (virtueMask == (VIRT_LOVE | VIRT_COURAGE)) return "Love and Courage";
--    else if (virtueMask == (VIRT_COURAGE | VIRT_TRUTH)) return "Courage and Truth";
--    else if (virtueMask == (VIRT_TRUTH | VIRT_LOVE | VIRT_COURAGE)) return "Truth, Love and Courage";
-+    if (virtueMask == VIRT_TRUTH)           return CHT("Truth");
-+    else if (virtueMask == VIRT_LOVE)       return CHT("Love");
-+    else if (virtueMask == VIRT_COURAGE)    return CHT("Courage");
-+    else if (virtueMask == (VIRT_TRUTH | VIRT_LOVE)) return CHT("Truth and Love");
-+    else if (virtueMask == (VIRT_LOVE | VIRT_COURAGE)) return CHT("Love and Courage");
-+    else if (virtueMask == (VIRT_COURAGE | VIRT_TRUTH)) return CHT("Courage and Truth");
-+    else if (virtueMask == (VIRT_TRUTH | VIRT_LOVE | VIRT_COURAGE)) return CHT("Truth, Love and Courage");
+     if (virtueMask == VIRT_TRUTH)           return "Truth";
+     else if (virtueMask == VIRT_LOVE)       return "Love";
+@@ -64,6 +98,10 @@ const char *getBaseVirtueName(int virtueMask) {
      else return "???";
  }
  
-@@ -91,7 +123,7 @@ const char *getVirtueAdjective(Virtue virtue) {
++const char *getDisplayBaseVirtueName(int virtueMask) {
++    return CHT(getBaseVirtueName(virtueMask));
++}
++
+ int getBaseVirtues(Virtue virtue) {
+     switch(virtue) {
+     case VIRT_HONESTY: return VIRT_TRUTH;
+@@ -91,11 +129,13 @@ const char *getVirtueAdjective(Virtue virtue) {
      };
  
      if (virtue < 8)
@@ -1367,16 +1395,13 @@ index 8807b88..a0a1dbb 100644
      else
          return "???";
  }
-@@ -104,7 +136,7 @@ const char *getStoneName(Virtue virtue) {
-     };
  
-     if (virtue < VIRT_MAX)
--        return virtueNames[virtue - VIRT_HONESTY];
-+        return CHT(virtueNames[virtue - VIRT_HONESTY]);
-     else
-         return "???";
- }
-@@ -112,23 +144,23 @@ const char *getStoneName(Virtue virtue) {
++/* U4 繁中化:回傳英文 canonical,因為祭壇拿它比對玩家輸入(item.cpp),Ztats 也取
++ * 首字母當縮寫(stats.cpp)。 */
+ const char *getStoneName(Virtue virtue) {
+     static const char * const virtueNames[] = {
+         "Blue", "Yellow", "Red",
+@@ -112,23 +152,23 @@ const char *getStoneName(Virtue virtue) {
  const char *getItemName(Item item) {
      switch (item) {
      case ITEM_SKULL:
@@ -1409,7 +1434,7 @@ index 8807b88..a0a1dbb 100644
      default:
          return "???";
      }
-@@ -140,8 +172,7 @@ const char *getDirectionName(Direction dir) {
+@@ -140,8 +180,7 @@ const char *getDirectionName(Direction dir) {
      };
  
      if (dir >= DIR_WEST && dir <= DIR_SOUTH)
@@ -1420,19 +1445,26 @@ index 8807b88..a0a1dbb 100644
  }
 -
 diff --git a/src/names.h b/src/names.h
-index eb9718a..68e5338 100644
+index eb9718a..4f9eee2 100644
 --- a/src/names.h
 +++ b/src/names.h
-@@ -14,7 +14,8 @@
+@@ -14,11 +14,13 @@
   */
  const char *getClassName(ClassType klass);
  const char *getReagentName(Reagent reagent);
 -const char *getVirtueName(Virtue virtue);
+-const char *getBaseVirtueName(int virtueMask);
 +const char *getVirtueName(Virtue virtue);          /* 英文 canonical(輸入比對/縮寫首字母) */
 +const char *getDisplayVirtueName(Virtue virtue);   /* 顯示用「中文(英文)」如 正義(Justice) */
- const char *getBaseVirtueName(int virtueMask);
++const char *getBaseVirtueName(int virtueMask);     /* 英文 canonical(法典問答比對) */
++const char *getDisplayBaseVirtueName(int virtueMask); /* 顯示用中文,如 真理 */
  int getBaseVirtues(Virtue virtue);
  const char *getVirtueAdjective(Virtue virtue);
+-const char *getStoneName(Virtue virtue);
++const char *getStoneName(Virtue virtue);           /* 英文 canonical(祭壇輸入比對/縮寫首字母) */
+ const char *getItemName(Item item);
+ const char *getDirectionName(Direction dir);
+ 
 diff --git a/src/portal.cpp b/src/portal.cpp
 index 119aca3..8c22e70 100644
 --- a/src/portal.cpp
@@ -2047,7 +2079,7 @@ index 2901aa8..148f3e6 100644
 +        al_set_window_title(sa->disp, title);
 +}
 diff --git a/src/screen_glfw.cpp b/src/screen_glfw.cpp
-index a8d7a6a..acd74d2 100644
+index a8d7a6a..a0ad0ce 100644
 --- a/src/screen_glfw.cpp
 +++ b/src/screen_glfw.cpp
 @@ -266,6 +266,13 @@ static void mouseMotionHandler(GLFWwindow* win, double x, double y)
@@ -2064,7 +2096,52 @@ index a8d7a6a..acd74d2 100644
  static void mouseButtonHandler(GLFWwindow* win, int button, int action,
                                 int mods)
  {
-@@ -352,7 +359,7 @@ void screenInit_sys(const Settings* settings, ScreenState* state, int reset)
+@@ -305,6 +312,23 @@ static void scrollHandler(GLFWwindow* win, double x, double y)
+ 
+ extern int screenInitState(ScreenState*, const Settings*, int dw, int dh);
+ 
++/*
++ * U4 繁中化:視窗模式依桌面大小自動降 scale,避免視窗比螢幕大(1080p 上 -s 2 是
++ * 1920x1200)。預留邊距給標題列與工作列,數值與 screen_allegro.cpp 相同。
++ */
++static int fitWindowScale(int scale, int baseH)
++{
++    GLFWmonitor* mon = glfwGetPrimaryMonitor();
++    const GLFWvidmode* vm = mon ? glfwGetVideoMode(mon) : NULL;
++    if (vm) {
++        while (scale > 1 &&
++               (U4_SCREEN_W * scale > vm->width ||
++                baseH * scale > vm->height - 96))
++            --scale;
++    }
++    return scale;
++}
++
+ void screenInit_sys(const Settings* settings, ScreenState* state, int reset)
+ {
+     ScreenGLView* ss;
+@@ -313,7 +337,8 @@ void screenInit_sys(const Settings* settings, ScreenState* state, int reset)
+     const char* gpuError;
+     int scale = settings->scale;
+     int dw = U4_SCREEN_W * scale;
+-    int dh = ((settings->filter >= FILTER_POINT_43) ? 240 : U4_SCREEN_H) * scale;
++    const int baseH = (settings->filter >= FILTER_POINT_43) ? 240 : U4_SCREEN_H;
++    int dh = baseH * scale;
+     char title[MOD_NAME_LIMIT];
+ 
+     xu4.config->gameTitle(title);
+@@ -335,6 +360,10 @@ void screenInit_sys(const Settings* settings, ScreenState* state, int reset)
+                 glfwSetWindowMonitor(ss->view, monitor, 0, 0, dw, dh, mode->refreshRate);
+             }
+         } else {
++            scale = fitWindowScale(scale, baseH);
++            dw = U4_SCREEN_W * scale;
++            dh = baseH * scale;
++
+             if (ss->winFullscreen) {
+                 ss->winFullscreen = false;
+                 glfwSetWindowMonitor(ss->view, NULL, ss->winPos[0], ss->winPos[1],
+@@ -352,7 +381,7 @@ void screenInit_sys(const Settings* settings, ScreenState* state, int reset)
              errorFatal("Unable to initialize GLFW");
          }
  
@@ -2073,7 +2150,17 @@ index a8d7a6a..acd74d2 100644
  #if defined(USE_GLES)
          const int glVersion = 0x301;
  #else
-@@ -388,6 +395,7 @@ void screenInit_sys(const Settings* settings, ScreenState* state, int reset)
+@@ -377,6 +406,9 @@ void screenInit_sys(const Settings* settings, ScreenState* state, int reset)
+             dh = mode->height;
+         } else {
+             monitor = NULL;
++            scale = fitWindowScale(scale, baseH);
++            dw = U4_SCREEN_W * scale;
++            dh = baseH * scale;
+         }
+ 
+         ss->view = glfwCreateWindow(dw, dh, title, monitor, NULL);
+@@ -388,6 +420,7 @@ void screenInit_sys(const Settings* settings, ScreenState* state, int reset)
          glfwSetCursorPosCallback(ss->view, mouseMotionHandler);
          glfwSetMouseButtonCallback(ss->view, mouseButtonHandler);
          glfwSetScrollCallback(ss->view, scrollHandler);
@@ -2081,7 +2168,21 @@ index a8d7a6a..acd74d2 100644
  
  #if defined(__linux__)
          _setWindowIcon(ss->view, "/usr/share/icons/hicolor/48x48/apps/xu4.png");
-@@ -611,3 +619,10 @@ void EventHandler::handleInputEvents(Controller* waitCon,
+@@ -416,7 +449,13 @@ void screenInit_sys(const Settings* settings, ScreenState* state, int reset)
+     printf("KR dim %d,%d (%d,%d) %d\n",
+             dw, dh, state->displayW, state->displayH, glfwGetError(NULL));
+ #endif
++    {
++    // screenInitState 在視窗模式回傳 settings->scale,要換回實際用的 scale。
++    int fitted = scale;
+     scale = screenInitState(state, settings, dw, dh);
++    if (! settings->fullscreen)
++        scale = fitted;
++    }
+ 
+     /* enable or disable the mouse cursor */
+     screenShowMouseCursor(settings->mouseOptions.enabled);
+@@ -611,3 +650,10 @@ void EventHandler::handleInputEvents(Controller* waitCon,
  int EventHandler::setKeyRepeat(int delay, int interval) {
      return 0;
  }
@@ -2239,7 +2340,7 @@ index 977cedf..0bc6f6c 100644
  }
  
 diff --git a/src/stats.cpp b/src/stats.cpp
-index d2c466b..9235af3 100644
+index d2c466b..b45a0a3 100644
 --- a/src/stats.cpp
 +++ b/src/stats.cpp
 @@ -7,6 +7,7 @@
@@ -2269,6 +2370,37 @@ index d2c466b..9235af3 100644
      title.textAtFmt(titleStart, 0, "%c%s%c", 16, s, 17);
  }
  
+@@ -362,7 +373,7 @@ void StatsArea::showEquipment() {
+  */
+ void StatsArea::showItems() {
+     int i, j;
+-    char buffer[17];
++    char buffer[32];    // U4 繁中化:原 17 位元組放不下「法鐘 典籍 蠟燭」(20 位元組)
+ 
+     setTitle("Items");
+ 
+@@ -397,18 +408,17 @@ void StatsArea::showItems() {
+         }
+         if (c->saveGame->items & ITEM_CANDLE) {
+             strcat(buffer, getItemName(ITEM_CANDLE));
+-            buffer[15] = '\0';
+         }
+         mainArea.textAt(0, line++, buffer);
+     }
+     if (c->saveGame->items & (ITEM_KEY_C | ITEM_KEY_L | ITEM_KEY_T)) {
+         j = 0;
+         if (c->saveGame->items & ITEM_KEY_T)
+-            buffer[j++] = getItemName(ITEM_KEY_T)[0];
++            buffer[j++] = 'T';   // U4 繁中化:getItemName 回中文,[0] 會是半個字
+         if (c->saveGame->items & ITEM_KEY_L)
+-            buffer[j++] = getItemName(ITEM_KEY_L)[0];
++            buffer[j++] = 'L';
+         if (c->saveGame->items & ITEM_KEY_C)
+-            buffer[j++] = getItemName(ITEM_KEY_C)[0];
++            buffer[j++] = 'C';
+         buffer[j] = '\0';
+         mainArea.textAtFmt(0, line++, "3 Part Key:%s", buffer);
+     }
 diff --git a/src/support/txf_draw.c b/src/support/txf_draw.c
 index b449d10..078df24 100644
 --- a/src/support/txf_draw.c

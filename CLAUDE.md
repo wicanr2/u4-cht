@@ -12,7 +12,8 @@
   `inputEq` 等),其 canonical 值**必須維持英文** —— 玩家無法在遊戲中輸入中文。
   翻譯只能用於「顯示」。作法:`getXxxName()` 回英文 canonical(比對/`[0]`首字母/`strlen`),
   另開 `getDisplayXxxName()` 回「中文(英文)」如 `正義(Justice)`,讓玩家知道要打什麼。
-  已知適用:美德名(聖壇冥想/codex/城堡/item);**疑似同類待查:職業名 getClassName**。
+  已知適用:美德名(聖壇冥想/codex/城堡/item)、基本美德(法典)、石頭顏色(祭壇)、NPC 名(JOIN)。
+  職業名 getClassName 只用於顯示,維持中文。回歸測試見 `tests/run-canonical-names.sh`。
 - **字型 atlas 收字門檻 ≥0x80**:引擎對所有 codepoint ≥0x80 都查 atlas;漏收(如 `…`)會顯示灰框。
 - **Boron 字串是 UCS2**:module(vendors.b 等)內 CJK 經 `cf_screenMessage` 須自行轉 UTF-8;
   `append` CJK 到空 Latin1 `""` 會有損降轉成 0xBF(灰框)→ 需 seed UCS2。

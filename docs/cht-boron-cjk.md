@@ -124,6 +124,11 @@ bash tools/run_boron_cjk_test.sh     # 於 u4cht/xu4-allegro image 內編譯+執
 |---|---|---|
 | `getVirtueName(v)` | **英文** canonical(`"Justice"`) | 輸入比對、`[0]` 首字母、`strlen` |
 | `getDisplayVirtueName(v)` | **中文(英文)**(`"正義(Justice)"`) | 顯示;讓玩家知道要輸入的英文 |
+| `getBaseVirtueName(mask)` | **英文** canonical(`"Truth"`) | 法典問答比對 |
+| `getDisplayBaseVirtueName(mask)` | **中文**(`"真理"`) | 祭壇室名稱、祭壇提問 |
+| `getStoneName(v)` | **英文** canonical(`"Blue"`) | 祭壇輸入比對、Ztats 首字母 |
+| `Person::getName()` | **英文**原名(`"Iolo"`) | JOIN 比對存檔的隊員名 |
+| `DSTRING(DS_NAME)` | **中文**譯名(`"尤洛"`) | 對話顯示「我是 %s」 |
 
 - 比對端用 `getVirtueName`(英文)→ 自動正確。
 - 顯示端用 `getDisplayVirtueName` → 玩家看到「正義(Justice)」,知道聖壇要打 `Justice`。
@@ -134,6 +139,10 @@ bash tools/run_boron_cjk_test.sh     # 於 u4cht/xu4-allegro image 內編譯+執
 > **同類檢查結果**:`getClassName()`(職業名,也被 `CHT()` 包成中文)經查**只用於顯示**
 > (`stats.cpp` 面板、`game.cpp`「A %s may NOT use…」),無輸入比對 / `[0]` / `strlen`,
 > 故維持中文**安全**,不需拆分。talk 關鍵字本就維持英文、`(可問 %s)` 提示也是英文 → OK。
+
+回歸測試:`bash tests/run-canonical-names.sh <已套 patch 的 xu4 目錄>` 載入 `u4_cht.tab`
+後檢查上表的名稱函式。沒載入對照表時所有名稱都是英文,這類錯誤看不出來,所以測試先確認
+對照表已載入。
 
 ## 翻譯涵蓋缺口
 
