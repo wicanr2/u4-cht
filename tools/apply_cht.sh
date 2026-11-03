@@ -16,11 +16,13 @@ git -C "$XU4" apply --check "$ROOT/patches/engine/cht-engine.patch" 2>/dev/null 
   && git -C "$XU4" apply "$ROOT/patches/engine/cht-engine.patch" \
   || patch -d "$XU4" -p1 < "$ROOT/patches/engine/cht-engine.patch"
 
-# Windows 音訊修正(timeBeginPeriod + 連 winmm);套在 cht-engine.patch 之上。
-# 非 Windows build 無害:timeBeginPeriod 在 #ifdef _WIN32 內、winmm 僅 win32 libs。
-git -C "$XU4" apply --check "$ROOT/patches/engine/win-audio.patch" 2>/dev/null \
-  && git -C "$XU4" apply "$ROOT/patches/engine/win-audio.patch" \
-  || patch -d "$XU4" -p1 < "$ROOT/patches/engine/win-audio.patch"
+# Windows 音訊修正(timeBeginPeriod + 連 winmm)。內容已併入 cht-engine.patch,
+# 再套會失敗;GNU patch 在 Linux 上回傳非零,會讓 set -e 中止整個腳本。所以先檢查。
+if ! grep -q 'timeBeginPeriod' "$XU4/src/xu4.cpp"; then
+  git -C "$XU4" apply --check "$ROOT/patches/engine/win-audio.patch" 2>/dev/null \
+    && git -C "$XU4" apply "$ROOT/patches/engine/win-audio.patch" \
+    || patch -d "$XU4" -p1 < "$ROOT/patches/engine/win-audio.patch"
+fi
 
 echo "[3/3] 產生並安裝資產"
 # 三套 CJK atlas:Noto(預設)+ AR PL 宋(firefly)/ 楷(kai)。字集涵蓋 6 份雙語表
