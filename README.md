@@ -8,7 +8,7 @@
 > 還記得嗎?那年它有太多副面孔 —— EGA、VGA,還有遠在日本的 FM Towns、X68000、MSX2,
 > 大海另一端的 Amiga,卡帶裡的 Sega 主機。每一台都是同一個不列顛尼亞,卻沒幾個台灣玩家
 > 看全過。本專案以開源引擎 **[xu4](https://github.com/xu4-engine/u4)** 為基礎,把這款四十年的
-> 經典**完整繁體中文化**,跨平台(Linux / Windows / macOS)、640×400 全美術重繪;更一路把那七個面貌
+> 經典**完整繁體中文化**,跨平台(Linux / Windows / macOS)、960×600 全美術重繪;更一路把那七個面貌
 > ——畫風與配樂——一張光碟、一片磁碟、一顆 ROM 地挖了回來,讓你按一個 `F2`,就在整部移植史
 > 之間穿梭。**這不只是一次漢化,是把一款經典的七個分身,一個個救了回來。**
 
@@ -176,7 +176,7 @@ Amiga 社群都有人在論壇貼「**WANTED: Ultima IV Amiga Music**」求檔;�
 
 本專案把這款 1985 年的經典,以維護中的開源引擎 **[xu4](https://github.com/xu4-engine/u4)**(Allegro 5 / GLFW 跨平台 C++)為基礎,進行**完整繁體中文化**:跨平台(Linux / Windows / macOS)、Docker 全程建置、文字以 load-time 查表替換(對齊 [u6-cht](https://github.com/wicanr2/u6-cht) 的成功經驗)。除文字外,還把六種移植版的[美術](#art)與[配樂](#music)從原始媒體逆向還原 —— 下面先講工程,前面兩章是它的成果展。
 
-> 目前狀態:**可玩**。標題 / 選單 / 角色創建 / intro 故事 / NPC 對話 / 系統訊息 / vendor 商店全部中文,640×400 全美術 2x、CJK 一格一字;遊戲中 `F2` 切 EGA/VGA、`F3` 切解析度;Linux AppImage 與 Windows zip 皆已打包(含全部 DLL、遊戲資料、三套字形)。**macOS** 版亦已移植完成 —— Apple Silicon 的自包含 `.app`(zip / dmg)由 GitHub Actions 原生建置、相依庫全 bundle、解壓即玩(Intel 版受 macos-13 runner 供給排隊中)。
+> 目前狀態:**可破關**。標題 / 選單 / 角色創建 / intro 故事 / NPC 對話 / 系統訊息 / vendor 商店全部中文,960×600 全美術 3x、中文 24×24 點陣;Hawkwind 的台詞、法典之室的問答題目和部分結局文字仍是英文;遊戲中 `F2` 切 EGA/VGA、`F3` 切解析度;Linux AppImage 與 Windows zip 皆已打包(含全部 DLL、遊戲資料、三套字形)。**macOS** 版亦已移植完成 —— Apple Silicon 的自包含 `.app`(zip / dmg)由 GitHub Actions 原生建置、相依庫全 bundle、解壓即玩(Intel 版受 macos-13 runner 供給排隊中)。
 
 ---
 
