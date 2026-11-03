@@ -1,0 +1,21 @@
+Ultima IV: Quest of the Avatar 繁體中文版：授權與來源
+
+原始碼
+  中文化專案：https://github.com/wicanr2/u4-cht
+  引擎上游：https://github.com/xu4-engine/u4 （commit 6a7ee3d0079cfdc1c8fb9ba7a3c710a957155a71）
+  引擎修改見中文化專案的 patches/ 目錄，重建步驟見 SETUP.md。
+
+程式
+  xu4 引擎與本專案的引擎修改採 GPL-3.0，條款見隨附的 COPYING。
+
+遊戲資料
+  ultima4.zip：Ultima IV © 1985 Origin Systems / Richard Garriott，EA／Origin 已釋出為免費版。
+  u4upgrad.zip：U4 Upgrade 社群專案的 VGA 美術與音樂。
+  這兩份資料的權利屬原權利人，不受上述程式授權涵蓋。
+
+字型
+  中文點陣字由下列字型產生：
+  Noto Sans CJK（SIL Open Font License 1.1）
+  AR PL 宋體 bsmi00lp、楷體 bkai00mp（Arphic Public License）
+
+本專案與 Origin Systems、Electronic Arts 沒有關聯。

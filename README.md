@@ -251,6 +251,12 @@ U4 是「八德系統」的起源。Garriott 把所有德目歸納到三個底�
 <a name="快速開始"></a>
 ## ⚡ 快速開始
 
+### 下載
+
+到 **[Releases](https://github.com/wicanr2/u4-cht/releases/latest)** 下載 Linux AppImage、Windows zip 或 macOS(Apple Silicon、Intel)版。包內含 EA／Origin 釋出的免費版遊戲資料,解壓就能玩。授權與來源見包內的 `LICENSES.txt`。
+
+### 從原始碼建置
+
 完整指令見 [`SETUP.md`](SETUP.md)。最小流程:
 
 ```bash
@@ -390,4 +396,4 @@ B. GUI / 選單(.txf SDF 紋理字,uint16 碼位)
 - **[@catsmice](https://github.com/catsmice)** —— macOS 真機(M1 Pro / macOS 26.5)三項修正([PR #2](https://github.com/wicanr2/u4-cht/pull/2)):CoreAudio 後端改 callback 拉取式(解開頭即靜音 / 城鎮移動卡死)、主選單選項框 2x→3x 偏移、新增本機 Mac 建置腳本 `dist/build-mac-local.sh`。
 - **[@laneser](https://github.com/laneser)** —— Windows 音樂 bass 頓頓修正([PR #1](https://github.com/wicanr2/u4-cht/pull/1)):定位為 WASAPI 緩衝在 Windows 預設 15.6ms 計時器精度下週期性 underrun,以 `timeBeginPeriod(1)` 拉高精度根治,附 [`docs/audio-windows.md`](docs/audio-windows.md)。
 
-> repo 納管:中文化工具 / 雙語表 / Docker / 文件 / tileset 展示圖。完整可玩遊戲請依 [`SETUP.md`](SETUP.md) 用 `make download` 自行取得 freeware 資料重建。
+> repo 納管:中文化工具 / 雙語表 / Docker / 文件 / tileset 展示圖。完整可玩遊戲可從 [Releases](https://github.com/wicanr2/u4-cht/releases/latest) 下載,或依 [`SETUP.md`](SETUP.md) 用 `make download` 取得 freeware 資料自行重建。

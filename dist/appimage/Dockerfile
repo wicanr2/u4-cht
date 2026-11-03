@@ -38,6 +38,8 @@ RUN set -e; \
     cp appimage/AppRun $AD/AppRun; chmod +x $AD/AppRun; \
     cp appimage/u4-cht.desktop $AD/u4-cht.desktop; \
     cp appimage/u4-cht.png $AD/u4-cht.png; \
+    mkdir -p $AD/usr/share/doc/u4-cht; \
+    cp COPYING appimage/LICENSES.txt $AD/usr/share/doc/u4-cht/; \
     # 遞迴 ldd 收集所有非 glibc 庫 \
     collect() { ldd "$1" 2>/dev/null | awk '/=> \//{print $3}'; }; \
     queue=$(collect $AD/usr/bin/xu4); seen=""; \

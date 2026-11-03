@@ -10,10 +10,9 @@ name: build-android
 # 可能搬遷);(b) CHARSET CJK 算繪在 GLV 後端的實機表現;(c) 模組瀏覽器 SDF(gpu_opengl
 # 路徑)是否隨 GLV 編入。CHARSET 文字路徑(screen.cpp/textview.cpp)為後端無關,風險低。
 
+# 只手動觸發:Android 版尚未驗證,打 tag 時不自動附到 Release。
 on:
   workflow_dispatch:
-  push:
-    tags: [ 'v*' ]
 
 env:
   XU4_UPSTREAM: https://github.com/xu4-engine/u4.git

@@ -10,6 +10,10 @@ on:
   push:
     tags: [ 'v*' ]
 
+# softprops/action-gh-release 要寫入權限才能把 mac 產物附到 Release。
+permissions:
+  contents: write
+
 env:
   XU4_UPSTREAM: https://github.com/xu4-engine/u4.git
   XU4_COMMIT: 6a7ee3d0079cfdc1c8fb9ba7a3c710a957155a71
@@ -117,6 +121,7 @@ jobs:
           cp Ultima-IV.mod U4-Upgrade.mod render.pak cjk_font*.bin u4_cht.tab \
              "$APP/Contents/Resources/share/"
           cp ultima4.zip u4upgrad.zip "$APP/Contents/Resources/share/" 2>/dev/null || true
+          cp COPYING "$GITHUB_WORKSPACE/cht/dist/LICENSES.txt" "$APP/Contents/Resources/"
           # launch wrapper:cd 到 Resources/share(資產同目錄)後執行
           cat > "$APP/Contents/MacOS/launch" <<'LAUNCH'
           #!/bin/bash
